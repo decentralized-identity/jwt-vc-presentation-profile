@@ -487,12 +487,15 @@ The issued VC MUST include a `credentialStatus` property, as defined in section 
 
 ### Cryptographic Signature
 
-While ION supports any public key JWK representation in a DID Document, implementors of this document MUST support the following public key signature algorithms:
+While ION supports any public key JWK representation in a DID Document, implementors of this document MUST support JWT signature verification with the following Key Types and must support JWT signing with at least one.
 
-* ES256K (secp256k1)
-* EdDSA (Ed25519)
+|Key Type|JWT Algorithm|
+|--------|-------------|
+|secp256k1|ES256K|
+|Ed25519|EdDSA|
 
-For more information on signature suites see the [Linked Data Cryptographic Suite Registry](https://w3c-ccg.github.io/ld-cryptosuite-registry/)
+Note: This profile leverages JWT for signature generation and verification only. There is a rich offering of Linked Data Cryptographic Suites which are not covered by this iteration of the profile.
+For reference and more information on LD signature suites see the [Linked Data Cryptographic Suite Registry](https://w3c-ccg.github.io/ld-cryptosuite-registry/).
 
 ## Use-Cases
 

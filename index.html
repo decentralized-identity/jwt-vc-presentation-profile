@@ -682,12 +682,27 @@ Below is a non-normative example of a DID Document that includes a serviceEndpoi
 <span class="token punctuation">}</span>
 </code></pre>
 <h3 id="cryptographic-signature"><a class="toc-anchor" href="#cryptographic-signature" >§</a> Cryptographic Signature</h3>
-<p>While ION supports any public key JWK representation in a DID Document, implementors of this document MUST support the following public key signature algorithms:</p>
-<ul>
-<li>ES256K (secp256k1)</li>
-<li>EdDSA (Ed25519)</li>
-</ul>
-<p>For more information on signature suites see the <a path-0="w3c-ccg.github.io"path-1="ld-cryptosuite-registry"path-2=""href="https://w3c-ccg.github.io/ld-cryptosuite-registry/" >Linked Data Cryptographic Suite Registry</a></p>
+<p>While ION supports any public key JWK representation in a DID Document, implementors of this document MUST support JWT signature verification with the following Key Types and must support JWT signing with at least one.</p>
+<table>
+<thead>
+<tr>
+<th>Key Type</th>
+<th>JWT Algorithm</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>secp256k1</td>
+<td>ES256K</td>
+</tr>
+<tr>
+<td>Ed25519</td>
+<td>EdDSA</td>
+</tr>
+</tbody>
+</table>
+<p>Note: This profile leverages JWT for signature generation and verification only. There is a rich offering of Linked Data Cryptographic Suites which are not covered by this iteration of the profile.
+For reference and more information on LD signature suites see the <a path-0="w3c-ccg.github.io"path-1="ld-cryptosuite-registry"path-2=""href="https://w3c-ccg.github.io/ld-cryptosuite-registry/" >Linked Data Cryptographic Suite Registry</a>.</p>
 <h2 id="use-cases"><a class="toc-anchor" href="#use-cases" >§</a> Use-Cases</h2>
 <p>Defining or referring to previously published use cases which this profile enables and supports is highly recommended.</p>
 <h2 id="examples"><a class="toc-anchor" href="#examples" >§</a> Examples</h2>
