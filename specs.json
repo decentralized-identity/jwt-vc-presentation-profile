@@ -2,38 +2,21 @@
 {
   "specs": [
     {
-      "title": "Spec-Up Example",
-      "spec_directory": "./single-file-test",
+      "title": "JWT VC Presentation Profile",
+      "spec_directory": "./spec",
       "output_path": "./",
       "logo": "logo.svg",
-      "logo_link": "https://github.com/decentralized-identity/spec-up",
+      "logo_link": "https://github.com/decentralized-identity/jwt-vc-interoperability-profile",
       "source": {
         "host": "github",
         "account": "decentralized-identity",
-        "repo": "spec-up"
+        "repo": "jwt-vc-interoperability-profile"
       },
       "assets": [
         { "path": "/custom-assets/custom.css" },
         { "path": "/custom-assets/custom-head.js", "inject": "head" },
         { "path": "/custom-assets/custom-body.js", "inject": "body" }
       ]
-    },
-    {
-      "title": "Spec-Up Multi-File Example",
-      "spec_directory": "./multi-file-test",
-      "markdown_paths": [
-        "header.md",
-        "abstract.md",
-        "getting-started.md",
-        "features.md"
-      ],
-      "logo": "../logo.svg",
-      "logo_link": "https://github.com/decentralized-identity/spec-up",
-      "source": {
-        "host": "github",
-        "account": "decentralized-identity",
-        "repo": "spec-up"
-      }
     }
   ]
 }
