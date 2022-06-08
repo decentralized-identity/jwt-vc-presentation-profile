@@ -214,7 +214,7 @@ The Verifier/RP MUST use static Self-Issued OP metadata as defined in section 6.
 ```
 :::
 
-##### Verifier/RP Registration Metadata {registration-metadata}
+##### Verifier/RP Registration Metadata
 
 The Self-Issued OP request MUST be signed. Decentralized Identifier resolution as defined in section 10.2.2.2. of [[ref: SIOPv2]] MUST be used as the Verifier/RP Registration Metadata Resolution Method.
 
@@ -264,7 +264,7 @@ Below is a normative example of claims included in the `registration` parameter:
 
 Other Registration parameters defined in [[ref: OIDC Registration]] can be used.
 
-##### Linked Domain Verification {#linked-domain}
+##### Linked Domain Verification
 
 To strengthen trust between the Verifier/RP and End-user, a Verifier/RP's DID must be bound to its website. This proves the Verifier/RP controls both the DID and the origin and allows the End-user to verify this relationship. To bind an owner of a DID to a controller of a certain origin, Well Known DID Configuration MUST be used as defined in [[ref: Well Known DID]].
 
@@ -322,6 +322,178 @@ Below is a non-normative example of a `claims` parameter:
 }
 ```
 
+### End-user Consent
+
+When the Self-Issued OP displays the consent screen to the user, it is RECOMMENDED to display the domain name obtained using [Linked Domains](#linked-domain-verification). Displaying details of the consent using registration parameters such as `client_name`, `logo_uri`, and `client_purpose` defined in [Registration Metadata](#verifierrp-registration-metadata) is OPTIONAL.
+
+Note that displaying the domain name of the Verifier/RP helps the End-users to identify malicious Verifiers/RPs who has copied registration parameters of good Verifiers/OP and are impersonating them.
+
+### Authentication Response
+
+Authentication Response is sent as an HTTPS POST request to the RP's endpoint indicated in `redirect_uri` in the request.
+
+Note that when this response_mode is used, the user will finish the transaction on the device with a Self-Issued OP, which is a different device than on which the user initiated a request. It is up to the implementations to enable further user interaction with the Verifier/RP on the device used to initiate the request.
+
+Since requested VCs are returned in a VP Token, two artifacts MUST be returned:
+
+1. ID Token that serves as an authentication receipt and includes metadata about the VP Token
+1. VP Token that includes one or more Verifiable Presentations
+
+`presentation_submission` object located inside an ID Token specifies metadata such as format and path of both VPs and VCs in the VP Token.
+
+This profile currently supports including only a single VP in the VP Token. In such cases, as defined in section 5.2 of [[ref: OIDC4VP]], when the Self-Issued OP returns a single VP in the `vp_token`, VP Token is not an array, and a single VP is passed as a `vp_token`. In this case, the descriptor map would contain a simple path expression "$".
+
+Note that when in the future use-cases multiple VPs are included in the VP Token, VP Token itself is not signed, and each VP included inside the VP Token MUST be signed.
+
+This profile currently assumes that ID Token and a single VP passed as a VP Token are signed by the same Holder DID.
+
+Note that a Holder DID signing the ID Token in its `sub` claim is user's identifier within the RP/Verifier, while a Holder DID signing a VP in its `iss` claim is user's identifier within the Issuer, and the two do not have the same connotation.
+
+#### ID Token Validation
+
+ID Token validation rules defined in section 10 of [[ref: SIOPv2]] MUST be followed. The ID Token MUST be signed by the End-User's DID.
+
+- `iss` claim MUST be `https://self-issued.me/v2/openid-vc`.
+- Signature on the ID Token MUST be validated.
+  - Validation is performed against the key obtained from a DID Document. DID Document MUST be obtained by resolving a Decentralized Identifier included in the `sub` claim using DID Resolution.
+- `sub` claim MUST equal the `id` property in the DID Document.
+
+#### ID Token example
+
+Below is a non-normative example of an ID Token:
+::: example ID Token
+```json
+[[insert: ./spec/assets/4_id_token.json]]
+```
+:::
+
+#### VP Token example
+
+Below is a non-normative example of a Base64URL encoded VP Token:
+::: example  Base64URL Encoded VP Token
+```json
+[[insert: ./spec/assets/encoded_vptoken_jwt.json]]
+```
+:::
+
+Below is a non-normative example of a decoded VP Token:
+::: example  Decoded VP Token
+```json
+[[insert: ./spec/assets/6_decoded_vp_token.json]]
+```
+:::
+
+Below is a non-normative example of a Base64URL encoded VC. Note that the VC MUST be obtained from `path_nested` in `presentation_submission` of the ID Token.
+::: example  VC JWT
+```json
+[[insert: ./spec/assets/vc_jwt.json]]
+```
+:::
+
+Below is a non-normative example of a decoded VC in a JSON format, signed as a JWT:
+::: example  Decoded VC
+```json
+[[insert: ./spec/assets/sample_vc_1.json]]
+```
+:::
+
+### Decentralized Identifiers
+
+This profile utilizes Decentralized Identifiers (DIDs) as a cryptographically verifiable identifier of the Verifier/RP and Self-Issued OP and that resolve to cryptographic key material. Implementations of this profile MUST support DID Method ION.
+
+ION DIDs can operate in both long-form and short-form. Implementations of this profile MUST be able to consume both long-form and short-form DIDs regardless of whether they are anchored.
+
+The Verifier/RP should always check DIDs against an ION node to validate their current states. Just because a long form DID has been used, doesn't mean the state hasn't changed on ION.
+
+#### Short-Form DID
+
+Short Form DIDs are DIDs written on a Bitcoin Blockchain. They are also known as anchored DIDs. These types of DIDs give the organization and user the most flexibility because the underlying components of the DID Document, such as public keys and service endpoints, can change without altering the DID itself.
+
+Below is a non-normative example of a short-form DID:
+
+```md
+did:ion:EiDC8qe_kwtm02IVoVZ8epcGi90XnL1NYI6baJIwHVBgrg
+```
+Below is a non-normative example of a DID Document obtained by resolving a short-form DID using an ION Node:
+::: example  Resolved SFD
+```json
+[[insert: ./spec/assets/resolved_short_form_did.json]]
+```
+:::
+
+#### Long-Form DID
+
+Long-form DIDs are DIDs not written on a Bitcoin Blockchain. They are also known as unanchored DIDs.
+
+Long-form DIDs have the entire DID Document encapsulated into the DID itself. This means that public keys cannot be rotated without modifying a DID
+
+Below is a non-normative example of a long-form DID:
+::: example  LFD
+```json
+[[insert: ./spec/assets/raw_longform_did.json]]
+```
+:::
+
+Below is a non-normative example of a DID Document obtained by resolving a long-form DID using an ION Node:
+::: example  Resolved LFD
+```json
+[[insert: ./spec/assets/resolved_long_form_did.json]]
+```
+:::
+
+#### serviceEndpoints
+
+The following two serviceEndpoints MUST be supported in the DID Document, but only one is required.
+
+1. LinkedDomain vis [[ref: Well Known DID]] spec
+1. [[ref: Id Hubs]]
+
+### Revocation
+
+StatusList2021 MUST be used for revocation of VCs, as defined in [[ref: Status List 2021]].
+
+#### credentialStatus
+
+StatusList2021 MUST be discovered using HTTPS URL or DID Relative URLs stored in an ID Hub.
+
+An Issuer of a VC MAY have an ID Hub serviceEndpoint in the Issuer's DID Document. ID Hubs are the single endpoint to look up objects associated with a DID, as defined in [Identity-Hub].
+Below is a non-normative example of a DID Document that includes a serviceEndpoint:
+
+```json
+"service": [
+      {
+        "id": "hubs",
+        "type": "IdentityHub",
+        "serviceEndpoint": [
+          "https://hubs.microsoft.com",
+          "https://datastore.protonmail.com"
+        ]
+      }
+]
+```
+
+The issued VC MUST include a `credentialStatus` property, as defined in section 5.1 of [[ref: Status List 2021]]:
+
+```json
+{
+  "credentialStatus": {
+    "id": "Qmdfr32sdf32546...",
+    "type": "StatusList2021",
+    "statusListIndex": "94567",
+    "statusListCredential": 'did:ion:123?service=IdentityHub&relativeRef=?messages=[{ type: "CollectionsQuery", statement: { id: "Qmdfr32sdf32546..." }}]'
+  }
+}
+```
+
+### Cryptographic Signature
+
+While ION supports any public key JWK representation in a DID Document, implementors of this document MUST support the following public key signature algorithms:
+
+* ES256K (secp256k1)
+* EdDSA (Ed25519)
+
+For more information on signature suites see the [Linked Data Cryptographic Suite Registry](https://w3c-ccg.github.io/ld-cryptosuite-registry/)
+
 ## Use-Cases
 
 Defining or referring to previously published use cases which this profile enables and supports is highly recommended.
@@ -336,7 +508,6 @@ Embedded or referenced non-normative examples
 - Workday
 - Mattr
 - Ping Identity
-- IBM
 
 ## Test Vectors
 
