@@ -297,7 +297,7 @@ sequenceDiagram
 
 </code></pre>
 </div>
-<h5 registration-metadata="" id="verifierrp-registration-metadata"><a class="toc-anchor" href="#verifierrp-registration-metadata" >§</a> Verifier/RP Registration Metadata</h5>
+<h5 id="verifierrp-registration-metadata"><a class="toc-anchor" href="#verifierrp-registration-metadata" >§</a> Verifier/RP Registration Metadata</h5>
 <p>The Self-Issued OP request MUST be signed. Decentralized Identifier resolution as defined in section 10.2.2.2. of <a class="term-reference" href="#term:siopv2">SIOPv2</a> MUST be used as the Verifier/RP Registration Metadata Resolution Method.</p>
 <p>The RP MUST support Subject Syntax Type <code>did:ion</code> as specified in section 9.2.3. in <a class="term-reference" href="#term:siopv2">SIOPv2</a>. RP’s <code>client_id</code> MUST be expressed as using a <code>did:ion</code> URI, and the public key used to sign the request MUST be obtained from the <code>verificationMethod</code> property of a DID Document. The public key used to sign the request in question MUST be identified by the <code>kid</code> in the header of the signed request.</p>
 <p>All RP metadata other than the public key MUST be obtained from the <code>registration</code> parameter as defined in section 6.3.1. of <a class="term-reference" href="#term:siopv2">SIOPv2</a>.</p>
@@ -354,7 +354,7 @@ sequenceDiagram
 </code></pre>
 </div>
 <p>Other Registration parameters defined in <a class="term-reference" href="#term:oidc-registration">OIDC Registration</a> can be used.</p>
-<h5 id="linked-domain" id="linked-domain-verification"><a class="toc-anchor" href="#linked-domain-verification" >§</a> Linked Domain Verification</h5>
+<h5 id="linked-domain-verification"><a class="toc-anchor" href="#linked-domain-verification" >§</a> Linked Domain Verification</h5>
 <p>To strengthen trust between the Verifier/RP and End-user, a Verifier/RP’s DID must be bound to its website. This proves the Verifier/RP controls both the DID and the origin and allows the End-user to verify this relationship. To bind an owner of a DID to a controller of a certain origin, Well Known DID Configuration MUST be used as defined in <a class="term-reference" href="#term:well-known-did">Well Known DID</a>.</p>
 <p>When creating a Verifier/RP’s DID, the domain linked to that DID MUST be included in a <code>serviceEndpoint</code> property of the DID Document as shown in a non-normative response below:</p>
 <div id="example-2" class="notice example"><a class="notice-link" href="#example-2">EXAMPLE</a><pre class="language-json"><code class="language-json"><span class="token punctuation">{</span>
@@ -404,6 +404,305 @@ sequenceDiagram
   <span class="token punctuation">}</span>
 <span class="token punctuation">}</span>
 </code></pre>
+<h3 id="end-user-consent"><a class="toc-anchor" href="#end-user-consent" >§</a> End-user Consent</h3>
+<p>When the Self-Issued OP displays the consent screen to the user, it is RECOMMENDED to display the domain name obtained using <a href="#linked-domain-verification" >Linked Domains</a>. Displaying details of the consent using registration parameters such as <code>client_name</code>, <code>logo_uri</code>, and <code>client_purpose</code> defined in <a href="#verifierrp-registration-metadata" >Registration Metadata</a> is OPTIONAL.</p>
+<p>Note that displaying the domain name of the Verifier/RP helps the End-users to identify malicious Verifiers/RPs who has copied registration parameters of good Verifiers/OP and are impersonating them.</p>
+<h3 id="authentication-response"><a class="toc-anchor" href="#authentication-response" >§</a> Authentication Response</h3>
+<p>Authentication Response is sent as an HTTPS POST request to the RP’s endpoint indicated in <code>redirect_uri</code> in the request.</p>
+<p>Note that when this response_mode is used, the user will finish the transaction on the device with a Self-Issued OP, which is a different device than on which the user initiated a request. It is up to the implementations to enable further user interaction with the Verifier/RP on the device used to initiate the request.</p>
+<p>Since requested VCs are returned in a VP Token, two artifacts MUST be returned:</p>
+<ol>
+<li>ID Token that serves as an authentication receipt and includes metadata about the VP Token</li>
+<li>VP Token that includes one or more Verifiable Presentations</li>
+</ol>
+<p><code>presentation_submission</code> object located inside an ID Token specifies metadata such as format and path of both VPs and VCs in the VP Token.</p>
+<p>This profile currently supports including only a single VP in the VP Token. In such cases, as defined in section 5.2 of <a class="term-reference" href="#term:oidc4vp">OIDC4VP</a>, when the Self-Issued OP returns a single VP in the <code>vp_token</code>, VP Token is not an array, and a single VP is passed as a <code>vp_token</code>. In this case, the descriptor map would contain a simple path expression “$”.</p>
+<p>Note that when in the future use-cases multiple VPs are included in the VP Token, VP Token itself is not signed, and each VP included inside the VP Token MUST be signed.</p>
+<p>This profile currently assumes that ID Token and a single VP passed as a VP Token are signed by the same Holder DID.</p>
+<p>Note that a Holder DID signing the ID Token in its <code>sub</code> claim is user’s identifier within the RP/Verifier, while a Holder DID signing a VP in its <code>iss</code> claim is user’s identifier within the Issuer, and the two do not have the same connotation.</p>
+<h4 id="id-token-validation"><a class="toc-anchor" href="#id-token-validation" >§</a> ID Token Validation</h4>
+<p>ID Token validation rules defined in section 10 of <a class="term-reference" href="#term:siopv2">SIOPv2</a> MUST be followed. The ID Token MUST be signed by the End-User’s DID.</p>
+<ul>
+<li><code>iss</code> claim MUST be <code>https://self-issued.me/v2/openid-vc</code>.</li>
+<li>Signature on the ID Token MUST be validated.
+<ul>
+<li>Validation is performed against the key obtained from a DID Document. DID Document MUST be obtained by resolving a Decentralized Identifier included in the <code>sub</code> claim using DID Resolution.</li>
+</ul>
+</li>
+<li><code>sub</code> claim MUST equal the <code>id</code> property in the DID Document.</li>
+</ul>
+<h4 id="id-token-example"><a class="toc-anchor" href="#id-token-example" >§</a> ID Token example</h4>
+<p>Below is a non-normative example of an ID Token:</p>
+<div id="id-token" class="notice example"><a class="notice-link" href="#id-token">EXAMPLE</a><pre class="language-json"><code class="language-json"><span class="token punctuation">{</span>
+    <span class="token property">"alg"</span><span class="token operator">:</span> <span class="token string">"ES256K"</span><span class="token punctuation">,</span>
+    <span class="token property">"kid"</span><span class="token operator">:</span> <span class="token string">"did:ion:EiAN0g6ahFl9GuP2uVRJMj4n6EJfvp9B_CfuOipsl1kbng:eyJkZWx0YSI6eyJwYXRjaGVzIjpbeyJhY3Rpb24iOiJyZXBsYWNlIiwiZG9jdW1lbnQiOnsicHVibGljS2V5cyI6W3siaWQiOiJzaWduIiwicHVibGljS2V5SndrIjp7ImNydiI6InNlY3AyNTZrMSIsImt0eSI6IkVDIiwieCI6InBEd1JSbHpSNjJQU1RaR20tYTlwemh0X1NUZnBrb21ZOXliWGJLQXBqTHciLCJ5IjoiNmFUM3RkRXlTaWFtcWQ3YjFpaG5LMW5wR2p2cHA4QnBfYnp4ZWtaS2JZRSJ9LCJwdXJwb3NlcyI6WyJhdXRoZW50aWNhdGlvbiJdLCJ0eXBlIjoiRWNkc2FTZWNwMjU2azFWZXJpZmljYXRpb25LZXkyMDE5In1dfX1dLCJ1cGRhdGVDb21taXRtZW50IjoiRWlEbWlXQ3ZkWHNUajVpTUROX3NOVGxKakdaRmxfcklpd2VkMURic004a2JmZyJ9LCJzdWZmaXhEYXRhIjp7ImRlbHRhSGFzaCI6IkVpQ0ludDZlTFNMcGsyaGNwb3RrUHFmQUxTU2pjMEw0Y3Z0aEJGNFg1UXV1REEiLCJyZWNvdmVyeUNvbW1pdG1lbnQiOiJFaUNIeFFkSk5qYUtvS2gybklDY0w4ZTcyZTBkdVJGdUVVcWM2YVpfZnhkdGxBIn19#sign"</span><span class="token punctuation">,</span>
+    <span class="token property">"typ"</span><span class="token operator">:</span> <span class="token string">"JWT"</span>
+  <span class="token punctuation">}</span>.<span class="token punctuation">{</span>
+    <span class="token property">"sub"</span><span class="token operator">:</span> <span class="token string">"did:ion:EiAN0g6ahFl9GuP2uVRJMj4n6EJfvp9B_CfuOipsl1kbng:eyJkZWx0YSI6eyJwYXRjaGVzIjpbeyJhY3Rpb24iOiJyZXBsYWNlIiwiZG9jdW1lbnQiOnsicHVibGljS2V5cyI6W3siaWQiOiJzaWduIiwicHVibGljS2V5SndrIjp7ImNydiI6InNlY3AyNTZrMSIsImt0eSI6IkVDIiwieCI6InBEd1JSbHpSNjJQU1RaR20tYTlwemh0X1NUZnBrb21ZOXliWGJLQXBqTHciLCJ5IjoiNmFUM3RkRXlTaWFtcWQ3YjFpaG5LMW5wR2p2cHA4QnBfYnp4ZWtaS2JZRSJ9LCJwdXJwb3NlcyI6WyJhdXRoZW50aWNhdGlvbiJdLCJ0eXBlIjoiRWNkc2FTZWNwMjU2azFWZXJpZmljYXRpb25LZXkyMDE5In1dfX1dLCJ1cGRhdGVDb21taXRtZW50IjoiRWlEbWlXQ3ZkWHNUajVpTUROX3NOVGxKakdaRmxfcklpd2VkMURic004a2JmZyJ9LCJzdWZmaXhEYXRhIjp7ImRlbHRhSGFzaCI6IkVpQ0ludDZlTFNMcGsyaGNwb3RrUHFmQUxTU2pjMEw0Y3Z0aEJGNFg1UXV1REEiLCJyZWNvdmVyeUNvbW1pdG1lbnQiOiJFaUNIeFFkSk5qYUtvS2gybklDY0w4ZTcyZTBkdVJGdUVVcWM2YVpfZnhkdGxBIn19"</span><span class="token punctuation">,</span>
+    <span class="token property">"nonce"</span><span class="token operator">:</span> <span class="token string">"O1mZGnuet++Ilg2c1jR4jA=="</span><span class="token punctuation">,</span>
+    <span class="token property">"_vp_token"</span><span class="token operator">:</span> <span class="token punctuation">{</span>
+      <span class="token property">"presentation_submission"</span><span class="token operator">:</span> <span class="token punctuation">{</span>
+        <span class="token property">"id"</span><span class="token operator">:</span> <span class="token string">"8af49176-21ff-4e53-a568-081696aa549c"</span><span class="token punctuation">,</span>
+        <span class="token property">"definition_id"</span><span class="token operator">:</span> <span class="token string">"c278823a-f9d7-4a22-9a73-4a1bcd87f60e"</span><span class="token punctuation">,</span>
+        <span class="token property">"descriptor_map"</span><span class="token operator">:</span> <span class="token punctuation">[</span>
+          <span class="token punctuation">{</span>
+            <span class="token property">"id"</span><span class="token operator">:</span> <span class="token string">"InteropExampleVC"</span><span class="token punctuation">,</span>
+            <span class="token property">"format"</span><span class="token operator">:</span> <span class="token string">"jwt_vp"</span><span class="token punctuation">,</span>
+            <span class="token property">"path"</span><span class="token operator">:</span> <span class="token string">"$"</span><span class="token punctuation">,</span>
+            <span class="token property">"path_nested"</span><span class="token operator">:</span> <span class="token punctuation">{</span>
+              <span class="token property">"id"</span><span class="token operator">:</span> <span class="token string">"InteropExampleVC"</span><span class="token punctuation">,</span>
+              <span class="token property">"format"</span><span class="token operator">:</span> <span class="token string">"jwt_vc"</span><span class="token punctuation">,</span>
+              <span class="token property">"path"</span><span class="token operator">:</span> <span class="token string">"$.verifiableCredential[0]"</span>
+            <span class="token punctuation">}</span>
+          <span class="token punctuation">}</span>
+        <span class="token punctuation">]</span>
+      <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span><span class="token punctuation">,</span>
+    <span class="token property">"aud"</span><span class="token operator">:</span> <span class="token string">"did:ion:EiAv0eJ5cB0hGWVH5YbY-uw1K71EpOST6ztueEQzVCEc0A:eyJkZWx0YSI6eyJwYXRjaGVzIjpbeyJhY3Rpb24iOiJyZXBsYWNlIiwiZG9jdW1lbnQiOnsicHVibGljS2V5cyI6W3siaWQiOiJzaWdfY2FiNjVhYTAiLCJwdWJsaWNLZXlKd2siOnsiY3J2Ijoic2VjcDI1NmsxIiwia3R5IjoiRUMiLCJ4IjoiOG15MHFKUGt6OVNRRTkyRTlmRFg4ZjJ4bTR2X29ZMXdNTEpWWlQ1SzhRdyIsInkiOiIxb0xsVG5rNzM2RTNHOUNNUTh3WjJQSlVBM0phVnY5VzFaVGVGSmJRWTFFIn0sInB1cnBvc2VzIjpbImF1dGhlbnRpY2F0aW9uIiwiYXNzZXJ0aW9uTWV0aG9kIl0sInR5cGUiOiJFY2RzYVNlY3AyNTZrMVZlcmlmaWNhdGlvbktleTIwMTkifV0sInNlcnZpY2VzIjpbeyJpZCI6ImxpbmtlZGRvbWFpbnMiLCJzZXJ2aWNlRW5kcG9pbnQiOnsib3JpZ2lucyI6WyJodHRwczovL3N3ZWVwc3Rha2VzLmRpZC5taWNyb3NvZnQuY29tLyJdfSwidHlwZSI6IkxpbmtlZERvbWFpbnMifV19fV0sInVwZGF0ZUNvbW1pdG1lbnQiOiJFaUFwcmVTNy1Eczh5MDFnUzk2cE5iVnpoRmYxUlpvblZ3UkswbG9mZHdOZ2FBIn0sInN1ZmZpeERhdGEiOnsiZGVsdGFIYXNoIjoiRWlEMWRFdUVldERnMnhiVEs0UDZVTTNuWENKVnFMRE11M29IVWNMamtZMWFTdyIsInJlY292ZXJ5Q29tbWl0bWVudCI6IkVpREFkSzFWNkpja1BpY0RBcGFxV2IyZE95MFRNcmJKTmllNmlKVzk4Zk54bkEifX0"</span><span class="token punctuation">,</span>
+    <span class="token property">"iss"</span><span class="token operator">:</span> <span class="token string">"https://self-issued.me/v2/openid-vc"</span><span class="token punctuation">,</span>
+    <span class="token property">"iat"</span><span class="token operator">:</span> <span class="token number">1646308737</span><span class="token punctuation">,</span>
+    <span class="token property">"exp"</span><span class="token operator">:</span> <span class="token number">1646769537</span>
+  <span class="token punctuation">}</span>.<span class="token punctuation">[</span>Signature<span class="token punctuation">]</span>
+</code></pre>
+</div>
+<h4 id="vp-token-example"><a class="toc-anchor" href="#vp-token-example" >§</a> VP Token example</h4>
+<p>Below is a non-normative example of a Base64URL encoded VP Token:</p>
+<div id="base64url-encoded-vp-token" class="notice example"><a class="notice-link" href="#base64url-encoded-vp-token">EXAMPLE</a><pre class="language-json"><code class="language-json">eyJhbGciOiJFUzI1NksiLCJraWQiOiJkaWQ6aW9uOkVpQU4wZzZhaEZsOUd1UDJ1VlJKTWo0bjZFSmZ2cDlCX0NmdU9pcHNsMWtibmc6ZXlKa1pXeDBZU0k2ZXlKd1lYUmphR1Z6SWpwYmV5SmhZM1JwYjI0aU9pSnlaWEJzWVdObElpd2laRzlqZFcxbGJuUWlPbnNpY0hWaWJHbGpTMlY1Y3lJNlczc2lhV1FpT2lKemFXZHVJaXdpY0hWaWJHbGpTMlY1U25kcklqcDdJbU55ZGlJNkluTmxZM0F5TlRack1TSXNJbXQwZVNJNklrVkRJaXdpZUNJNkluQkVkMUpTYkhwU05qSlFVMVJhUjIwdFlUbHdlbWgwWDFOVVpuQnJiMjFaT1hsaVdHSkxRWEJxVEhjaUxDSjVJam9pTm1GVU0zUmtSWGxUYVdGdGNXUTNZakZwYUc1TE1XNXdSMnAyY0hBNFFuQmZZbnA0Wld0YVMySlpSU0o5TENKd2RYSndiM05sY3lJNld5SmhkWFJvWlc1MGFXTmhkR2x2YmlKZExDSjBlWEJsSWpvaVJXTmtjMkZUWldOd01qVTJhekZXWlhKcFptbGpZWFJwYjI1TFpYa3lNREU1SW4xZGZYMWRMQ0oxY0dSaGRHVkRiMjF0YVhSdFpXNTBJam9pUldsRWJXbFhRM1prV0hOVWFqVnBUVVJPWDNOT1ZHeEtha2RhUm14ZmNrbHBkMlZrTVVSaWMwMDRhMkptWnlKOUxDSnpkV1ptYVhoRVlYUmhJanA3SW1SbGJIUmhTR0Z6YUNJNklrVnBRMGx1ZERabFRGTk1jR3N5YUdOd2IzUnJVSEZtUVV4VFUycGpNRXcwWTNaMGFFSkdORmcxVVhWMVJFRWlMQ0p5WldOdmRtVnllVU52YlcxcGRHMWxiblFpT2lKRmFVTkllRkZrU2s1cVlVdHZTMmd5YmtsRFkwdzRaVGN5WlRCa2RWSkdkVVZWY1dNMllWcGZabmhrZEd4QkluMTkjc2lnbiIsInR5cCI6IkpXVCJ9.eyJub25jZSI6Ik8xbVpHbnVldCsrSWxnMmMxalI0akE9PSIsInZwIjp7IkBjb250ZXh0IjpbImh0dHBzOi8vd3d3LnczLm9yZy8yMDE4L2NyZWRlbnRpYWxzL3YxIl0sInR5cGUiOlsiVmVyaWZpYWJsZVByZXNlbnRhdGlvbiJdLCJ2ZXJpZmlhYmxlQ3JlZGVudGlhbCI6WyJleUpoYkdjaU9pSkZVekkxTmtzaUxDSnJhV1FpT2lKa2FXUTZhVzl1T2tWcFJEZE5PRkpaYmxWMWFYSXlZbTB5TVhWMUxUVlpiVmRqY1hGUlJXbGxMVlF0YWxsRlQwVkNaVVZYU2xFNlpYbEthMXBYZURCWlUwazJaWGxLZDFsWVVtcGhSMVo2U1dwd1ltVjVTbWhaTTFKd1lqSTBhVTlwU25sYVdFSnpXVmRPYkVscGQybGFSemxxWkZjeGJHSnVVV2xQYm5OcFkwaFdhV0pIYkdwVE1sWTFZM2xKTmxjemMybGhWMUZwVDJsS2VtRlhaSFZKYVhkcFkwaFdhV0pIYkdwVE1sWTFVMjVrY2tscWNEZEpiVTU1WkdsSk5rbHVUbXhaTTBGNVRsUmFjazFUU1hOSmJYUXdaVk5KTmtsclZrUkphWGRwWlVOSk5rbHVUbTVoYldoVVpGWkdjMXByWkZsV2FtY3hVV3hXVTFkclp6VmhSWFJSVWpKU2FGUkVVbXhaYldSVFRqQmtSVkpGVWtaaWEwcDBaVmhOYVV4RFNqVkphbTlwVWtkM05Gb3paSEZoZWxKUVRqSm9OV05FVm5GV2FscHFWV3BHUTFRemJEQmxiRGxVVTFWYWRFNHdiR3BYVld4elRGaENjV1F4U2xWV1UwbzVURU5LZDJSWVNuZGlNMDVzWTNsSk5sZDVTbWhrV0ZKdldsYzFNR0ZYVG1oa1IyeDJZbWxLWkV4RFNqQmxXRUpzU1dwdmFWSlhUbXRqTWtaVVdsZE9kMDFxVlRKaGVrWlhXbGhLY0ZwdGJHcFpXRkp3WWpJMVRGcFlhM2xOUkVVMVNXNHhaR1pZTVdSTVEwb3hZMGRTYUdSSFZrUmlNakYwWVZoU2RGcFhOVEJKYW05cFVsZHNRbFZxV2xkaWFteElaVWRLYVZOR2FFVmpSRUp2V21wc05rNVdPVnBVTTJkNlkwWkthRnBYWkRWTVZrWlZaRVZ3TTFscVRrUmpWV1JEWkhsS09VeERTbnBrVjFwdFlWaG9SVmxZVW1oSmFuQTNTVzFTYkdKSVVtaFRSMFo2WVVOSk5rbHJWbkJSTURWb1lrUmFXVlZ1VmpWV2FrWnJXREp3TWxWc1drVmliWEJHVkZoT2NWTlZTa3hhYWtVeVZucFplR1JFUmpKamJtUlBXakZSZEdKV1JXbE1RMHA1V2xkT2RtUnRWbmxsVlU1MllsY3hjR1JITVd4aWJsRnBUMmxLUm1GVlNtOVBWMUp5VTBSQ1JXUldXazlWUjJONVZHNUtiVmRwTUhwYU1VSnRXWHBhV0Zac09VTk9NMlJQV2pGb1RscFhiRUpsYTNoQ1lVUkdia2x1TVRramMybG5iaUlzSW5SNWNDSTZJa3BYVkNKOS5leUp6ZFdJaU9pSmthV1E2YVc5dU9rVnBRVTR3WnpaaGFFWnNPVWQxVURKMVZsSktUV28wYmpaRlNtWjJjRGxDWDBObWRVOXBjSE5zTVd0aWJtYzZaWGxLYTFwWGVEQlpVMGsyWlhsS2QxbFlVbXBoUjFaNlNXcHdZbVY1U21oWk0xSndZakkwYVU5cFNubGFXRUp6V1ZkT2JFbHBkMmxhUnpscVpGY3hiR0p1VVdsUGJuTnBZMGhXYVdKSGJHcFRNbFkxWTNsSk5sY3pjMmxoVjFGcFQybEtlbUZYWkhWSmFYZHBZMGhXYVdKSGJHcFRNbFkxVTI1a2NrbHFjRGRKYlU1NVpHbEpOa2x1VG14Wk0wRjVUbFJhY2sxVFNYTkpiWFF3WlZOSk5rbHJWa1JKYVhkcFpVTkpOa2x1UWtWa01VcFRZa2h3VTA1cVNsRlZNVkpoVWpJd2RGbFViSGRsYldnd1dERk9WVnB1UW5KaU1qRmFUMWhzYVZkSFNreFJXRUp4VkVoamFVeERTalZKYW05cFRtMUdWVTB6VW10U1dHeFVZVmRHZEdOWFVUTlpha1p3WVVjMVRFMVhOWGRTTW5BeVkwaEJORkZ1UW1aWmJuQTBXbGQwWVZNeVNscFNVMG81VEVOS2QyUllTbmRpTTA1c1kzbEpObGQ1U21oa1dGSnZXbGMxTUdGWFRtaGtSMngyWW1sS1pFeERTakJsV0VKc1NXcHZhVkpYVG10ak1rWlVXbGRPZDAxcVZUSmhla1pYV2xoS2NGcHRiR3BaV0ZKd1lqSTFURnBZYTNsTlJFVTFTVzR4WkdaWU1XUk1RMG94WTBkU2FHUkhWa1JpTWpGMFlWaFNkRnBYTlRCSmFtOXBVbGRzUldKWGJGaFJNMXByVjBoT1ZXRnFWbkJVVlZKUFdETk9UMVpIZUV0aGEyUmhVbTE0Wm1OcmJIQmtNbFpyVFZWU2FXTXdNRFJoTWtwdFdubEtPVXhEU25wa1YxcHRZVmhvUlZsWVVtaEphbkEzU1cxU2JHSklVbWhUUjBaNllVTkpOa2xyVm5CUk1HeDFaRVJhYkZSR1RrMWpSM041WVVkT2QySXpVbkpWU0VadFVWVjRWRlV5Y0dwTlJYY3dXVE5hTUdGRlNrZE9SbWN4VlZoV01WSkZSV2xNUTBwNVdsZE9kbVJ0Vm5sbFZVNTJZbGN4Y0dSSE1XeGlibEZwVDJsS1JtRlZUa2xsUmtaclUyczFjVmxWZEhaVE1tZDVZbXRzUkZrd2R6UmFWR041V2xSQ2EyUldTa2RrVlZaV1kxZE5NbGxXY0daYWJtaHJaRWQ0UWtsdU1Ua2lMQ0pxZEdraU9pSXlOVFZoTTJNM05pMWhOVEl5TFRRME1XSXRZVEEwTVMxbU16Sm1abU5qWkRGak16UWlMQ0oyWXlJNmV5SkFZMjl1ZEdWNGRDSTZXeUpvZEhSd2N6b3ZMM2QzZHk1M015NXZjbWN2TWpBeE9DOWpjbVZrWlc1MGFXRnNjeTkyTVNKZExDSjBlWEJsSWpwYklsWmxjbWxtYVdGaWJHVkRjbVZrWlc1MGFXRnNJaXdpU1c1MFpYSnZjRVY0WVcxd2JHVldReUpkTENKamNtVmtaVzUwYVdGc1UzVmlhbVZqZENJNmV5Sk1hV0p5WVhKNUlFNWhiV1VpT2lKWGIyOWtaM0p2ZG1VZ1RHbGljbUZ5ZVNJc0lrMWxiV0psY2tsa0lqb2lPVFF6T0RVMk1qQTRJbjBzSW1OeVpXUmxiblJwWVd4VGRHRjBkWE1pT25zaWFXUWlPaUoxY200NmRYVnBaRG8zWm1GalpqUXhZeTB4WkdNMUxUUTRObUl0T0RkbE5pMDFPRGRrTURFMVpUYzJaRGNfWW1sMExXbHVaR1Y0UFRFd0lpd2lkSGx3WlNJNklsSmxkbTlqWVhScGIyNU1hWE4wTWpBeU1WTjBZWFIxY3lJc0luTjBZWFIxYzB4cGMzUkpibVJsZUNJNklqRXdJaXdpYzNSaGRIVnpUR2x6ZEVOeVpXUmxiblJwWVd3aU9pSmthV1E2YVc5dU9rVnBSRGROT0ZKWmJsVjFhWEl5WW0weU1YVjFMVFZaYlZkamNYRlJSV2xsTFZRdGFsbEZUMFZDWlVWWFNsRTZaWGxLYTFwWGVEQlpVMGsyWlhsS2QxbFlVbXBoUjFaNlNXcHdZbVY1U21oWk0xSndZakkwYVU5cFNubGFXRUp6V1ZkT2JFbHBkMmxhUnpscVpGY3hiR0p1VVdsUGJuTnBZMGhXYVdKSGJHcFRNbFkxWTNsSk5sY3pjMmxoVjFGcFQybEtlbUZYWkhWSmFYZHBZMGhXYVdKSGJHcFRNbFkxVTI1a2NrbHFjRGRKYlU1NVpHbEpOa2x1VG14Wk0wRjVUbFJhY2sxVFNYTkpiWFF3WlZOSk5rbHJWa1JKYVhkcFpVTkpOa2x1VG01aGJXaFVaRlpHYzFwclpGbFdhbWN4VVd4V1UxZHJaelZoUlhSUlVqSlNhRlJFVW14WmJXUlRUakJrUlZKRlVrWmlhMHAwWlZoTmFVeERTalZKYW05cFVrZDNORm96WkhGaGVsSlFUakpvTldORVZuRldhbHBxVldwR1ExUXpiREJsYkRsVVUxVmFkRTR3YkdwWFZXeHpURmhDY1dReFNsVldVMG81VEVOS2QyUllTbmRpTTA1c1kzbEpObGQ1U21oa1dGSnZXbGMxTUdGWFRtaGtSMngyWW1sS1pFeERTakJsV0VKc1NXcHZhVkpYVG10ak1rWlVXbGRPZDAxcVZUSmhla1pYV2xoS2NGcHRiR3BaV0ZKd1lqSTFURnBZYTNsTlJFVTFTVzR4WkdaWU1XUk1RMG94WTBkU2FHUkhWa1JpTWpGMFlWaFNkRnBYTlRCSmFtOXBVbGRzUWxWcVdsZGlhbXhJWlVkS2FWTkdhRVZqUkVKdldtcHNOazVXT1ZwVU0yZDZZMFpLYUZwWFpEVk1Wa1pWWkVWd00xbHFUa1JqVldSRFpIbEtPVXhEU25wa1YxcHRZVmhvUlZsWVVtaEphbkEzU1cxU2JHSklVbWhUUjBaNllVTkpOa2xyVm5CUk1EVm9Za1JhV1ZWdVZqVldha1pyV0RKd01sVnNXa1ZpYlhCR1ZGaE9jVk5WU2t4YWFrVXlWbnBaZUdSRVJqSmpibVJQV2pGUmRHSldSV2xNUTBwNVdsZE9kbVJ0Vm5sbFZVNTJZbGN4Y0dSSE1XeGlibEZwVDJsS1JtRlZTbTlQVjFKeVUwUkNSV1JXV2s5VlIyTjVWRzVLYlZkcE1IcGFNVUp0V1hwYVdGWnNPVU5PTTJSUFdqRm9UbHBYYkVKbGEzaENZVVJHYmtsdU1Ua19jMlZ5ZG1salpUMUpaR1Z1ZEdsMGVVaDFZaVp4ZFdWeWFXVnpQVmN6YzJsaVYxWXdZVWM1YTBscWIybFJNamx6WWtkV2FtUkhiSFppYms1U1pGZFdlV1ZUU1hOSmJrNXFZVWRXZEZsVFNUWkpiV2d3WkVoQ2VrOXBPSFprZWs1d1drTTFkbU50WTNaa2JVMTBZek5TYUdSSVZucE1WM2h3WXpOUmRFMXFRWGxOVXpreVRWTkpjMGx0T1dsaGJWWnFaRVZzYTBscWIybGFhbXhxV1ZSR2JVNUVRWFJQUkdjd1RsTXdNRTVYUlRGTVZHZDNUbGRaZEZsNlNteE9WMHBxVGtSYWFFNHlTVFZKYmpGa0luMTlMQ0pwYzNNaU9pSmthV1E2YVc5dU9rVnBSRGROT0ZKWmJsVjFhWEl5WW0weU1YVjFMVFZaYlZkamNYRlJSV2xsTFZRdGFsbEZUMFZDWlVWWFNsRTZaWGxLYTFwWGVEQlpVMGsyWlhsS2QxbFlVbXBoUjFaNlNXcHdZbVY1U21oWk0xSndZakkwYVU5cFNubGFXRUp6V1ZkT2JFbHBkMmxhUnpscVpGY3hiR0p1VVdsUGJuTnBZMGhXYVdKSGJHcFRNbFkxWTNsSk5sY3pjMmxoVjFGcFQybEtlbUZYWkhWSmFYZHBZMGhXYVdKSGJHcFRNbFkxVTI1a2NrbHFjRGRKYlU1NVpHbEpOa2x1VG14Wk0wRjVUbFJhY2sxVFNYTkpiWFF3WlZOSk5rbHJWa1JKYVhkcFpVTkpOa2x1VG01aGJXaFVaRlpHYzFwclpGbFdhbWN4VVd4V1UxZHJaelZoUlhSUlVqSlNhRlJFVW14WmJXUlRUakJrUlZKRlVrWmlhMHAwWlZoTmFVeERTalZKYW05cFVrZDNORm96WkhGaGVsSlFUakpvTldORVZuRldhbHBxVldwR1ExUXpiREJsYkRsVVUxVmFkRTR3YkdwWFZXeHpURmhDY1dReFNsVldVMG81VEVOS2QyUllTbmRpTTA1c1kzbEpObGQ1U21oa1dGSnZXbGMxTUdGWFRtaGtSMngyWW1sS1pFeERTakJsV0VKc1NXcHZhVkpYVG10ak1rWlVXbGRPZDAxcVZUSmhla1pYV2xoS2NGcHRiR3BaV0ZKd1lqSTFURnBZYTNsTlJFVTFTVzR4WkdaWU1XUk1RMG94WTBkU2FHUkhWa1JpTWpGMFlWaFNkRnBYTlRCSmFtOXBVbGRzUWxWcVdsZGlhbXhJWlVkS2FWTkdhRVZqUkVKdldtcHNOazVXT1ZwVU0yZDZZMFpLYUZwWFpEVk1Wa1pWWkVWd00xbHFUa1JqVldSRFpIbEtPVXhEU25wa1YxcHRZVmhvUlZsWVVtaEphbkEzU1cxU2JHSklVbWhUUjBaNllVTkpOa2xyVm5CUk1EVm9Za1JhV1ZWdVZqVldha1pyV0RKd01sVnNXa1ZpYlhCR1ZGaE9jVk5WU2t4YWFrVXlWbnBaZUdSRVJqSmpibVJQV2pGUmRHSldSV2xNUTBwNVdsZE9kbVJ0Vm5sbFZVNTJZbGN4Y0dSSE1XeGlibEZwVDJsS1JtRlZTbTlQVjFKeVUwUkNSV1JXV2s5VlIyTjVWRzVLYlZkcE1IcGFNVUp0V1hwYVdGWnNPVU5PTTJSUFdqRm9UbHBYYkVKbGEzaENZVVJHYmtsdU1Ua2lMQ0pwWVhRaU9qRTJORFl6TURnM016Y3NJbTVpWmlJNk1UWTBOak13T0Rjek55d2laWGh3SWpveE5qYzNPRGN6TlRNM2ZRLnBvbjlqMnhrVkJBQXM3TklQSjJ5MmdEVUU2Z0R3djZxMnB1ZnVSeTA1NnRwdmdYM2xDM3JZc2tJclVGSGwwZXNZWGFMNnFrVUhYQnY2SkFaWG5weVh3Il19LCJhdWQiOiJkaWQ6aW9uOkVpQXYwZUo1Y0IwaEdXVkg1WWJZLXV3MUs3MUVwT1NUNnp0dWVFUXpWQ0VjMEE6ZXlKa1pXeDBZU0k2ZXlKd1lYUmphR1Z6SWpwYmV5SmhZM1JwYjI0aU9pSnlaWEJzWVdObElpd2laRzlqZFcxbGJuUWlPbnNpY0hWaWJHbGpTMlY1Y3lJNlczc2lhV1FpT2lKemFXZGZZMkZpTmpWaFlUQWlMQ0p3ZFdKc2FXTkxaWGxLZDJzaU9uc2lZM0oySWpvaWMyVmpjREkxTm1zeElpd2lhM1I1SWpvaVJVTWlMQ0o0SWpvaU9HMTVNSEZLVUd0Nk9WTlJSVGt5UlRsbVJGZzRaako0YlRSMlgyOVpNWGROVEVwV1dsUTFTemhSZHlJc0lua2lPaUl4YjB4c1ZHNXJOek0yUlROSE9VTk5VVGgzV2pKUVNsVkJNMHBoVm5ZNVZ6RmFWR1ZHU21KUldURkZJbjBzSW5CMWNuQnZjMlZ6SWpwYkltRjFkR2hsYm5ScFkyRjBhVzl1SWl3aVlYTnpaWEowYVc5dVRXVjBhRzlrSWwwc0luUjVjR1VpT2lKRlkyUnpZVk5sWTNBeU5UWnJNVlpsY21sbWFXTmhkR2x2Ymt0bGVUSXdNVGtpZlYwc0luTmxjblpwWTJWeklqcGJleUpwWkNJNklteHBibXRsWkdSdmJXRnBibk1pTENKelpYSjJhV05sUlc1a2NHOXBiblFpT25zaWIzSnBaMmx1Y3lJNld5Sm9kSFJ3Y3pvdkwzTjNaV1Z3YzNSaGEyVnpMbVJwWkM1dGFXTnliM052Wm5RdVkyOXRMeUpkZlN3aWRIbHdaU0k2SWt4cGJtdGxaRVJ2YldGcGJuTWlmVjE5ZlYwc0luVndaR0YwWlVOdmJXMXBkRzFsYm5RaU9pSkZhVUZ3Y21WVE55MUVjemg1TURGblV6azJjRTVpVm5wb1JtWXhVbHB2YmxaM1Vrc3diRzltWkhkT1oyRkJJbjBzSW5OMVptWnBlRVJoZEdFaU9uc2laR1ZzZEdGSVlYTm9Jam9pUldsRU1XUkZkVVZsZEVSbk1uaGlWRXMwVURaVlRUTnVXRU5LVm5GTVJFMTFNMjlJVldOTWFtdFpNV0ZUZHlJc0luSmxZMjkyWlhKNVEyOXRiV2wwYldWdWRDSTZJa1ZwUkVGa1N6RldOa3BqYTFCcFkwUkJjR0Z4VjJJeVpFOTVNRlJOY21KS1RtbGxObWxLVnprNFprNTRia0VpZlgwIiwiaXNzIjoiZGlkOmlvbjpFaUFOMGc2YWhGbDlHdVAydVZSSk1qNG42RUpmdnA5Ql9DZnVPaXBzbDFrYm5nOmV5SmtaV3gwWVNJNmV5SndZWFJqYUdWeklqcGJleUpoWTNScGIyNGlPaUp5WlhCc1lXTmxJaXdpWkc5amRXMWxiblFpT25zaWNIVmliR2xqUzJWNWN5STZXM3NpYVdRaU9pSnphV2R1SWl3aWNIVmliR2xqUzJWNVNuZHJJanA3SW1OeWRpSTZJbk5sWTNBeU5UWnJNU0lzSW10MGVTSTZJa1ZESWl3aWVDSTZJbkJFZDFKU2JIcFNOakpRVTFSYVIyMHRZVGx3ZW1oMFgxTlVabkJyYjIxWk9YbGlXR0pMUVhCcVRIY2lMQ0o1SWpvaU5tRlVNM1JrUlhsVGFXRnRjV1EzWWpGcGFHNUxNVzV3UjJwMmNIQTRRbkJmWW5wNFpXdGFTMkpaUlNKOUxDSndkWEp3YjNObGN5STZXeUpoZFhSb1pXNTBhV05oZEdsdmJpSmRMQ0owZVhCbElqb2lSV05rYzJGVFpXTndNalUyYXpGV1pYSnBabWxqWVhScGIyNUxaWGt5TURFNUluMWRmWDFkTENKMWNHUmhkR1ZEYjIxdGFYUnRaVzUwSWpvaVJXbEViV2xYUTNaa1dITlVhalZwVFVST1gzTk9WR3hLYWtkYVJteGZja2xwZDJWa01VUmljMDA0YTJKbVp5SjlMQ0p6ZFdabWFYaEVZWFJoSWpwN0ltUmxiSFJoU0dGemFDSTZJa1ZwUTBsdWREWmxURk5NY0dzeWFHTndiM1JyVUhGbVFVeFRVMnBqTUV3MFkzWjBhRUpHTkZnMVVYVjFSRUVpTENKeVpXTnZkbVZ5ZVVOdmJXMXBkRzFsYm5RaU9pSkZhVU5JZUZGa1NrNXFZVXR2UzJneWJrbERZMHc0WlRjeVpUQmtkVkpHZFVWVmNXTTJZVnBmWm5oa2RHeEJJbjE5IiwiaWF0IjoxNjQ2MzA4NzM3LCJuYmYiOjE2NDYzMDg3MzcsImV4cCI6MTY0Njc2OTUzN30.BmifPHKuRPMpqbU6NnV6n0D1kNqg72l8e1dy4Ju0VBwEGr6XESBpLgymPOgy0CtzWQop2CxoXdGiHnTvAIlc5Q&amp;state=djEDnND6B/1xbrpZ1AiC+YTLcD88eDcEoE5jrZLk/4XIYyQHuvyy5xVZM5Hs7HL31DfgdS9CJt8Je8su8cHrWDGr0dQcFlYN4mEJV3HVo1M9u6x/iBNzJ5coOG2nyVs+FhFOuNGtKfRp+KzecA2CYRHKzGNiTZxCI1/9s2thWFs+sEvJcHhdkreM97v6zafUocl1nnVHEDA4zJ7KSpZB4tRyabSO26HxTgWesQwoIE2T+qOTQvs48lSRHfXnK7BBHA4SK2+Kmz5ypdn/RSqng+2v81vBdkewSXihbErnmk5rtnxRLyqCUaf/DUDfzrq8I/HOCUrGH91EBzFgW2T7qI08dfO8u7zayGjfvvOkYJrxSo+Aum/IWFXWYHLydho/9NzNEhW33/9O9rQ95MmNX9t/juRzi/RjR6ZEKMYUkzpIktlOzGInRq4/Ycfxn8YP3T14dMWMU6KTsYABXpcnJ8h/NNp51h13lxke1ZmwmU36PUYjqByDZ75d3I39hH4++lJJyESr9sFi2OiF1jRPxyAJgfNPq+j962I/N9z7kkA/E+1tEVj+kVqZ18hU9rIdmfudjewo+mFFTnh7yAqZUWiqC018TUs/m+Ei4OrxHCll67js6R74IkUF3zBuxOrCrXrPJxdvM8xcFyVkXQpPvRVSmgS9QwjD6Ug7vIG1dyn6O8/ocQ6L5DZP6CM3O77TOB10wRF8jhDwWLZ3zR8RWsO4o4S3BwPy1W4iG9IIQXYE7vFBI2Z4AGyC1WSvnyDEVhEZEGnxkkwuT+jIU/Eti70DSB1FiaJcfvrUNqDdBfX6a387QDGPEmWoY7Jt128gdDhLvjG81DzCTot3GZfRsa6RDP5Cnbafu0LnGX8exf332L3nt1V8MPJTOaIvWtce0rVy9hqALisAdwlgQ74QDVqNCWgTurZdVd9z0hR+xau+WNIi6laUt6ROYQijuhVbtFzdyl/P141ezTk/Pn3eOSWPdM1tXHTE1CfJkb03cp22leMI1qRk6F3MmpiAhhF5CIMTUKyQ4d7wulTIFZimoxoIGd+Ji8WDKjl7x/2u72pR+L259WisTW95kO7g/RUOrOg2mgj9tC3xD+5icn6GS9zY4YDuFx+0XIdzgzteNdiTbpkCYhmMaYRiKv8IDJmuLK1cCDLyOSmjksJdfyrIA21/uRYU+3BKKCcaQbzCO2x81xNoSiL3P/vp5qXwigxmFOG7ZHqcNhSjxeTJJ7jijegW+GevNPo36Y5f0vLjo1HOroNdfPw6hjb783/d6h0ZFiQxNy8tDCY5q+WxBL1j6NSLFgkYJ3aBYXmQkfLMpMRTmfOeBxlBvReuU52YI/q0Suya/FVfcjZjf2by/I60Guu4ZySVv3eZVZju7K/OclViZT8zOkS7QAYlgehqVrYBWcGfTYEc95UIIdXgB+ReCGB0EoFjmWjkb1Gt09jP4bZP/fl/vaMZzBqSrjPo34jgO4ZB5a1pZOB0nugZhypfUVFv1pAmITszIsksHfyL2KMeVsSfPhkXY+93t2OB3L48pbvJSfAFjzUMRhRzy/SzRzHb39dXbQV/FmtW5rEIYEcudJurFdKAvQnk36bHxwCDCRkzquZuv9PzdH9woQMJDze1KS0KtTPU4EXkcYTFezn1uuw8IbbZxHU0EUf9VXN3hKOKSBMlLTLuZoDJiERNsVPm8S/9lL6/iHvP9zzvp9Zloj3eytJ5jmGVjROjnM+YCKP5IMy3y/BTq1WlQVixVLki6euMlR8PLdRICPDXNYRt
+</code></pre>
+</div>
+<p>Below is a non-normative example of a decoded VP Token:</p>
+<div id="decoded-vp-token" class="notice example"><a class="notice-link" href="#decoded-vp-token">EXAMPLE</a><pre class="language-json"><code class="language-json"><span class="token punctuation">{</span>
+  <span class="token property">"alg"</span><span class="token operator">:</span> <span class="token string">"ES256K"</span><span class="token punctuation">,</span>
+  <span class="token property">"kid"</span><span class="token operator">:</span> <span class="token string">"did:ion:EiAN0g6ahFl9GuP2uVRJMj4n6EJfvp9B_CfuOipsl1kbng:eyJkZWx0YSI6eyJwYXRjaGVzIjpbeyJhY3Rpb24iOiJyZXBsYWNlIiwiZG9jdW1lbnQiOnsicHVibGljS2V5cyI6W3siaWQiOiJzaWduIiwicHVibGljS2V5SndrIjp7ImNydiI6InNlY3AyNTZrMSIsImt0eSI6IkVDIiwieCI6InBEd1JSbHpSNjJQU1RaR20tYTlwemh0X1NUZnBrb21ZOXliWGJLQXBqTHciLCJ5IjoiNmFUM3RkRXlTaWFtcWQ3YjFpaG5LMW5wR2p2cHA4QnBfYnp4ZWtaS2JZRSJ9LCJwdXJwb3NlcyI6WyJhdXRoZW50aWNhdGlvbiJdLCJ0eXBlIjoiRWNkc2FTZWNwMjU2azFWZXJpZmljYXRpb25LZXkyMDE5In1dfX1dLCJ1cGRhdGVDb21taXRtZW50IjoiRWlEbWlXQ3ZkWHNUajVpTUROX3NOVGxKakdaRmxfcklpd2VkMURic004a2JmZyJ9LCJzdWZmaXhEYXRhIjp7ImRlbHRhSGFzaCI6IkVpQ0ludDZlTFNMcGsyaGNwb3RrUHFmQUxTU2pjMEw0Y3Z0aEJGNFg1UXV1REEiLCJyZWNvdmVyeUNvbW1pdG1lbnQiOiJFaUNIeFFkSk5qYUtvS2gybklDY0w4ZTcyZTBkdVJGdUVVcWM2YVpfZnhkdGxBIn19#sign"</span><span class="token punctuation">,</span>
+  <span class="token property">"typ"</span><span class="token operator">:</span> <span class="token string">"JWT"</span>
+<span class="token punctuation">}</span>.<span class="token punctuation">{</span>
+  <span class="token property">"nonce"</span><span class="token operator">:</span> <span class="token string">"O1mZGnuet++Ilg2c1jR4jA=="</span><span class="token punctuation">,</span>
+  <span class="token property">"vp"</span><span class="token operator">:</span> <span class="token punctuation">{</span>
+    <span class="token property">"@context"</span><span class="token operator">:</span> <span class="token punctuation">[</span>
+      <span class="token string">"https://www.w3.org/2018/credentials/v1"</span>
+    <span class="token punctuation">]</span><span class="token punctuation">,</span>
+    <span class="token property">"type"</span><span class="token operator">:</span> <span class="token punctuation">[</span>
+      <span class="token string">"VerifiablePresentation"</span>
+    <span class="token punctuation">]</span><span class="token punctuation">,</span>
+    <span class="token property">"verifiableCredential"</span><span class="token operator">:</span> <span class="token punctuation">[</span>
+      <span class="token string">"eyJhbGciOiJFUzI1NksiLCJraWQiOiJkaWQ6aW9uOkVpRDdNOFJZblV1aXIyYm0yMXV1LTVZbVdjcXFRRWllLVQtallFT0VCZUVXSlE6ZXlKa1pXeDBZU0k2ZXlKd1lYUmphR1Z6SWpwYmV5SmhZM1JwYjI0aU9pSnlaWEJzWVdObElpd2laRzlqZFcxbGJuUWlPbnNpY0hWaWJHbGpTMlY1Y3lJNlczc2lhV1FpT2lKemFXZHVJaXdpY0hWaWJHbGpTMlY1U25kcklqcDdJbU55ZGlJNkluTmxZM0F5TlRack1TSXNJbXQwZVNJNklrVkRJaXdpZUNJNkluTm5hbWhUZFZGc1prZFlWamcxUWxWU1drZzVhRXRRUjJSaFREUmxZbWRTTjBkRVJFUkZia0p0ZVhNaUxDSjVJam9pUkd3NFozZHFhelJQTjJoNWNEVnFWalpqVWpGQ1QzbDBlbDlUU1VadE4wbGpXVWxzTFhCcWQxSlVWU0o5TENKd2RYSndiM05sY3lJNld5SmhkWFJvWlc1MGFXTmhkR2x2YmlKZExDSjBlWEJsSWpvaVJXTmtjMkZUWldOd01qVTJhekZXWlhKcFptbGpZWFJwYjI1TFpYa3lNREU1SW4xZGZYMWRMQ0oxY0dSaGRHVkRiMjF0YVhSdFpXNTBJam9pUldsQlVqWldiamxIZUdKaVNGaEVjREJvWmpsNk5WOVpUM2d6Y0ZKaFpXZDVMVkZVZEVwM1lqTkRjVWRDZHlKOUxDSnpkV1ptYVhoRVlYUmhJanA3SW1SbGJIUmhTR0Z6YUNJNklrVnBRMDVoYkRaWVVuVjVWakZrWDJwMlVsWkVibXBGVFhOcVNVSkxaakUyVnpZeGRERjJjbmRPWjFRdGJWRWlMQ0p5WldOdmRtVnllVU52YlcxcGRHMWxiblFpT2lKRmFVSm9PV1JyU0RCRWRWWk9VR2N5VG5KbVdpMHpaMUJtWXpaWFZsOUNOM2RPWjFoTlpXbEJla3hCYURGbkluMTkjc2lnbiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJkaWQ6aW9uOkVpQU4wZzZhaEZsOUd1UDJ1VlJKTWo0bjZFSmZ2cDlCX0NmdU9pcHNsMWtibmc6ZXlKa1pXeDBZU0k2ZXlKd1lYUmphR1Z6SWpwYmV5SmhZM1JwYjI0aU9pSnlaWEJzWVdObElpd2laRzlqZFcxbGJuUWlPbnNpY0hWaWJHbGpTMlY1Y3lJNlczc2lhV1FpT2lKemFXZHVJaXdpY0hWaWJHbGpTMlY1U25kcklqcDdJbU55ZGlJNkluTmxZM0F5TlRack1TSXNJbXQwZVNJNklrVkRJaXdpZUNJNkluQkVkMUpTYkhwU05qSlFVMVJhUjIwdFlUbHdlbWgwWDFOVVpuQnJiMjFaT1hsaVdHSkxRWEJxVEhjaUxDSjVJam9pTm1GVU0zUmtSWGxUYVdGdGNXUTNZakZwYUc1TE1XNXdSMnAyY0hBNFFuQmZZbnA0Wld0YVMySlpSU0o5TENKd2RYSndiM05sY3lJNld5SmhkWFJvWlc1MGFXTmhkR2x2YmlKZExDSjBlWEJsSWpvaVJXTmtjMkZUWldOd01qVTJhekZXWlhKcFptbGpZWFJwYjI1TFpYa3lNREU1SW4xZGZYMWRMQ0oxY0dSaGRHVkRiMjF0YVhSdFpXNTBJam9pUldsRWJXbFhRM1prV0hOVWFqVnBUVVJPWDNOT1ZHeEtha2RhUm14ZmNrbHBkMlZrTVVSaWMwMDRhMkptWnlKOUxDSnpkV1ptYVhoRVlYUmhJanA3SW1SbGJIUmhTR0Z6YUNJNklrVnBRMGx1ZERabFRGTk1jR3N5YUdOd2IzUnJVSEZtUVV4VFUycGpNRXcwWTNaMGFFSkdORmcxVVhWMVJFRWlMQ0p5WldOdmRtVnllVU52YlcxcGRHMWxiblFpT2lKRmFVTkllRkZrU2s1cVlVdHZTMmd5YmtsRFkwdzRaVGN5WlRCa2RWSkdkVVZWY1dNMllWcGZabmhrZEd4QkluMTkiLCJqdGkiOiIyNTVhM2M3Ni1hNTIyLTQ0MWItYTA0MS1mMzJmZmNjZDFjMzQiLCJ2YyI6eyJAY29udGV4dCI6WyJodHRwczovL3d3dy53My5vcmcvMjAxOC9jcmVkZW50aWFscy92MSJdLCJ0eXBlIjpbIlZlcmlmaWFibGVDcmVkZW50aWFsIiwiSW50ZXJvcEV4YW1wbGVWQyJdLCJjcmVkZW50aWFsU3ViamVjdCI6eyJMaWJyYXJ5IE5hbWUiOiJXb29kZ3JvdmUgTGlicmFyeSIsIk1lbWJlcklkIjoiOTQzODU2MjA4In0sImNyZWRlbnRpYWxTdGF0dXMiOnsiaWQiOiJ1cm46dXVpZDo3ZmFjZjQxYy0xZGM1LTQ4NmItODdlNi01ODdkMDE1ZTc2ZDc_Yml0LWluZGV4PTEwIiwidHlwZSI6IlJldm9jYXRpb25MaXN0MjAyMVN0YXR1cyIsInN0YXR1c0xpc3RJbmRleCI6IjEwIiwic3RhdHVzTGlzdENyZWRlbnRpYWwiOiJkaWQ6aW9uOkVpRDdNOFJZblV1aXIyYm0yMXV1LTVZbVdjcXFRRWllLVQtallFT0VCZUVXSlE6ZXlKa1pXeDBZU0k2ZXlKd1lYUmphR1Z6SWpwYmV5SmhZM1JwYjI0aU9pSnlaWEJzWVdObElpd2laRzlqZFcxbGJuUWlPbnNpY0hWaWJHbGpTMlY1Y3lJNlczc2lhV1FpT2lKemFXZHVJaXdpY0hWaWJHbGpTMlY1U25kcklqcDdJbU55ZGlJNkluTmxZM0F5TlRack1TSXNJbXQwZVNJNklrVkRJaXdpZUNJNkluTm5hbWhUZFZGc1prZFlWamcxUWxWU1drZzVhRXRRUjJSaFREUmxZbWRTTjBkRVJFUkZia0p0ZVhNaUxDSjVJam9pUkd3NFozZHFhelJQTjJoNWNEVnFWalpqVWpGQ1QzbDBlbDlUU1VadE4wbGpXVWxzTFhCcWQxSlVWU0o5TENKd2RYSndiM05sY3lJNld5SmhkWFJvWlc1MGFXTmhkR2x2YmlKZExDSjBlWEJsSWpvaVJXTmtjMkZUWldOd01qVTJhekZXWlhKcFptbGpZWFJwYjI1TFpYa3lNREU1SW4xZGZYMWRMQ0oxY0dSaGRHVkRiMjF0YVhSdFpXNTBJam9pUldsQlVqWldiamxIZUdKaVNGaEVjREJvWmpsNk5WOVpUM2d6Y0ZKaFpXZDVMVkZVZEVwM1lqTkRjVWRDZHlKOUxDSnpkV1ptYVhoRVlYUmhJanA3SW1SbGJIUmhTR0Z6YUNJNklrVnBRMDVoYkRaWVVuVjVWakZrWDJwMlVsWkVibXBGVFhOcVNVSkxaakUyVnpZeGRERjJjbmRPWjFRdGJWRWlMQ0p5WldOdmRtVnllVU52YlcxcGRHMWxiblFpT2lKRmFVSm9PV1JyU0RCRWRWWk9VR2N5VG5KbVdpMHpaMUJtWXpaWFZsOUNOM2RPWjFoTlpXbEJla3hCYURGbkluMTk_c2VydmljZT1JZGVudGl0eUh1YiZxdWVyaWVzPVczc2liV1YwYUc5a0lqb2lRMjlzYkdWamRHbHZibk5SZFdWeWVTSXNJbk5qYUdWdFlTSTZJbWgwZEhCek9pOHZkek5wWkM1dmNtY3ZkbU10YzNSaGRIVnpMV3hwYzNRdE1qQXlNUzkyTVNJc0ltOWlhbVZqZEVsa0lqb2laamxqWVRGbU5EQXRPRGcwTlMwME5XRTFMVGd3TldZdFl6SmxOV0pqTkRaaE4ySTVJbjFkIn19LCJpc3MiOiJkaWQ6aW9uOkVpRDdNOFJZblV1aXIyYm0yMXV1LTVZbVdjcXFRRWllLVQtallFT0VCZUVXSlE6ZXlKa1pXeDBZU0k2ZXlKd1lYUmphR1Z6SWpwYmV5SmhZM1JwYjI0aU9pSnlaWEJzWVdObElpd2laRzlqZFcxbGJuUWlPbnNpY0hWaWJHbGpTMlY1Y3lJNlczc2lhV1FpT2lKemFXZHVJaXdpY0hWaWJHbGpTMlY1U25kcklqcDdJbU55ZGlJNkluTmxZM0F5TlRack1TSXNJbXQwZVNJNklrVkRJaXdpZUNJNkluTm5hbWhUZFZGc1prZFlWamcxUWxWU1drZzVhRXRRUjJSaFREUmxZbWRTTjBkRVJFUkZia0p0ZVhNaUxDSjVJam9pUkd3NFozZHFhelJQTjJoNWNEVnFWalpqVWpGQ1QzbDBlbDlUU1VadE4wbGpXVWxzTFhCcWQxSlVWU0o5TENKd2RYSndiM05sY3lJNld5SmhkWFJvWlc1MGFXTmhkR2x2YmlKZExDSjBlWEJsSWpvaVJXTmtjMkZUWldOd01qVTJhekZXWlhKcFptbGpZWFJwYjI1TFpYa3lNREU1SW4xZGZYMWRMQ0oxY0dSaGRHVkRiMjF0YVhSdFpXNTBJam9pUldsQlVqWldiamxIZUdKaVNGaEVjREJvWmpsNk5WOVpUM2d6Y0ZKaFpXZDVMVkZVZEVwM1lqTkRjVWRDZHlKOUxDSnpkV1ptYVhoRVlYUmhJanA3SW1SbGJIUmhTR0Z6YUNJNklrVnBRMDVoYkRaWVVuVjVWakZrWDJwMlVsWkVibXBGVFhOcVNVSkxaakUyVnpZeGRERjJjbmRPWjFRdGJWRWlMQ0p5WldOdmRtVnllVU52YlcxcGRHMWxiblFpT2lKRmFVSm9PV1JyU0RCRWRWWk9VR2N5VG5KbVdpMHpaMUJtWXpaWFZsOUNOM2RPWjFoTlpXbEJla3hCYURGbkluMTkiLCJpYXQiOjE2NDYzMDg3MzcsIm5iZiI6MTY0NjMwODczNywiZXhwIjoxNjc3ODczNTM3fQ.pon9j2xkVBAAs7NIPJ2y2gDUE6gDwv6q2pufuRy056tpvgX3lC3rYskIrUFHl0esYXaL6qkUHXBv6JAZXnpyXw"</span>
+    <span class="token punctuation">]</span>
+  <span class="token punctuation">}</span><span class="token punctuation">,</span>
+  <span class="token property">"aud"</span><span class="token operator">:</span> <span class="token string">"did:ion:EiAv0eJ5cB0hGWVH5YbY-uw1K71EpOST6ztueEQzVCEc0A:eyJkZWx0YSI6eyJwYXRjaGVzIjpbeyJhY3Rpb24iOiJyZXBsYWNlIiwiZG9jdW1lbnQiOnsicHVibGljS2V5cyI6W3siaWQiOiJzaWdfY2FiNjVhYTAiLCJwdWJsaWNLZXlKd2siOnsiY3J2Ijoic2VjcDI1NmsxIiwia3R5IjoiRUMiLCJ4IjoiOG15MHFKUGt6OVNRRTkyRTlmRFg4ZjJ4bTR2X29ZMXdNTEpWWlQ1SzhRdyIsInkiOiIxb0xsVG5rNzM2RTNHOUNNUTh3WjJQSlVBM0phVnY5VzFaVGVGSmJRWTFFIn0sInB1cnBvc2VzIjpbImF1dGhlbnRpY2F0aW9uIiwiYXNzZXJ0aW9uTWV0aG9kIl0sInR5cGUiOiJFY2RzYVNlY3AyNTZrMVZlcmlmaWNhdGlvbktleTIwMTkifV0sInNlcnZpY2VzIjpbeyJpZCI6ImxpbmtlZGRvbWFpbnMiLCJzZXJ2aWNlRW5kcG9pbnQiOnsib3JpZ2lucyI6WyJodHRwczovL3N3ZWVwc3Rha2VzLmRpZC5taWNyb3NvZnQuY29tLyJdfSwidHlwZSI6IkxpbmtlZERvbWFpbnMifV19fV0sInVwZGF0ZUNvbW1pdG1lbnQiOiJFaUFwcmVTNy1Eczh5MDFnUzk2cE5iVnpoRmYxUlpvblZ3UkswbG9mZHdOZ2FBIn0sInN1ZmZpeERhdGEiOnsiZGVsdGFIYXNoIjoiRWlEMWRFdUVldERnMnhiVEs0UDZVTTNuWENKVnFMRE11M29IVWNMamtZMWFTdyIsInJlY292ZXJ5Q29tbWl0bWVudCI6IkVpREFkSzFWNkpja1BpY0RBcGFxV2IyZE95MFRNcmJKTmllNmlKVzk4Zk54bkEifX0"</span><span class="token punctuation">,</span>
+  <span class="token property">"iss"</span><span class="token operator">:</span> <span class="token string">"did:ion:EiAN0g6ahFl9GuP2uVRJMj4n6EJfvp9B_CfuOipsl1kbng:eyJkZWx0YSI6eyJwYXRjaGVzIjpbeyJhY3Rpb24iOiJyZXBsYWNlIiwiZG9jdW1lbnQiOnsicHVibGljS2V5cyI6W3siaWQiOiJzaWduIiwicHVibGljS2V5SndrIjp7ImNydiI6InNlY3AyNTZrMSIsImt0eSI6IkVDIiwieCI6InBEd1JSbHpSNjJQU1RaR20tYTlwemh0X1NUZnBrb21ZOXliWGJLQXBqTHciLCJ5IjoiNmFUM3RkRXlTaWFtcWQ3YjFpaG5LMW5wR2p2cHA4QnBfYnp4ZWtaS2JZRSJ9LCJwdXJwb3NlcyI6WyJhdXRoZW50aWNhdGlvbiJdLCJ0eXBlIjoiRWNkc2FTZWNwMjU2azFWZXJpZmljYXRpb25LZXkyMDE5In1dfX1dLCJ1cGRhdGVDb21taXRtZW50IjoiRWlEbWlXQ3ZkWHNUajVpTUROX3NOVGxKakdaRmxfcklpd2VkMURic004a2JmZyJ9LCJzdWZmaXhEYXRhIjp7ImRlbHRhSGFzaCI6IkVpQ0ludDZlTFNMcGsyaGNwb3RrUHFmQUxTU2pjMEw0Y3Z0aEJGNFg1UXV1REEiLCJyZWNvdmVyeUNvbW1pdG1lbnQiOiJFaUNIeFFkSk5qYUtvS2gybklDY0w4ZTcyZTBkdVJGdUVVcWM2YVpfZnhkdGxBIn19"</span><span class="token punctuation">,</span>
+  <span class="token property">"iat"</span><span class="token operator">:</span> <span class="token number">1646308737</span><span class="token punctuation">,</span>
+  <span class="token property">"nbf"</span><span class="token operator">:</span> <span class="token number">1646308737</span><span class="token punctuation">,</span>
+  <span class="token property">"exp"</span><span class="token operator">:</span> <span class="token number">1646769537</span>
+<span class="token punctuation">}</span>.<span class="token punctuation">[</span>Signature<span class="token punctuation">]</span>
+</code></pre>
+</div>
+<p>Below is a non-normative example of a Base64URL encoded VC. Note that the VC MUST be obtained from <code>path_nested</code> in <code>presentation_submission</code> of the ID Token.</p>
+<div id="vc-jwt" class="notice example"><a class="notice-link" href="#vc-jwt">EXAMPLE</a><pre class="language-json"><code class="language-json">eyJhbGciOiJFUzI1NksiLCJraWQiOiJkaWQ6aW9uOkVpRDdNOFJZblV1aXIyYm0yMXV1LTVZbVdjcXFRRWllLVQtallFT0VCZUVXSlE6ZXlKa1pXeDBZU0k2ZXlKd1lYUmphR1Z6SWpwYmV5SmhZM1JwYjI0aU9pSnlaWEJzWVdObElpd2laRzlqZFcxbGJuUWlPbnNpY0hWaWJHbGpTMlY1Y3lJNlczc2lhV1FpT2lKemFXZHVJaXdpY0hWaWJHbGpTMlY1U25kcklqcDdJbU55ZGlJNkluTmxZM0F5TlRack1TSXNJbXQwZVNJNklrVkRJaXdpZUNJNkluTm5hbWhUZFZGc1prZFlWamcxUWxWU1drZzVhRXRRUjJSaFREUmxZbWRTTjBkRVJFUkZia0p0ZVhNaUxDSjVJam9pUkd3NFozZHFhelJQTjJoNWNEVnFWalpqVWpGQ1QzbDBlbDlUU1VadE4wbGpXVWxzTFhCcWQxSlVWU0o5TENKd2RYSndiM05sY3lJNld5SmhkWFJvWlc1MGFXTmhkR2x2YmlKZExDSjBlWEJsSWpvaVJXTmtjMkZUWldOd01qVTJhekZXWlhKcFptbGpZWFJwYjI1TFpYa3lNREU1SW4xZGZYMWRMQ0oxY0dSaGRHVkRiMjF0YVhSdFpXNTBJam9pUldsQlVqWldiamxIZUdKaVNGaEVjREJvWmpsNk5WOVpUM2d6Y0ZKaFpXZDVMVkZVZEVwM1lqTkRjVWRDZHlKOUxDSnpkV1ptYVhoRVlYUmhJanA3SW1SbGJIUmhTR0Z6YUNJNklrVnBRMDVoYkRaWVVuVjVWakZrWDJwMlVsWkVibXBGVFhOcVNVSkxaakUyVnpZeGRERjJjbmRPWjFRdGJWRWlMQ0p5WldOdmRtVnllVU52YlcxcGRHMWxiblFpT2lKRmFVSm9PV1JyU0RCRWRWWk9VR2N5VG5KbVdpMHpaMUJtWXpaWFZsOUNOM2RPWjFoTlpXbEJla3hCYURGbkluMTkjc2lnbiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJkaWQ6aW9uOkVpQU4wZzZhaEZsOUd1UDJ1VlJKTWo0bjZFSmZ2cDlCX0NmdU9pcHNsMWtibmc6ZXlKa1pXeDBZU0k2ZXlKd1lYUmphR1Z6SWpwYmV5SmhZM1JwYjI0aU9pSnlaWEJzWVdObElpd2laRzlqZFcxbGJuUWlPbnNpY0hWaWJHbGpTMlY1Y3lJNlczc2lhV1FpT2lKemFXZHVJaXdpY0hWaWJHbGpTMlY1U25kcklqcDdJbU55ZGlJNkluTmxZM0F5TlRack1TSXNJbXQwZVNJNklrVkRJaXdpZUNJNkluQkVkMUpTYkhwU05qSlFVMVJhUjIwdFlUbHdlbWgwWDFOVVpuQnJiMjFaT1hsaVdHSkxRWEJxVEhjaUxDSjVJam9pTm1GVU0zUmtSWGxUYVdGdGNXUTNZakZwYUc1TE1XNXdSMnAyY0hBNFFuQmZZbnA0Wld0YVMySlpSU0o5TENKd2RYSndiM05sY3lJNld5SmhkWFJvWlc1MGFXTmhkR2x2YmlKZExDSjBlWEJsSWpvaVJXTmtjMkZUWldOd01qVTJhekZXWlhKcFptbGpZWFJwYjI1TFpYa3lNREU1SW4xZGZYMWRMQ0oxY0dSaGRHVkRiMjF0YVhSdFpXNTBJam9pUldsRWJXbFhRM1prV0hOVWFqVnBUVVJPWDNOT1ZHeEtha2RhUm14ZmNrbHBkMlZrTVVSaWMwMDRhMkptWnlKOUxDSnpkV1ptYVhoRVlYUmhJanA3SW1SbGJIUmhTR0Z6YUNJNklrVnBRMGx1ZERabFRGTk1jR3N5YUdOd2IzUnJVSEZtUVV4VFUycGpNRXcwWTNaMGFFSkdORmcxVVhWMVJFRWlMQ0p5WldOdmRtVnllVU52YlcxcGRHMWxiblFpT2lKRmFVTkllRkZrU2s1cVlVdHZTMmd5YmtsRFkwdzRaVGN5WlRCa2RWSkdkVVZWY1dNMllWcGZabmhrZEd4QkluMTkiLCJqdGkiOiIyNTVhM2M3Ni1hNTIyLTQ0MWItYTA0MS1mMzJmZmNjZDFjMzQiLCJ2YyI6eyJAY29udGV4dCI6WyJodHRwczovL3d3dy53My5vcmcvMjAxOC9jcmVkZW50aWFscy92MSJdLCJ0eXBlIjpbIlZlcmlmaWFibGVDcmVkZW50aWFsIiwiSW50ZXJvcEV4YW1wbGVWQyJdLCJjcmVkZW50aWFsU3ViamVjdCI6eyJMaWJyYXJ5IE5hbWUiOiJXb29kZ3JvdmUgTGlicmFyeSIsIk1lbWJlcklkIjoiOTQzODU2MjA4In0sImNyZWRlbnRpYWxTdGF0dXMiOnsiaWQiOiJ1cm46dXVpZDo3ZmFjZjQxYy0xZGM1LTQ4NmItODdlNi01ODdkMDE1ZTc2ZDc_Yml0LWluZGV4PTEwIiwidHlwZSI6IlJldm9jYXRpb25MaXN0MjAyMVN0YXR1cyIsInN0YXR1c0xpc3RJbmRleCI6IjEwIiwic3RhdHVzTGlzdENyZWRlbnRpYWwiOiJkaWQ6aW9uOkVpRDdNOFJZblV1aXIyYm0yMXV1LTVZbVdjcXFRRWllLVQtallFT0VCZUVXSlE6ZXlKa1pXeDBZU0k2ZXlKd1lYUmphR1Z6SWpwYmV5SmhZM1JwYjI0aU9pSnlaWEJzWVdObElpd2laRzlqZFcxbGJuUWlPbnNpY0hWaWJHbGpTMlY1Y3lJNlczc2lhV1FpT2lKemFXZHVJaXdpY0hWaWJHbGpTMlY1U25kcklqcDdJbU55ZGlJNkluTmxZM0F5TlRack1TSXNJbXQwZVNJNklrVkRJaXdpZUNJNkluTm5hbWhUZFZGc1prZFlWamcxUWxWU1drZzVhRXRRUjJSaFREUmxZbWRTTjBkRVJFUkZia0p0ZVhNaUxDSjVJam9pUkd3NFozZHFhelJQTjJoNWNEVnFWalpqVWpGQ1QzbDBlbDlUU1VadE4wbGpXVWxzTFhCcWQxSlVWU0o5TENKd2RYSndiM05sY3lJNld5SmhkWFJvWlc1MGFXTmhkR2x2YmlKZExDSjBlWEJsSWpvaVJXTmtjMkZUWldOd01qVTJhekZXWlhKcFptbGpZWFJwYjI1TFpYa3lNREU1SW4xZGZYMWRMQ0oxY0dSaGRHVkRiMjF0YVhSdFpXNTBJam9pUldsQlVqWldiamxIZUdKaVNGaEVjREJvWmpsNk5WOVpUM2d6Y0ZKaFpXZDVMVkZVZEVwM1lqTkRjVWRDZHlKOUxDSnpkV1ptYVhoRVlYUmhJanA3SW1SbGJIUmhTR0Z6YUNJNklrVnBRMDVoYkRaWVVuVjVWakZrWDJwMlVsWkVibXBGVFhOcVNVSkxaakUyVnpZeGRERjJjbmRPWjFRdGJWRWlMQ0p5WldOdmRtVnllVU52YlcxcGRHMWxiblFpT2lKRmFVSm9PV1JyU0RCRWRWWk9VR2N5VG5KbVdpMHpaMUJtWXpaWFZsOUNOM2RPWjFoTlpXbEJla3hCYURGbkluMTk_c2VydmljZT1JZGVudGl0eUh1YiZxdWVyaWVzPVczc2liV1YwYUc5a0lqb2lRMjlzYkdWamRHbHZibk5SZFdWeWVTSXNJbk5qYUdWdFlTSTZJbWgwZEhCek9pOHZkek5wWkM1dmNtY3ZkbU10YzNSaGRIVnpMV3hwYzNRdE1qQXlNUzkyTVNJc0ltOWlhbVZqZEVsa0lqb2laamxqWVRGbU5EQXRPRGcwTlMwME5XRTFMVGd3TldZdFl6SmxOV0pqTkRaaE4ySTVJbjFkIn19LCJpc3MiOiJkaWQ6aW9uOkVpRDdNOFJZblV1aXIyYm0yMXV1LTVZbVdjcXFRRWllLVQtallFT0VCZUVXSlE6ZXlKa1pXeDBZU0k2ZXlKd1lYUmphR1Z6SWpwYmV5SmhZM1JwYjI0aU9pSnlaWEJzWVdObElpd2laRzlqZFcxbGJuUWlPbnNpY0hWaWJHbGpTMlY1Y3lJNlczc2lhV1FpT2lKemFXZHVJaXdpY0hWaWJHbGpTMlY1U25kcklqcDdJbU55ZGlJNkluTmxZM0F5TlRack1TSXNJbXQwZVNJNklrVkRJaXdpZUNJNkluTm5hbWhUZFZGc1prZFlWamcxUWxWU1drZzVhRXRRUjJSaFREUmxZbWRTTjBkRVJFUkZia0p0ZVhNaUxDSjVJam9pUkd3NFozZHFhelJQTjJoNWNEVnFWalpqVWpGQ1QzbDBlbDlUU1VadE4wbGpXVWxzTFhCcWQxSlVWU0o5TENKd2RYSndiM05sY3lJNld5SmhkWFJvWlc1MGFXTmhkR2x2YmlKZExDSjBlWEJsSWpvaVJXTmtjMkZUWldOd01qVTJhekZXWlhKcFptbGpZWFJwYjI1TFpYa3lNREU1SW4xZGZYMWRMQ0oxY0dSaGRHVkRiMjF0YVhSdFpXNTBJam9pUldsQlVqWldiamxIZUdKaVNGaEVjREJvWmpsNk5WOVpUM2d6Y0ZKaFpXZDVMVkZVZEVwM1lqTkRjVWRDZHlKOUxDSnpkV1ptYVhoRVlYUmhJanA3SW1SbGJIUmhTR0Z6YUNJNklrVnBRMDVoYkRaWVVuVjVWakZrWDJwMlVsWkVibXBGVFhOcVNVSkxaakUyVnpZeGRERjJjbmRPWjFRdGJWRWlMQ0p5WldOdmRtVnllVU52YlcxcGRHMWxiblFpT2lKRmFVSm9PV1JyU0RCRWRWWk9VR2N5VG5KbVdpMHpaMUJtWXpaWFZsOUNOM2RPWjFoTlpXbEJla3hCYURGbkluMTkiLCJpYXQiOjE2NDYzMDg3MzcsIm5iZiI6MTY0NjMwODczNywiZXhwIjoxNjc3ODczNTM3fQ.pon9j2xkVBAAs7NIPJ2y2gDUE6gDwv6q2pufuRy056tpvgX3lC3rYskIrUFHl0esYXaL6qkUHXBv6JAZXnpyXw
+</code></pre>
+</div>
+<p>Below is a non-normative example of a decoded VC in a JSON format, signed as a JWT:</p>
+<div id="decoded-vc" class="notice example"><a class="notice-link" href="#decoded-vc">EXAMPLE</a><pre class="language-json"><code class="language-json"><span class="token punctuation">{</span>
+    <span class="token property">"alg"</span><span class="token operator">:</span> <span class="token string">"ES256K"</span><span class="token punctuation">,</span>
+    <span class="token property">"kid"</span><span class="token operator">:</span> <span class="token string">"did:ion:EiD7M8RYnUuir2bm21uu-5YmWcqqQEie-T-jYEOEBeEWJQ:eyJkZWx0YSI6eyJwYXRjaGVzIjpbeyJhY3Rpb24iOiJyZXBsYWNlIiwiZG9jdW1lbnQiOnsicHVibGljS2V5cyI6W3siaWQiOiJzaWduIiwicHVibGljS2V5SndrIjp7ImNydiI6InNlY3AyNTZrMSIsImt0eSI6IkVDIiwieCI6InNnamhTdVFsZkdYVjg1QlVSWkg5aEtQR2RhTDRlYmdSN0dERERFbkJteXMiLCJ5IjoiRGw4Z3dqazRPN2h5cDVqVjZjUjFCT3l0el9TSUZtN0ljWUlsLXBqd1JUVSJ9LCJwdXJwb3NlcyI6WyJhdXRoZW50aWNhdGlvbiJdLCJ0eXBlIjoiRWNkc2FTZWNwMjU2azFWZXJpZmljYXRpb25LZXkyMDE5In1dfX1dLCJ1cGRhdGVDb21taXRtZW50IjoiRWlBUjZWbjlHeGJiSFhEcDBoZjl6NV9ZT3gzcFJhZWd5LVFUdEp3YjNDcUdCdyJ9LCJzdWZmaXhEYXRhIjp7ImRlbHRhSGFzaCI6IkVpQ05hbDZYUnV5VjFkX2p2UlZEbmpFTXNqSUJLZjE2VzYxdDF2cndOZ1QtbVEiLCJyZWNvdmVyeUNvbW1pdG1lbnQiOiJFaUJoOWRrSDBEdVZOUGcyTnJmWi0zZ1BmYzZXVl9CN3dOZ1hNZWlBekxBaDFnIn19#sign"</span><span class="token punctuation">,</span>
+    <span class="token property">"typ"</span><span class="token operator">:</span> <span class="token string">"JWT"</span>
+  <span class="token punctuation">}</span>.<span class="token punctuation">{</span>
+    <span class="token property">"sub"</span><span class="token operator">:</span> <span class="token string">"did:ion:EiAN0g6ahFl9GuP2uVRJMj4n6EJfvp9B_CfuOipsl1kbng:eyJkZWx0YSI6eyJwYXRjaGVzIjpbeyJhY3Rpb24iOiJyZXBsYWNlIiwiZG9jdW1lbnQiOnsicHVibGljS2V5cyI6W3siaWQiOiJzaWduIiwicHVibGljS2V5SndrIjp7ImNydiI6InNlY3AyNTZrMSIsImt0eSI6IkVDIiwieCI6InBEd1JSbHpSNjJQU1RaR20tYTlwemh0X1NUZnBrb21ZOXliWGJLQXBqTHciLCJ5IjoiNmFUM3RkRXlTaWFtcWQ3YjFpaG5LMW5wR2p2cHA4QnBfYnp4ZWtaS2JZRSJ9LCJwdXJwb3NlcyI6WyJhdXRoZW50aWNhdGlvbiJdLCJ0eXBlIjoiRWNkc2FTZWNwMjU2azFWZXJpZmljYXRpb25LZXkyMDE5In1dfX1dLCJ1cGRhdGVDb21taXRtZW50IjoiRWlEbWlXQ3ZkWHNUajVpTUROX3NOVGxKakdaRmxfcklpd2VkMURic004a2JmZyJ9LCJzdWZmaXhEYXRhIjp7ImRlbHRhSGFzaCI6IkVpQ0ludDZlTFNMcGsyaGNwb3RrUHFmQUxTU2pjMEw0Y3Z0aEJGNFg1UXV1REEiLCJyZWNvdmVyeUNvbW1pdG1lbnQiOiJFaUNIeFFkSk5qYUtvS2gybklDY0w4ZTcyZTBkdVJGdUVVcWM2YVpfZnhkdGxBIn19"</span><span class="token punctuation">,</span>
+    <span class="token property">"jti"</span><span class="token operator">:</span> <span class="token string">"255a3c76-a522-441b-a041-f32ffccd1c34"</span><span class="token punctuation">,</span>
+    <span class="token property">"vc"</span><span class="token operator">:</span> <span class="token punctuation">{</span>
+      <span class="token property">"@context"</span><span class="token operator">:</span> <span class="token punctuation">[</span>
+        <span class="token string">"https://www.w3.org/2018/credentials/v1"</span>
+      <span class="token punctuation">]</span><span class="token punctuation">,</span>
+      <span class="token property">"type"</span><span class="token operator">:</span> <span class="token punctuation">[</span>
+        <span class="token string">"VerifiableCredential"</span><span class="token punctuation">,</span>
+        <span class="token string">"InteropExampleVC"</span>
+      <span class="token punctuation">]</span><span class="token punctuation">,</span>
+      <span class="token property">"credentialSubject"</span><span class="token operator">:</span> <span class="token punctuation">{</span>
+        <span class="token property">"Library Name"</span><span class="token operator">:</span> <span class="token string">"Woodgrove Library"</span><span class="token punctuation">,</span>
+        <span class="token property">"MemberId"</span><span class="token operator">:</span> <span class="token string">"943856208"</span>
+      <span class="token punctuation">}</span><span class="token punctuation">,</span>
+      <span class="token property">"credentialStatus"</span><span class="token operator">:</span> <span class="token punctuation">{</span>
+        <span class="token property">"id"</span><span class="token operator">:</span> <span class="token string">"urn:uuid:7facf41c-1dc5-486b-87e6-587d015e76d7?bit-index=10"</span><span class="token punctuation">,</span>
+        <span class="token property">"type"</span><span class="token operator">:</span> <span class="token string">"RevocationList2021Status"</span><span class="token punctuation">,</span>
+        <span class="token property">"statusListIndex"</span><span class="token operator">:</span> <span class="token string">"10"</span><span class="token punctuation">,</span>
+        <span class="token property">"statusListCredential"</span><span class="token operator">:</span> <span class="token string">"did:ion:EiD7M8RYnUuir2bm21uu-5YmWcqqQEie-T-jYEOEBeEWJQ:eyJkZWx0YSI6eyJwYXRjaGVzIjpbeyJhY3Rpb24iOiJyZXBsYWNlIiwiZG9jdW1lbnQiOnsicHVibGljS2V5cyI6W3siaWQiOiJzaWduIiwicHVibGljS2V5SndrIjp7ImNydiI6InNlY3AyNTZrMSIsImt0eSI6IkVDIiwieCI6InNnamhTdVFsZkdYVjg1QlVSWkg5aEtQR2RhTDRlYmdSN0dERERFbkJteXMiLCJ5IjoiRGw4Z3dqazRPN2h5cDVqVjZjUjFCT3l0el9TSUZtN0ljWUlsLXBqd1JUVSJ9LCJwdXJwb3NlcyI6WyJhdXRoZW50aWNhdGlvbiJdLCJ0eXBlIjoiRWNkc2FTZWNwMjU2azFWZXJpZmljYXRpb25LZXkyMDE5In1dfX1dLCJ1cGRhdGVDb21taXRtZW50IjoiRWlBUjZWbjlHeGJiSFhEcDBoZjl6NV9ZT3gzcFJhZWd5LVFUdEp3YjNDcUdCdyJ9LCJzdWZmaXhEYXRhIjp7ImRlbHRhSGFzaCI6IkVpQ05hbDZYUnV5VjFkX2p2UlZEbmpFTXNqSUJLZjE2VzYxdDF2cndOZ1QtbVEiLCJyZWNvdmVyeUNvbW1pdG1lbnQiOiJFaUJoOWRrSDBEdVZOUGcyTnJmWi0zZ1BmYzZXVl9CN3dOZ1hNZWlBekxBaDFnIn19?service=IdentityHub&amp;queries=W3sibWV0aG9kIjoiQ29sbGVjdGlvbnNRdWVyeSIsInNjaGVtYSI6Imh0dHBzOi8vdzNpZC5vcmcvdmMtc3RhdHVzLWxpc3QtMjAyMS92MSIsIm9iamVjdElkIjoiZjljYTFmNDAtODg0NS00NWE1LTgwNWYtYzJlNWJjNDZhN2I5In1d"</span>
+      <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span><span class="token punctuation">,</span>
+    <span class="token property">"iss"</span><span class="token operator">:</span> <span class="token string">"did:ion:EiD7M8RYnUuir2bm21uu-5YmWcqqQEie-T-jYEOEBeEWJQ:eyJkZWx0YSI6eyJwYXRjaGVzIjpbeyJhY3Rpb24iOiJyZXBsYWNlIiwiZG9jdW1lbnQiOnsicHVibGljS2V5cyI6W3siaWQiOiJzaWduIiwicHVibGljS2V5SndrIjp7ImNydiI6InNlY3AyNTZrMSIsImt0eSI6IkVDIiwieCI6InNnamhTdVFsZkdYVjg1QlVSWkg5aEtQR2RhTDRlYmdSN0dERERFbkJteXMiLCJ5IjoiRGw4Z3dqazRPN2h5cDVqVjZjUjFCT3l0el9TSUZtN0ljWUlsLXBqd1JUVSJ9LCJwdXJwb3NlcyI6WyJhdXRoZW50aWNhdGlvbiJdLCJ0eXBlIjoiRWNkc2FTZWNwMjU2azFWZXJpZmljYXRpb25LZXkyMDE5In1dfX1dLCJ1cGRhdGVDb21taXRtZW50IjoiRWlBUjZWbjlHeGJiSFhEcDBoZjl6NV9ZT3gzcFJhZWd5LVFUdEp3YjNDcUdCdyJ9LCJzdWZmaXhEYXRhIjp7ImRlbHRhSGFzaCI6IkVpQ05hbDZYUnV5VjFkX2p2UlZEbmpFTXNqSUJLZjE2VzYxdDF2cndOZ1QtbVEiLCJyZWNvdmVyeUNvbW1pdG1lbnQiOiJFaUJoOWRrSDBEdVZOUGcyTnJmWi0zZ1BmYzZXVl9CN3dOZ1hNZWlBekxBaDFnIn19"</span><span class="token punctuation">,</span>
+    <span class="token property">"iat"</span><span class="token operator">:</span> <span class="token number">1646308737</span><span class="token punctuation">,</span>
+    <span class="token property">"nbf"</span><span class="token operator">:</span> <span class="token number">1646308737</span><span class="token punctuation">,</span>
+    <span class="token property">"exp"</span><span class="token operator">:</span> <span class="token number">1677873537</span>
+  <span class="token punctuation">}</span>.<span class="token punctuation">[</span>Signature<span class="token punctuation">]</span>
+</code></pre>
+</div>
+<h3 id="decentralized-identifiers"><a class="toc-anchor" href="#decentralized-identifiers" >§</a> Decentralized Identifiers</h3>
+<p>This profile utilizes Decentralized Identifiers (DIDs) as a cryptographically verifiable identifier of the Verifier/RP and Self-Issued OP and that resolve to cryptographic key material. Implementations of this profile MUST support DID Method ION.</p>
+<p>ION DIDs can operate in both long-form and short-form. Implementations of this profile MUST be able to consume both long-form and short-form DIDs regardless of whether they are anchored.</p>
+<p>The Verifier/RP should always check DIDs against an ION node to validate their current states. Just because a long form DID has been used, doesn’t mean the state hasn’t changed on ION.</p>
+<h4 id="short-form-did"><a class="toc-anchor" href="#short-form-did" >§</a> Short-Form DID</h4>
+<p>Short Form DIDs are DIDs written on a Bitcoin Blockchain. They are also known as anchored DIDs. These types of DIDs give the organization and user the most flexibility because the underlying components of the DID Document, such as public keys and service endpoints, can change without altering the DID itself.</p>
+<p>Below is a non-normative example of a short-form DID:</p>
+<pre class="language-md"><code class="language-md">did:ion:EiDC8qe_kwtm02IVoVZ8epcGi90XnL1NYI6baJIwHVBgrg
+</code></pre>
+<p>Below is a non-normative example of a DID Document obtained by resolving a short-form DID using an ION Node:</p>
+<div id="resolved-sfd" class="notice example"><a class="notice-link" href="#resolved-sfd">EXAMPLE</a><pre class="language-json"><code class="language-json"><span class="token punctuation">{</span>
+  <span class="token property">"@context"</span><span class="token operator">:</span> <span class="token string">"https://w3id.org/did-resolution/v1"</span><span class="token punctuation">,</span>
+  <span class="token property">"didDocument"</span><span class="token operator">:</span> <span class="token punctuation">{</span>
+    <span class="token property">"id"</span><span class="token operator">:</span> <span class="token string">"did:ion:EiDC8qe_kwtm02IVoVZ8epcGi90XnL1NYI6baJIwHVBgrg"</span><span class="token punctuation">,</span>
+    <span class="token property">"@context"</span><span class="token operator">:</span> <span class="token punctuation">[</span>
+      <span class="token string">"https://www.w3.org/ns/did/v1"</span><span class="token punctuation">,</span>
+      <span class="token punctuation">{</span>
+        <span class="token property">"@base"</span><span class="token operator">:</span> <span class="token string">"did:ion:EiDC8qe_kwtm02IVoVZ8epcGi90XnL1NYI6baJIwHVBgrg"</span>
+      <span class="token punctuation">}</span>
+    <span class="token punctuation">]</span><span class="token punctuation">,</span>
+    <span class="token property">"service"</span><span class="token operator">:</span> <span class="token punctuation">[</span>
+      <span class="token punctuation">{</span>
+        <span class="token property">"id"</span><span class="token operator">:</span> <span class="token string">"#domain-1"</span><span class="token punctuation">,</span>
+        <span class="token property">"type"</span><span class="token operator">:</span> <span class="token string">"LinkedDomains"</span><span class="token punctuation">,</span>
+        <span class="token property">"serviceEndpoint"</span><span class="token operator">:</span> <span class="token string">"https://erickuhn19.com"</span>
+      <span class="token punctuation">}</span>
+    <span class="token punctuation">]</span><span class="token punctuation">,</span>
+    <span class="token property">"verificationMethod"</span><span class="token operator">:</span> <span class="token punctuation">[</span>
+      <span class="token punctuation">{</span>
+        <span class="token property">"id"</span><span class="token operator">:</span> <span class="token string">"#key-1"</span><span class="token punctuation">,</span>
+        <span class="token property">"controller"</span><span class="token operator">:</span> <span class="token string">""</span><span class="token punctuation">,</span>
+        <span class="token property">"type"</span><span class="token operator">:</span> <span class="token string">"EcdsaSecp256k1VerificationKey2019"</span><span class="token punctuation">,</span>
+        <span class="token property">"publicKeyJwk"</span><span class="token operator">:</span> <span class="token punctuation">{</span>
+          <span class="token property">"kty"</span><span class="token operator">:</span> <span class="token string">"EC"</span><span class="token punctuation">,</span>
+          <span class="token property">"crv"</span><span class="token operator">:</span> <span class="token string">"secp256k1"</span><span class="token punctuation">,</span>
+          <span class="token property">"x"</span><span class="token operator">:</span> <span class="token string">"0DByK_buTNM5ljoJeFDMIoqEaCv92e25H6qj_36zYbs"</span><span class="token punctuation">,</span>
+          <span class="token property">"y"</span><span class="token operator">:</span> <span class="token string">"dY6MXrr70VZ_1VfHuBELDGzPk8Nxbpv1B76f6NnpVF8"</span>
+        <span class="token punctuation">}</span>
+      <span class="token punctuation">}</span>
+    <span class="token punctuation">]</span><span class="token punctuation">,</span>
+    <span class="token property">"authentication"</span><span class="token operator">:</span> <span class="token punctuation">[</span>
+      <span class="token string">"#key-1"</span>
+    <span class="token punctuation">]</span>
+  <span class="token punctuation">}</span><span class="token punctuation">,</span>
+  <span class="token property">"didDocumentMetadata"</span><span class="token operator">:</span> <span class="token punctuation">{</span>
+    <span class="token property">"method"</span><span class="token operator">:</span> <span class="token punctuation">{</span>
+      <span class="token property">"published"</span><span class="token operator">:</span> <span class="token boolean">true</span><span class="token punctuation">,</span>
+      <span class="token property">"recoveryCommitment"</span><span class="token operator">:</span> <span class="token string">"EiDRUgxeC0hdpch7zehFkH5_TmVLmbXWJ0O0faw5Inj_Dg"</span><span class="token punctuation">,</span>
+      <span class="token property">"updateCommitment"</span><span class="token operator">:</span> <span class="token string">"EiBnjYiBQ-gXaVRH_IoAp25QrcR_EeEf2pXTDHuV33_Vgg"</span>
+    <span class="token punctuation">}</span><span class="token punctuation">,</span>
+    <span class="token property">"canonicalId"</span><span class="token operator">:</span> <span class="token string">"did:ion:EiDC8qe_kwtm02IVoVZ8epcGi90XnL1NYI6baJIwHVBgrg"</span>
+  <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+
+</code></pre>
+</div>
+<h4 id="long-form-did"><a class="toc-anchor" href="#long-form-did" >§</a> Long-Form DID</h4>
+<p>Long-form DIDs are DIDs not written on a Bitcoin Blockchain. They are also known as unanchored DIDs.</p>
+<p>Long-form DIDs have the entire DID Document encapsulated into the DID itself. This means that public keys cannot be rotated without modifying a DID</p>
+<p>Below is a non-normative example of a long-form DID:</p>
+<div id="lfd" class="notice example"><a class="notice-link" href="#lfd">EXAMPLE</a><pre class="language-json"><code class="language-json">did<span class="token operator">:</span>ion<span class="token operator">:</span>EiDC8qe_kwtm02IVoVZ8epcGi90XnL1NYI6baJIwHVBgrg<span class="token operator">:</span>eyJkZWx0YSI6eyJwYXRjaGVzIjpbeyJhY3Rpb24iOiJyZXBsYWNlIiwiZG9jdW1lbnQiOnsicHVibGljS2V5cyI6W3siaWQiOiJrZXktMSIsInB1YmxpY0tleUp3ayI6eyJjcnYiOiJzZWNwMjU2azEiLCJrdHkiOiJFQyIsIngiOiIwREJ5S19idVROTTVsam9KZUZETUlvcUVhQ3Y5MmUyNUg2cWpfMzZ6WWJzIiwieSI6ImRZNk1YcnI3MFZaXzFWZkh1QkVMREd6UGs4TnhicHYxQjc2ZjZObnBWRjgifSwicHVycG9zZXMiOlsiYXV0aGVudGljYXRpb24iXSwidHlwZSI6IkVjZHNhU2VjcDI1NmsxVmVyaWZpY2F0aW9uS2V5MjAxOSJ9XSwic2VydmljZXMiOlt7ImlkIjoiZG9tYWluLTEiLCJzZXJ2aWNlRW5kcG9pbnQiOiJodHRwczovL2VyaWNrdWhuMTkuY29tIiwidHlwZSI6IkxpbmtlZERvbWFpbnMifV19fV0sInVwZGF0ZUNvbW1pdG1lbnQiOiJFaUJuallpQlEtZ1hhVlJIX0lvQXAyNVFyY1JfRWVFZjJwWFRESHVWMzNfVmdnIn0sInN1ZmZpeERhdGEiOnsiZGVsdGFIYXNoIjoiRWlBS1BzQnRaLWw2N3h1RXFHVFZHVjBvYmFIRDZOajZxWTdVbkJuVUl2ZHVYQSIsInJlY292ZXJ5Q29tbWl0bWVudCI6IkVpRFJVZ3hlQzBoZHBjaDd6ZWhGa0g1X1RtVkxtYlhXSjBPMGZhdzVJbmpfRGcifX0
+
+</code></pre>
+</div>
+<p>Below is a non-normative example of a DID Document obtained by resolving a long-form DID using an ION Node:</p>
+<div id="resolved-lfd" class="notice example"><a class="notice-link" href="#resolved-lfd">EXAMPLE</a><pre class="language-json"><code class="language-json"><span class="token punctuation">{</span>
+  <span class="token property">"@context"</span><span class="token operator">:</span> <span class="token string">"https://w3id.org/did-resolution/v1"</span><span class="token punctuation">,</span>
+  <span class="token property">"didDocument"</span><span class="token operator">:</span> <span class="token punctuation">{</span>
+    <span class="token property">"id"</span><span class="token operator">:</span> <span class="token string">"did:ion:EiDC8qe_kwtm02IVoVZ8epcGi90XnL1NYI6baJIwHVBgrg:eyJkZWx0YSI6eyJwYXRjaGVzIjpbeyJhY3Rpb24iOiJyZXBsYWNlIiwiZG9jdW1lbnQiOnsicHVibGljS2V5cyI6W3siaWQiOiJrZXktMSIsInB1YmxpY0tleUp3ayI6eyJjcnYiOiJzZWNwMjU2azEiLCJrdHkiOiJFQyIsIngiOiIwREJ5S19idVROTTVsam9KZUZETUlvcUVhQ3Y5MmUyNUg2cWpfMzZ6WWJzIiwieSI6ImRZNk1YcnI3MFZaXzFWZkh1QkVMREd6UGs4TnhicHYxQjc2ZjZObnBWRjgifSwicHVycG9zZXMiOlsiYXV0aGVudGljYXRpb24iXSwidHlwZSI6IkVjZHNhU2VjcDI1NmsxVmVyaWZpY2F0aW9uS2V5MjAxOSJ9XSwic2VydmljZXMiOlt7ImlkIjoiZG9tYWluLTEiLCJzZXJ2aWNlRW5kcG9pbnQiOiJodHRwczovL2VyaWNrdWhuMTkuY29tIiwidHlwZSI6IkxpbmtlZERvbWFpbnMifV19fV0sInVwZGF0ZUNvbW1pdG1lbnQiOiJFaUJuallpQlEtZ1hhVlJIX0lvQXAyNVFyY1JfRWVFZjJwWFRESHVWMzNfVmdnIn0sInN1ZmZpeERhdGEiOnsiZGVsdGFIYXNoIjoiRWlBS1BzQnRaLWw2N3h1RXFHVFZHVjBvYmFIRDZOajZxWTdVbkJuVUl2ZHVYQSIsInJlY292ZXJ5Q29tbWl0bWVudCI6IkVpRFJVZ3hlQzBoZHBjaDd6ZWhGa0g1X1RtVkxtYlhXSjBPMGZhdzVJbmpfRGcifX0"</span><span class="token punctuation">,</span>
+    <span class="token property">"@context"</span><span class="token operator">:</span> <span class="token punctuation">[</span>
+      <span class="token string">"https://www.w3.org/ns/did/v1"</span><span class="token punctuation">,</span>
+      <span class="token punctuation">{</span>
+        <span class="token property">"@base"</span><span class="token operator">:</span> <span class="token string">"did:ion:EiDC8qe_kwtm02IVoVZ8epcGi90XnL1NYI6baJIwHVBgrg:eyJkZWx0YSI6eyJwYXRjaGVzIjpbeyJhY3Rpb24iOiJyZXBsYWNlIiwiZG9jdW1lbnQiOnsicHVibGljS2V5cyI6W3siaWQiOiJrZXktMSIsInB1YmxpY0tleUp3ayI6eyJjcnYiOiJzZWNwMjU2azEiLCJrdHkiOiJFQyIsIngiOiIwREJ5S19idVROTTVsam9KZUZETUlvcUVhQ3Y5MmUyNUg2cWpfMzZ6WWJzIiwieSI6ImRZNk1YcnI3MFZaXzFWZkh1QkVMREd6UGs4TnhicHYxQjc2ZjZObnBWRjgifSwicHVycG9zZXMiOlsiYXV0aGVudGljYXRpb24iXSwidHlwZSI6IkVjZHNhU2VjcDI1NmsxVmVyaWZpY2F0aW9uS2V5MjAxOSJ9XSwic2VydmljZXMiOlt7ImlkIjoiZG9tYWluLTEiLCJzZXJ2aWNlRW5kcG9pbnQiOiJodHRwczovL2VyaWNrdWhuMTkuY29tIiwidHlwZSI6IkxpbmtlZERvbWFpbnMifV19fV0sInVwZGF0ZUNvbW1pdG1lbnQiOiJFaUJuallpQlEtZ1hhVlJIX0lvQXAyNVFyY1JfRWVFZjJwWFRESHVWMzNfVmdnIn0sInN1ZmZpeERhdGEiOnsiZGVsdGFIYXNoIjoiRWlBS1BzQnRaLWw2N3h1RXFHVFZHVjBvYmFIRDZOajZxWTdVbkJuVUl2ZHVYQSIsInJlY292ZXJ5Q29tbWl0bWVudCI6IkVpRFJVZ3hlQzBoZHBjaDd6ZWhGa0g1X1RtVkxtYlhXSjBPMGZhdzVJbmpfRGcifX0"</span>
+      <span class="token punctuation">}</span>
+    <span class="token punctuation">]</span><span class="token punctuation">,</span>
+    <span class="token property">"service"</span><span class="token operator">:</span> <span class="token punctuation">[</span>
+      <span class="token punctuation">{</span>
+        <span class="token property">"id"</span><span class="token operator">:</span> <span class="token string">"#domain-1"</span><span class="token punctuation">,</span>
+        <span class="token property">"type"</span><span class="token operator">:</span> <span class="token string">"LinkedDomains"</span><span class="token punctuation">,</span>
+        <span class="token property">"serviceEndpoint"</span><span class="token operator">:</span> <span class="token string">"https://erickuhn19.com"</span>
+      <span class="token punctuation">}</span>
+    <span class="token punctuation">]</span><span class="token punctuation">,</span>
+    <span class="token property">"verificationMethod"</span><span class="token operator">:</span> <span class="token punctuation">[</span>
+      <span class="token punctuation">{</span>
+        <span class="token property">"id"</span><span class="token operator">:</span> <span class="token string">"#key-1"</span><span class="token punctuation">,</span>
+        <span class="token property">"controller"</span><span class="token operator">:</span> <span class="token string">""</span><span class="token punctuation">,</span>
+        <span class="token property">"type"</span><span class="token operator">:</span> <span class="token string">"EcdsaSecp256k1VerificationKey2019"</span><span class="token punctuation">,</span>
+        <span class="token property">"publicKeyJwk"</span><span class="token operator">:</span> <span class="token punctuation">{</span>
+          <span class="token property">"kty"</span><span class="token operator">:</span> <span class="token string">"EC"</span><span class="token punctuation">,</span>
+          <span class="token property">"crv"</span><span class="token operator">:</span> <span class="token string">"secp256k1"</span><span class="token punctuation">,</span>
+          <span class="token property">"x"</span><span class="token operator">:</span> <span class="token string">"0DByK_buTNM5ljoJeFDMIoqEaCv92e25H6qj_36zYbs"</span><span class="token punctuation">,</span>
+          <span class="token property">"y"</span><span class="token operator">:</span> <span class="token string">"dY6MXrr70VZ_1VfHuBELDGzPk8Nxbpv1B76f6NnpVF8"</span>
+        <span class="token punctuation">}</span>
+      <span class="token punctuation">}</span>
+    <span class="token punctuation">]</span><span class="token punctuation">,</span>
+    <span class="token property">"authentication"</span><span class="token operator">:</span> <span class="token punctuation">[</span>
+      <span class="token string">"#key-1"</span>
+    <span class="token punctuation">]</span>
+  <span class="token punctuation">}</span><span class="token punctuation">,</span>
+  <span class="token property">"didDocumentMetadata"</span><span class="token operator">:</span> <span class="token punctuation">{</span>
+    <span class="token property">"method"</span><span class="token operator">:</span> <span class="token punctuation">{</span>
+      <span class="token property">"published"</span><span class="token operator">:</span> <span class="token boolean">true</span><span class="token punctuation">,</span>
+      <span class="token property">"recoveryCommitment"</span><span class="token operator">:</span> <span class="token string">"EiDRUgxeC0hdpch7zehFkH5_TmVLmbXWJ0O0faw5Inj_Dg"</span><span class="token punctuation">,</span>
+      <span class="token property">"updateCommitment"</span><span class="token operator">:</span> <span class="token string">"EiBnjYiBQ-gXaVRH_IoAp25QrcR_EeEf2pXTDHuV33_Vgg"</span>
+    <span class="token punctuation">}</span><span class="token punctuation">,</span>
+    <span class="token property">"equivalentId"</span><span class="token operator">:</span> <span class="token punctuation">[</span>
+      <span class="token string">"did:ion:EiDC8qe_kwtm02IVoVZ8epcGi90XnL1NYI6baJIwHVBgrg"</span>
+    <span class="token punctuation">]</span><span class="token punctuation">,</span>
+    <span class="token property">"canonicalId"</span><span class="token operator">:</span> <span class="token string">"did:ion:EiDC8qe_kwtm02IVoVZ8epcGi90XnL1NYI6baJIwHVBgrg"</span>
+  <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+
+</code></pre>
+</div>
+<h4 id="serviceendpoints"><a class="toc-anchor" href="#serviceendpoints" >§</a> serviceEndpoints</h4>
+<p>The following two serviceEndpoints MUST be supported in the DID Document, but only one is required.</p>
+<ol>
+<li>LinkedDomain vis <a class="term-reference" href="#term:well-known-did">Well Known DID</a> spec</li>
+<li><a class="term-reference" href="#term:id-hubs">Id Hubs</a></li>
+</ol>
+<h3 id="revocation"><a class="toc-anchor" href="#revocation" >§</a> Revocation</h3>
+<p>StatusList2021 MUST be used for revocation of VCs, as defined in <a class="term-reference" href="#term:status-list-2021">Status List 2021</a>.</p>
+<h4 id="credentialstatus"><a class="toc-anchor" href="#credentialstatus" >§</a> credentialStatus</h4>
+<p>StatusList2021 MUST be discovered using HTTPS URL or DID Relative URLs stored in an ID Hub.</p>
+<p>An Issuer of a VC MAY have an ID Hub serviceEndpoint in the Issuer’s DID Document. ID Hubs are the single endpoint to look up objects associated with a DID, as defined in [Identity-Hub].
+Below is a non-normative example of a DID Document that includes a serviceEndpoint:</p>
+<pre class="language-json"><code class="language-json"><span class="token property">"service"</span><span class="token operator">:</span> <span class="token punctuation">[</span>
+      <span class="token punctuation">{</span>
+        <span class="token property">"id"</span><span class="token operator">:</span> <span class="token string">"hubs"</span><span class="token punctuation">,</span>
+        <span class="token property">"type"</span><span class="token operator">:</span> <span class="token string">"IdentityHub"</span><span class="token punctuation">,</span>
+        <span class="token property">"serviceEndpoint"</span><span class="token operator">:</span> <span class="token punctuation">[</span>
+          <span class="token string">"https://hubs.microsoft.com"</span><span class="token punctuation">,</span>
+          <span class="token string">"https://datastore.protonmail.com"</span>
+        <span class="token punctuation">]</span>
+      <span class="token punctuation">}</span>
+<span class="token punctuation">]</span>
+</code></pre>
+<p>The issued VC MUST include a <code>credentialStatus</code> property, as defined in section 5.1 of <a class="term-reference" href="#term:status-list-2021">Status List 2021</a>:</p>
+<pre class="language-json"><code class="language-json"><span class="token punctuation">{</span>
+  <span class="token property">"credentialStatus"</span><span class="token operator">:</span> <span class="token punctuation">{</span>
+    <span class="token property">"id"</span><span class="token operator">:</span> <span class="token string">"Qmdfr32sdf32546..."</span><span class="token punctuation">,</span>
+    <span class="token property">"type"</span><span class="token operator">:</span> <span class="token string">"StatusList2021"</span><span class="token punctuation">,</span>
+    <span class="token property">"statusListIndex"</span><span class="token operator">:</span> <span class="token string">"94567"</span><span class="token punctuation">,</span>
+    <span class="token property">"statusListCredential"</span><span class="token operator">:</span> 'did<span class="token operator">:</span>ion<span class="token operator">:</span><span class="token number">123</span>?service=IdentityHub&amp;relativeRef=?messages=<span class="token punctuation">[</span><span class="token punctuation">{</span> type<span class="token operator">:</span> <span class="token string">"CollectionsQuery"</span><span class="token punctuation">,</span> statement<span class="token operator">:</span> <span class="token punctuation">{</span> id<span class="token operator">:</span> <span class="token string">"Qmdfr32sdf32546..."</span> <span class="token punctuation">}</span><span class="token punctuation">}</span><span class="token punctuation">]</span>'
+  <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+</code></pre>
+<h3 id="cryptographic-signature"><a class="toc-anchor" href="#cryptographic-signature" >§</a> Cryptographic Signature</h3>
+<p>While ION supports any public key JWK representation in a DID Document, implementors of this document MUST support JWT signature verification with the following Key Types and must support JWT signing with at least one.</p>
+<table>
+<thead>
+<tr>
+<th>Key Type</th>
+<th>JWT Algorithm</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>secp256k1</td>
+<td>ES256K</td>
+</tr>
+<tr>
+<td>Ed25519</td>
+<td>EdDSA</td>
+</tr>
+</tbody>
+</table>
+<p>Note: This profile leverages JWT for signature generation and verification only. There is a rich offering of Linked Data Cryptographic Suites which are not covered by this iteration of the profile.
+For reference and more information on LD signature suites see the <a path-0="w3c-ccg.github.io"path-1="ld-cryptosuite-registry"path-2=""href="https://w3c-ccg.github.io/ld-cryptosuite-registry/" >Linked Data Cryptographic Suite Registry</a>.</p>
 <h2 id="use-cases"><a class="toc-anchor" href="#use-cases" >§</a> Use-Cases</h2>
 <p>Defining or referring to previously published use cases which this profile enables and supports is highly recommended.</p>
 <h2 id="examples"><a class="toc-anchor" href="#examples" >§</a> Examples</h2>
@@ -414,7 +713,6 @@ sequenceDiagram
 <li>Workday</li>
 <li>Mattr</li>
 <li>Ping Identity</li>
-<li>IBM</li>
 </ul>
 <h2 id="test-vectors"><a class="toc-anchor" href="#test-vectors" >§</a> Test Vectors</h2>
 <p>Embedded or referenced test vectors.</p>
@@ -506,6 +804,27 @@ sequenceDiagram
 <li><a href="#self-issued-op-request-object" >Self-Issued OP Request Object</a></li>
 </ul>
 </li>
+<li><a href="#end-user-consent" >End-user Consent</a></li>
+<li><a href="#authentication-response" >Authentication Response</a>
+<ul>
+<li><a href="#id-token-validation" >ID Token Validation</a></li>
+<li><a href="#id-token-example" >ID Token example</a></li>
+<li><a href="#vp-token-example" >VP Token example</a></li>
+</ul>
+</li>
+<li><a href="#decentralized-identifiers" >Decentralized Identifiers</a>
+<ul>
+<li><a href="#short-form-did" >Short-Form DID</a></li>
+<li><a href="#long-form-did" >Long-Form DID</a></li>
+<li><a href="#serviceendpoints" >serviceEndpoints</a></li>
+</ul>
+</li>
+<li><a href="#revocation" >Revocation</a>
+<ul>
+<li><a href="#credentialstatus" >credentialStatus</a></li>
+</ul>
+</li>
+<li><a href="#cryptographic-signature" >Cryptographic Signature</a></li>
 </ul>
 </li>
 <li><a href="#use-cases" >Use-Cases</a></li>
