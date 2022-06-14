@@ -4,13 +4,20 @@ JWT VC Presentation Profile
 **Profile Status:** Draft
 
 **Latest Draft:**
-[https://identity.foundation/jwt-vc-interoperability-profile](https://identity.foundation/jwt-vc-interoperability-profile)
+[https://identity.foundation/jwt-vc-interoperability-profile](https://identity.foundation/jwt-vc-presentation-profile)
 
 Editors:
-~ [<Each editor's plain text name>]([Company](https://example.com))
+~ [Daniel McGrogan](www.linkedin.com/in/dtmcgrogan) (Workday)
+~ [Kristina ](https://www.linkedin.com/in/kristina-yasuda-6263b5a2) (Microsoft)
+~ [Jennifer Schreiber](https://www.linkedin.com/in/jischr/) (Workday)
 
 Contributors:
-~ [<Each contributor's plain text name>]([Company](https://example.com))
+Tobias Looker (Mattr)
+Andrew Hughes (Ping Identity)
+David Waite (Ping Identity)
+Valerie Lanard (Workday)
+Daniel Godbout (Microsoft)
+Rohit Gulati (Microsoft)
 
 Participate:
 ~ [GitHub repo](https://github.com/decentralized-identity/jwt-vc-interoperability-profile)
