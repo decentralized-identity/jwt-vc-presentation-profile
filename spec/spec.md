@@ -4,25 +4,25 @@ JWT VC Presentation Profile
 **Profile Status:** Draft
 
 **Latest Draft:**
-[https://identity.foundation/jwt-vc-interoperability-profile](https://identity.foundation/jwt-vc-presentation-profile)
+[https://identity.foundation/jwt-vc-presentation-profile](https://identity.foundation/jwt-vc-presentation-profile)
 
 Editors:
 ~ [Daniel McGrogan](www.linkedin.com/in/dtmcgrogan) (Workday)
 ~ [Kristina ](https://www.linkedin.com/in/kristina-yasuda-6263b5a2) (Microsoft)
-~ [Jennifer Schreiber](https://www.linkedin.com/in/jischr/) (Workday)
+~ [Jen Schreiber](https://www.linkedin.com/in/jischr/) (Workday)
 
 Contributors:
-Tobias Looker (Mattr)
-Andrew Hughes (Ping Identity)
-David Waite (Ping Identity)
-Valerie Lanard (Workday)
-Daniel Godbout (Microsoft)
-Rohit Gulati (Microsoft)
+~ Tobias Looker (Mattr)
+~ Andrew Hughes (Ping Identity)
+~ David Waite (Ping Identity)
+~ Valerie Lanard (Workday)
+~ Daniel Godbout (Microsoft)
+~ Rohit Gulati (Microsoft)
 
 Participate:
-~ [GitHub repo](https://github.com/decentralized-identity/jwt-vc-interoperability-profile)
-~ [File a bug](https://github.com/decentralized-identity/jwt-vc-interoperability-profile/issues)
-~ [Commit history](https://github.com/decentralized-identity/jwt-vc-interoperability-profile/commits/master)
+~ [GitHub repo](https://github.com/decentralized-identity/jwt-vc-presentation-profile)
+~ [File a bug](https://github.com/decentralized-identity/jwt-vc-presentation-profile/issues)
+~ [Commit history](https://github.com/decentralized-identity/jwt-vc-presentation-profile/commits/main)
 
 ------------------------------------
 
