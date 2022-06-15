@@ -4,7 +4,7 @@ JWT VC Presentation Profile
 **Profile Status:** Draft
 
 **Latest Draft:**
-[https://identity.foundation/jwt-vc-interoperability-profile](https://identity.foundation/jwt-vc-presentation-profile)
+[https://identity.foundation/jwt-vc-presentation-profile](https://identity.foundation/jwt-vc-presentation-profile)
 
 Editors:
 ~ [Daniel McGrogan](www.linkedin.com/in/dtmcgrogan) (Workday)
@@ -20,9 +20,9 @@ Contributors:
 ~ Rohit Gulati (Microsoft)
 
 Participate:
-~ [GitHub repo](https://github.com/decentralized-identity/jwt-vc-interoperability-profile)
-~ [File a bug](https://github.com/decentralized-identity/jwt-vc-interoperability-profile/issues)
-~ [Commit history](https://github.com/decentralized-identity/jwt-vc-interoperability-profile/commits/master)
+~ [GitHub repo](https://github.com/decentralized-identity/jwt-vc-presentation-profile)
+~ [File a bug](https://github.com/decentralized-identity/jwt-vc-presentation-profile/issues)
+~ [Commit history](https://github.com/decentralized-identity/jwt-vc-presentation-profile/commits/main)
 
 ------------------------------------
 
