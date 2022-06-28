@@ -146,7 +146,7 @@ sequenceDiagram
 
 It is important to note that Cross-device SIOP is susceptible to a session phishing attack, where an attacker relays the request from a good Verifier/RP to a victim and is able to sign in as a victim. Implementers MUST implement mitigations most suitable to the use-case. For more details and concrete mitigations, see section 15 Security Considerations in [[ref: SIOPv2]].
 
-### Authentication Request
+### Authorization Request
 
 [[ref: SIOPv2]] MUST be used for key management and authentication, [[ref: OpenID4VP]] MUST be used to transport Verifiable Credentials, and [[ref: Presentation Exchange]] MUST be used as a query language as defined in [[ref: OpenID4VP]].
 
@@ -335,9 +335,9 @@ When the Self-Issued OP displays the consent screen to the user, it is RECOMMEND
 
 Note that displaying the domain name of the Verifier/RP helps the End-users to identify malicious Verifiers/RPs who has copied registration parameters of good Verifiers/OP and are impersonating them.
 
-### Authentication Response
+### Authorization Response
 
-Authentication Response is sent as an HTTPS POST request to the RP's endpoint indicated in `redirect_uri` in the request.
+Authorization Response is sent as an HTTPS POST request to the RP's endpoint indicated in `redirect_uri` in the request.
 
 Note that when this response_mode is used, the user will finish the transaction on the device with a Self-Issued OP, which is a different device than on which the user initiated a request. It is up to the implementations to enable further user interaction with the Verifier/RP on the device used to initiate the request.
 
