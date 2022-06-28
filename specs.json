@@ -2,15 +2,15 @@
 {
   "specs": [
     {
-      "title": "JWT VC Presentation Profile",
+      "title": "JWT VC Issuance Profile",
       "spec_directory": "./spec",
       "output_path": "./",
       "logo": "logo.svg",
-      "logo_link": "https://github.com/decentralized-identity/jwt-vc-presentation-profile",
+      "logo_link": "https://github.com/decentralized-identity/jwt-vc-issuance-profile",
       "source": {
         "host": "github",
         "account": "decentralized-identity",
-        "repo": "jwt-vc-presentation-profile"
+        "repo": "jwt-vc-issuance-profile"
       },
       "assets": [
         { "path": "/custom-assets/custom.css" },
