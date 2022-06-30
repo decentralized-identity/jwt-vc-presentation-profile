@@ -54,7 +54,7 @@ customElements.define("slide-panels",class extends HTMLElement{static get observ
 <dl>
 <dt>Editors:</dt>
 <dd><a path-0="in"path-1="dtmcgrogan"href="www.linkedin.com/in/dtmcgrogan" >Daniel McGrogan</a> (Workday)</dd>
-<dd><a path-0="www.linkedin.com"path-1="in"path-2="kristina-yasuda-6263b5a2"href="https://www.linkedin.com/in/kristina-yasuda-6263b5a2" >Kristina </a> (Microsoft)</dd>
+<dd><a path-0="www.linkedin.com"path-1="in"path-2="kristina-yasuda-6263b5a2"href="https://www.linkedin.com/in/kristina-yasuda-6263b5a2" >Kristina Yasuda</a> (Microsoft)</dd>
 <dd><a path-0="www.linkedin.com"path-1="in"path-2="jischr"path-3=""href="https://www.linkedin.com/in/jischr/" >Jen Schreiber</a> (Workday)</dd>
 <dt>Contributors:</dt>
 <dd>Tobias Looker (Mattr)</dd>
@@ -158,7 +158,7 @@ sequenceDiagram
 <li>As the query language, Presentation Exchange MUST be used and conform to the syntax defined in <a class="term-reference" href="#term:oidc4vp">OIDC4VP</a>, a profile of <a class="term-reference" href="#term:presentation-exchange">Presentation Exchange</a>.</li>
 <li>Decentralized Identifiers (DIDs), as defined in <a class="term-reference" href="#term:did-core">DID Core</a>, MUST be used as identifiers of the entities. Implementations MUST support did:ion as a mandatory DID method.</li>
 <li>To bind an owner of a DID to a controller of a certain origin, a Well Known DID Configuration MUST be used as defined in <a class="term-reference" href="#term:well-known-did">Well Known DID</a>.</li>
-<li>For Revocation of VCs, Status List 2021 as defined in <a class="term-reference" href="#term:status-list-2021">Status List 2021</a> MUST be used in combination with ID Hubs as defined in <a class="term-reference" href="#term:id-hubs">ID Hubs</a>.</li>
+<li>For Revocation of VCs, Status List 2021 as defined in <a class="term-reference" href="#term:status-list-2021">Status List 2021</a> MUST be used in combination with Identity Hubs as defined in <a class="term-reference" href="#term:identity-hub">Identity Hub</a> (Decentralized Web Node v0.0.1 predraft).</li>
 </ul>
 <p>It is important to note that Cross-device SIOP is susceptible to a session phishing attack, where an attacker relays the request from a good Verifier/RP to a victim and is able to sign in as a victim. Implementers MUST implement mitigations most suitable to the use-case. For more details and concrete mitigations, see section 15 Security Considerations in <a class="term-reference" href="#term:siopv2">SIOPv2</a>.</p>
 <h3 id="authentication-request"><a class="toc-anchor" href="#authentication-request" >§</a> Authentication Request</h3>
@@ -417,6 +417,7 @@ sequenceDiagram
 <h3 id="authentication-response"><a class="toc-anchor" href="#authentication-response" >§</a> Authentication Response</h3>
 <p>Authentication Response is sent as an HTTPS POST request to the RP’s endpoint indicated in <code>redirect_uri</code> in the request.</p>
 <p>Note that when this response_mode is used, the user will finish the transaction on the device with a Self-Issued OP, which is a different device than on which the user initiated a request. It is up to the implementations to enable further user interaction with the Verifier/RP on the device used to initiate the request.</p>
+<h3 id="structure-of-authentication-response"><a class="toc-anchor" href="#structure-of-authentication-response" >§</a> Structure of Authentication Response</h3>
 <p>Since requested VCs are returned in a VP Token, two artifacts MUST be returned:</p>
 <ol>
 <li>ID Token that serves as an authentication receipt and includes metadata about the VP Token</li>
@@ -659,7 +660,7 @@ sequenceDiagram
 <p>The following two serviceEndpoints MUST be supported in the DID Document, but only one is required.</p>
 <ol>
 <li>LinkedDomain vis <a class="term-reference" href="#term:well-known-did">Well Known DID</a> spec</li>
-<li><a class="term-reference" href="#term:id-hubs">Id Hubs</a></li>
+<li><a class="term-reference" href="#term:identity-hub">Identity Hub</a> (Decentralized Web Node v0.0.1 predraft))</li>
 </ol>
 <h3 id="revocation"><a class="toc-anchor" href="#revocation" >§</a> Revocation</h3>
 <p>StatusList2021 MUST be used for revocation of VCs, as defined in <a class="term-reference" href="#term:status-list-2021">Status List 2021</a>.</p>
@@ -667,6 +668,7 @@ sequenceDiagram
 <p>StatusList2021 MUST be discovered using HTTPS URL or DID Relative URLs stored in an ID Hub.</p>
 <p>An Issuer of a VC MAY have an ID Hub serviceEndpoint in the Issuer’s DID Document. ID Hubs are the single endpoint to look up objects associated with a DID, as defined in [Identity-Hub].
 Below is a non-normative example of a DID Document that includes a serviceEndpoint:</p>
+<p>Note: The ID Hub spec is published as a v0.0.1 predraft of <a path-0="identity.foundation"path-1="decentralized-web-node"path-2="spec"path-3=""href="https://identity.foundation/decentralized-web-node/spec/" >Decentralized Web Node</a>. We will continue to use the term ID Hub rather than Decentralized Web Node to avoid confusion. We do not have plans to use a current version of Decentralized Web Node at this time.</p>
 <pre class="language-json"><code class="language-json"><span class="token property">"service"</span><span class="token operator">:</span> <span class="token punctuation">[</span>
       <span class="token punctuation">{</span>
         <span class="token property">"id"</span><span class="token operator">:</span> <span class="token string">"hubs"</span><span class="token punctuation">,</span>
@@ -746,8 +748,8 @@ For reference and more information on LD signature suites see the <a path-0="w3c
 <dd><a path-0="identity.foundation"path-1="sidetree"path-2="spec"path-3=""href="https://identity.foundation/sidetree/spec/" >Sidetree v1.0.0</a>. Daniel Buchner, Orie Steele, Troy Ronda. 2021.03. Status: DIF Ratified Specification.</dd>
 <dt><span id="term:well-known-did">Well Known DID</span></dt>
 <dd><a path-0="identity.foundation"path-1=".well-known"path-2="resources"path-3="did-configuration"path-4=""href="https://identity.foundation/.well-known/resources/did-configuration/" >Well Known DID Configuration</a>. Daniel Buchner, Orie Steele, Tobias Looker. 2021.01. Status: DIF Working Group Approved Draft.</dd>
-<dt><span id="term:id-hubs">ID Hubs</span></dt>
-<dd><a path-0="identity.foundation"path-1="identity-hub"path-2="spec"path-3=""href="https://identity.foundation/identity-hub/spec/" >Identity Hubs</a></dd>
+<dt><span id="term:identity-hub">Identity Hub</span></dt>
+<dd><a path-0="identity.foundation"path-1="decentralized-web-node"path-2="spec"path-3="0.0.1-predraft"path-4=""href="https://identity.foundation/decentralized-web-node/spec/0.0.1-predraft/" >Identity Hub - Decentralized Web Node 0.0.1 Predraft</a></dd>
 <dt><span id="term:status-list-2021">Status List 2021</span></dt>
 <dd><a path-0="w3c-ccg.github.io"path-1="vc-status-list-2021"path-2=""href="https://w3c-ccg.github.io/vc-status-list-2021/" >Status List 2021</a>. Manu Sporny, Dave Longley, Orie Steele, Mike Prorock, Mahmoud Alkhraishi. 2022.04. Status: Draft Community Group Report.</dd>
 </dl>
@@ -812,7 +814,8 @@ For reference and more information on LD signature suites see the <a path-0="w3c
 </ul>
 </li>
 <li><a href="#end-user-consent" >End-user Consent</a></li>
-<li><a href="#authentication-response" >Authentication Response</a>
+<li><a href="#authentication-response" >Authentication Response</a></li>
+<li><a href="#structure-of-authentication-response" >Structure of Authentication Response</a>
 <ul>
 <li><a href="#id-token-validation" >ID Token Validation</a></li>
 <li><a href="#id-token-example" >ID Token example</a></li>
