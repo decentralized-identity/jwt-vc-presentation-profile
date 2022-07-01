@@ -106,7 +106,7 @@ sequenceDiagram
 
 Verifier Website presents the QR Code to the End User on their Verifier Website. The End User scans the QR Code using their Wallet. The Wallet parses the QR code to obtain the `request_uri`.
 
-The Wallet sends a GET request to the obtained `request_uri` to retrieve the Request Object. The Request Object is a signed JWT that contains a set of request parameters as defined in [[ref: SIOPv2]] and [[ref: OIDC4VP]]. In particular, Wallet will determine which VCs to submit to the Verifier by processing `presentation_definition` property in the Request Object.
+The Wallet sends a GET request to the obtained `request_uri` to retrieve the Request Object. The Request Object is a signed JWT that contains a set of request parameters as defined in [[ref: SIOPv2]] and [[ref: OpenID4VP]]. In particular, Wallet will determine which VCs to submit to the Verifier by processing `presentation_definition` property in the Request Object.
 
 ```mermaid
 sequenceDiagram
@@ -134,21 +134,21 @@ sequenceDiagram
   rp -->> siop: Acknowledgement
 ```
 
-### Requirements Overview
+### Overview of the Open Standards Requirements
 
 - VCs MUST adhere to the [[ref: VC Data Model]] and be encoded as JSON and signed as JWT as defined in 6.3.1 of [[ref: VC Data Model]]. VCs encoded as JSON-LD and signed using Linked Data Proofs are NOT supported.
 - For key management and authentication, Self-Issued OpenID Connect Provider v2, an extension to OpenID Connect, MUST be used as defined in [[ref: SIOPv2]].
-- For transportation of VCs, OpenID Connect for Verifiable Presentations MUST be used as defined in [[ref: OIDC4VP]].
-- As the query language, Presentation Exchange MUST be used and conform to the syntax defined in [[ref: OIDC4VP]], a profile of [[ref: Presentation Exchange]].
-- Decentralized Identifiers (DIDs), as defined in [[ref: DID Core]], MUST be used as identifiers of the entities. Implementations MUST support did:ion as a mandatory DID method.
+- For transportation of VCs, OpenID for Verifiable Presentations MUST be used as defined in [[ref: OpenID4VP]].
+- As the query language, Presentation Exchange MUST be used and conform to the syntax defined in [[ref: OpenID4VP]], a profile of [[ref: Presentation Exchange]].
+- Decentralized Identifiers (DIDs), as defined in [[ref: DID Core]], MUST be used as identifiers of the entities. Implementations MUST support did:web and did:ion as a mandatory DID method as defined in [[ref: did-web]] and [[ref: did-ion]].
 - To bind an owner of a DID to a controller of a certain origin, a Well Known DID Configuration MUST be used as defined in [[ref: Well Known DID]].
 - For Revocation of VCs, Status List 2021 as defined in [[ref: Status List 2021]] MUST be used in combination with ID Hubs as defined in [[ref: ID Hubs]].
 
 It is important to note that Cross-device SIOP is susceptible to a session phishing attack, where an attacker relays the request from a good Verifier/RP to a victim and is able to sign in as a victim. Implementers MUST implement mitigations most suitable to the use-case. For more details and concrete mitigations, see section 15 Security Considerations in [[ref: SIOPv2]].
 
-### Authentication Request
+### Authorization Request
 
-[[ref: SIOPv2]] MUST be used for key management and authentication, [[ref: OIDC4VP]] MUST be used to transport Verifiable Credentials, and [[ref: Presentation Exchange]] MUST be used as a query language as defined in [[ref: OIDC4VP]].
+[[ref: SIOPv2]] MUST be used for key management and authentication, [[ref: OpenID4VP]] MUST be used to transport Verifiable Credentials, and [[ref: Presentation Exchange]] MUST be used as a query language as defined in [[ref: OpenID4VP]].
 
 #### Invoking Self-Issued OP
 
@@ -233,7 +233,7 @@ The following are Verifier/RP Registration Metadata parameters and values:
 * `subject_syntax_types_supported`
   * REQUIRED. MUST include `did:ion`. Defined in [[ref: SIOPv2]].
 * `vp_formats`
-  * REQUIRED. MUST include `jwt_vp` and `jwt_vc`, and support signature algorithms `ES256K` and `EdDSA`. Defined in [[ref: OIDC4VP]].
+  * REQUIRED. MUST include `jwt_vp` and `jwt_vc`, and support signature algorithms `ES256K` and `EdDSA`. Defined in [[ref: OpenID4VP]].
 * `client_name`
   * OPTIONAL. Name of the Verifier/RP to be displayed to the End-User. If present, the server SHOULD display this name to the End-User during approval. Defined in [[ref: OIDC Registration]]. If desired, representation of this Claim in different languages and scripts is represented as described in Section 2.1 of [[ref: OIDC Registration]].
 * `logo_uri`
@@ -302,7 +302,7 @@ Below is a non-normative example of a Domain Linkage Credential that is hosted a
 
 ##### Requesting Verifiable Credentials
 
-A Specific VC type MUST be requested using [[ref: Presentation Exchange]] syntax in the Self-Issued OP request as defined in section 8 of [[ref: OIDC4VP]]. `presentation_definition` property defined in [[ref: Presentation Exchange]] MUST be included in a `vp_token` property as defined in [[ref: OIDC4VP]], which MUST be included in a `claims` parameter defined in [[ref: OIDC]].
+A Specific VC type MUST be requested using [[ref: Presentation Exchange]] syntax in the Self-Issued OP request as defined in section 8 of [[ref: OpenID4VP]]. `presentation_definition` property defined in [[ref: Presentation Exchange]] MUST be included in a `vp_token` property as defined in [[ref: OpenID4VP]], which MUST be included in a `claims` parameter defined in [[ref: OIDC]].
 
 Below is a non-normative example of a `claims` parameter:
 ```json
@@ -335,9 +335,9 @@ When the Self-Issued OP displays the consent screen to the user, it is RECOMMEND
 
 Note that displaying the domain name of the Verifier/RP helps the End-users to identify malicious Verifiers/RPs who has copied registration parameters of good Verifiers/OP and are impersonating them.
 
-### Authentication Response
+### Authorization Response
 
-Authentication Response is sent as an HTTPS POST request to the RP's endpoint indicated in `redirect_uri` in the request.
+Authorization Response is sent as an HTTPS POST request to the RP's endpoint indicated in `redirect_uri` in the request.
 
 Note that when this response_mode is used, the user will finish the transaction on the device with a Self-Issued OP, which is a different device than on which the user initiated a request. It is up to the implementations to enable further user interaction with the Verifier/RP on the device used to initiate the request.
 
@@ -348,7 +348,7 @@ Since requested VCs are returned in a VP Token, two artifacts MUST be returned:
 
 `presentation_submission` object located inside an ID Token specifies metadata such as format and path of both VPs and VCs in the VP Token.
 
-This profile currently supports including only a single VP in the VP Token. In such cases, as defined in section 5.2 of [[ref: OIDC4VP]], when the Self-Issued OP returns a single VP in the `vp_token`, VP Token is not an array, and a single VP is passed as a `vp_token`. In this case, the descriptor map would contain a simple path expression "$".
+This profile currently supports including only a single VP in the VP Token. In such cases, as defined in section 5.2 of [[ref: OpenID4VP]], when the Self-Issued OP returns a single VP in the `vp_token`, VP Token is not an array, and a single VP is passed as a `vp_token`. In this case, the descriptor map would contain a simple path expression "$".
 
 Note that when in the future use-cases multiple VPs are included in the VP Token, VP Token itself is not signed, and each VP included inside the VP Token MUST be signed.
 
@@ -540,14 +540,20 @@ Embedded or referenced test suites.
 [[def: SIOPv2]]
 ~ [Self-Issued OpenID Provider v2](https://openid.bitbucket.io/connect/openid-connect-self-issued-v2-1_0.html). Kristina Yasuda, Michael B. Jones, Torsten Lodderstedt. 2022.04. Status: Standards Track.
 
-[[def: OIDC4VP]]
-~ [OpenID Connect for Verifiable Presentations](https://openid.net/specs/openid-connect-4-verifiable-presentations-1_0.html). Oliver Terbu, Torsten Lodderstedt, Kristina Yasuda, Adam Lemmon, Tobias Looker. 2022.04. Status: Standards Track.
+[[def: OpenID4VP]]
+~ [OpenID for Verifiable Presentations](https://openid.net/specs/openid-connect-4-verifiable-presentations-1_0.html). Oliver Terbu, Torsten Lodderstedt, Kristina Yasuda, Adam Lemmon, Tobias Looker. 2022.04. Status: Standards Track.
 
 [[def: VC Data Model]]
 ~ [Verifiable Credentials Data Model v1.1](https://www.w3.org/TR/vc-data-model/). Manu Sporny, Dave Longley, David Chadwick. 2021.08. Status: W3C Proposed Recommendation.
 
 [[def: Presentation Exchange]]
 ~ [Presentation Exchange v1.0.0](https://identity.foundation/presentation-exchange/spec/v1.0.0/). Daniel Buchner, Brent Zundel, Martin Riedel.
+
+[[def: did-web]]
+~ [Web DID Method](https://github.com/w3c-ccg/did-method-web). Oliver Terbu, Mike Xu, Dmitri Zagidulin, Amy Guy. Status: Registered in DID Specification Registry.
+
+[[def: did-ion]]
+~ [ION DID Method](https://github.com/decentralized-identity/ion-did-method). Various DIF contributors. Status: Registered in DID Specification Registry.
 
 [[def: OIDC Registration]]
 ~ [OpenID Connect Dynamic Client Registration 1.0 incorporating errata set 1](https://openid.net/specs/openid-connect-registration-1_0.html). Nat Sakimura, John Bradley, Michael B. Jones. 2014.11. Status: Approved Specification.
