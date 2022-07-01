@@ -8,7 +8,7 @@ JWT VC Presentation Profile
 
 Editors:
 ~ [Daniel McGrogan](www.linkedin.com/in/dtmcgrogan) (Workday)
-~ [Kristina ](https://www.linkedin.com/in/kristina-yasuda-6263b5a2) (Microsoft)
+~ [Kristina Yasuda](https://www.linkedin.com/in/kristina-yasuda-6263b5a2) (Microsoft)
 ~ [Jen Schreiber](https://www.linkedin.com/in/jischr/) (Workday)
 
 Contributors:
@@ -142,7 +142,7 @@ sequenceDiagram
 - As the query language, Presentation Exchange MUST be used and conform to the syntax defined in [[ref: OpenID4VP]], a profile of [[ref: Presentation Exchange]].
 - Decentralized Identifiers (DIDs), as defined in [[ref: DID Core]], MUST be used as identifiers of the entities. Implementations MUST support did:web and did:ion as a mandatory DID method as defined in [[ref: did-web]] and [[ref: did-ion]].
 - To bind an owner of a DID to a controller of a certain origin, a Well Known DID Configuration MUST be used as defined in [[ref: Well Known DID]].
-- For Revocation of VCs, Status List 2021 as defined in [[ref: Status List 2021]] MUST be used in combination with ID Hubs as defined in [[ref: ID Hubs]].
+- For Revocation of VCs, Status List 2021 as defined in [[ref: Status List 2021]] MUST be used in combination with Identity Hubs as defined in [[ref: Identity Hub]] (Decentralized Web Node v0.0.1 predraft).
 
 It is important to note that Cross-device SIOP is susceptible to a session phishing attack, where an attacker relays the request from a good Verifier/RP to a victim and is able to sign in as a victim. Implementers MUST implement mitigations most suitable to the use-case. For more details and concrete mitigations, see section 15 Security Considerations in [[ref: SIOPv2]].
 
@@ -341,6 +341,8 @@ Authorization Response is sent as an HTTPS POST request to the RP's endpoint ind
 
 Note that when this response_mode is used, the user will finish the transaction on the device with a Self-Issued OP, which is a different device than on which the user initiated a request. It is up to the implementations to enable further user interaction with the Verifier/RP on the device used to initiate the request.
 
+### Structure of Authentication Response
+
 Since requested VCs are returned in a VP Token, two artifacts MUST be returned:
 
 1. ID Token that serves as an authentication receipt and includes metadata about the VP Token
@@ -453,7 +455,7 @@ Below is a non-normative example of a DID Document obtained by resolving a long-
 The following two serviceEndpoints MUST be supported in the DID Document, but only one is required.
 
 1. LinkedDomain vis [[ref: Well Known DID]] spec
-1. [[ref: Id Hubs]]
+1. [[ref: Identity Hub]] (Decentralized Web Node v0.0.1 predraft))
 
 ### Revocation
 
@@ -465,6 +467,8 @@ StatusList2021 MUST be discovered using HTTPS URL or DID Relative URLs stored in
 
 An Issuer of a VC MAY have an ID Hub serviceEndpoint in the Issuer's DID Document. ID Hubs are the single endpoint to look up objects associated with a DID, as defined in [Identity-Hub].
 Below is a non-normative example of a DID Document that includes a serviceEndpoint:
+
+Note: The ID Hub spec is published as a v0.0.1 predraft of [Decentralized Web Node](https://identity.foundation/decentralized-web-node/spec/). We will continue to use the term ID Hub rather than Decentralized Web Node to avoid confusion. We do not have plans to use a current version of Decentralized Web Node at this time.
 
 ```json
 "service": [
@@ -564,8 +568,8 @@ Embedded or referenced test suites.
 [[def: Well Known DID]]
 ~ [Well Known DID Configuration](https://identity.foundation/.well-known/resources/did-configuration/). Daniel Buchner, Orie Steele, Tobias Looker. 2021.01. Status: DIF Working Group Approved Draft.
 
-[[def: ID Hubs]]
-~ [Identity Hubs](https://identity.foundation/identity-hub/spec/)
+[[def: Identity Hub]]
+~ [Identity Hub - Decentralized Web Node 0.0.1 Predraft](https://identity.foundation/decentralized-web-node/spec/0.0.1-predraft/)
 
 [[def: Status List 2021]]
 ~ [Status List 2021](https://w3c-ccg.github.io/vc-status-list-2021/). Manu Sporny, Dave Longley, Orie Steele, Mike Prorock, Mahmoud Alkhraishi. 2022.04. Status: Draft Community Group Report.
