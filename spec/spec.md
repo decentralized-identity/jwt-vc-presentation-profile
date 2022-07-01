@@ -130,7 +130,7 @@ sequenceDiagram
   participant rp as Verifier/RP
   siop ->> siop: Identifies VCs<br>described in the<br>Request Object
   siop ->> siop: Generates a VP
-  siop ->> rp: POST /request_uri<br>ID Token and VP Token
+  siop ->> rp: POST /redirect_uri<br>ID Token and VP Token
   rp -->> siop: Acknowledgement
 ```
 
