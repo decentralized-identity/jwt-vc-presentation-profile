@@ -142,7 +142,7 @@ sequenceDiagram
 - As the query language, Presentation Exchange MUST be used and conform to the syntax defined in [[ref: OpenID4VP]], a profile of [[ref: Presentation Exchange]].
 - Decentralized Identifiers (DIDs), as defined in [[ref: DID Core]], MUST be used as identifiers of the entities. Implementations MUST support did:web and did:ion as a mandatory DID method as defined in [[ref: did-web]] and [[ref: did-ion]].
 - To bind an owner of a DID to a controller of a certain origin, a Well Known DID Configuration MUST be used as defined in [[ref: Well Known DID]].
-- For Revocation of VCs, Status List 2021 as defined in [[ref: Status List 2021]] MUST be used in combination with Identity Hubs as defined in [[ref: Identity Hub]] (Decentralized Web Node v0.0.1 predraft).
+- For Revocation of VCs, Status List 2021 as defined in [[ref: Status List 2021]] MUST be used, and the status lists MUST be discoverable using HTTPS URL or DID Relative URLs stored in an [[ref: Identity Hub]].
 
 It is important to note that Cross-device SIOP is susceptible to a session phishing attack, where an attacker relays the request from a good Verifier/RP to a victim and is able to sign in as a victim. Implementers MUST implement mitigations most suitable to the use-case. For more details and concrete mitigations, see section 15 Security Considerations in [[ref: SIOPv2]].
 
