@@ -510,7 +510,23 @@ For reference and more information on LD signature suites see the [Linked Data C
 
 ## Use-Cases
 
-Defining or referring to previously published use cases which this profile enables and supports is highly recommended.
+### Workplace Credential
+
+Workplace credential refers to a use case scenario for Verifiable Credential, where it is issued to the user by its workplace organization. The user, in this case, could be an employee, student, staff, contractor, or vendor. It supports users’ journeys around Onboarding, access to workplace applications, and even Alumni access scenarios. The objective of workplace credentials is to: 
+
+- Allow access to workplace applications – e.g. Verified Employee accessing their work email
+- Allow access to workplace applications by partners – e.g. Verified Employee at Woodgrove collaborating at Fabrikam
+- Allow access to applications on the Internet – e.g. Verified Employee at Woodgrove, unlocking a travel discount with an airline.
+
+Below is a storyboard that explains one concrete scenario using a workplace credential.
+- Alice Smith is a user at Woodgrove and her employer has issued her a  workplace credential.
+- Alice gets a notification email stating that she could get a workplace  credential but launching the issuer portal interface.
+- Alice uses her smartphone’s camera app or Authenticator app (Wallet app)  to scan the QR Code shown on the portal.
+- Alice is presented with an idtoken flow journey. She presents her  corporate username and password credentials to complete the idtoken flow.
+- Issuer service takes the claim from idtoken and presents Alice a  Verifiable Credential that she can accept and store in her wallet app.
+- Alice can review the credential information and can also review the  activity report for this credential.
+
+[[insert: ./spec/assets/workplacecredential_storyboard.png]]
 
 ## Examples
 
