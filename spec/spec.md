@@ -527,9 +527,6 @@ Embedded or referenced non-normative examples
 
 Embedded or referenced test vectors.
 
-## Test Suite
-
-Embedded or referenced test suites.
 
 ## References
 
