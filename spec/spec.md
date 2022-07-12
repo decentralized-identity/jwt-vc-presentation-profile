@@ -146,6 +146,10 @@ sequenceDiagram
 
 It is important to note that Cross-device SIOP is susceptible to a session phishing attack, where an attacker relays the request from a good Verifier/RP to a victim and is able to sign in as a victim. Implementers MUST implement mitigations most suitable to the use-case. For more details and concrete mitigations, see section 15 Security Considerations in [[ref: SIOPv2]].
 
+Note: This profile uses First Implementer's Drafts of Self-Issued OpenID Provider v2 and OpenID for Verifiable Prensetations. This document does not necessarily rely on the latest editor's drafts of these specifications and may choose to do so anytime.
+
+Note: The ID Hub spec is published as a v0.0.1 predraft of [Decentralized Web Node](https://identity.foundation/decentralized-web-node/spec/). We will continue to use the term ID Hub rather than Decentralized Web Node to avoid confusion. We do not have plans to use a current version of Decentralized Web Node at this time.
+
 ### Authorization Request
 
 [[ref: SIOPv2]] MUST be used for key management and authentication, [[ref: OpenID4VP]] MUST be used to transport Verifiable Credentials, and [[ref: Presentation Exchange]] MUST be used as a query language as defined in [[ref: OpenID4VP]].
@@ -467,8 +471,6 @@ StatusList2021 MUST be discovered using HTTPS URL or DID Relative URLs stored in
 
 An Issuer of a VC MAY have an ID Hub serviceEndpoint in the Issuer's DID Document. ID Hubs are the single endpoint to look up objects associated with a DID, as defined in [Identity-Hub].
 Below is a non-normative example of a DID Document that includes a serviceEndpoint:
-
-Note: The ID Hub spec is published as a v0.0.1 predraft of [Decentralized Web Node](https://identity.foundation/decentralized-web-node/spec/). We will continue to use the term ID Hub rather than Decentralized Web Node to avoid confusion. We do not have plans to use a current version of Decentralized Web Node at this time.
 
 ```json
 "service": [
