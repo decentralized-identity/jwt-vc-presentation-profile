@@ -506,7 +506,7 @@ For reference and more information on LD signature suites see the [Linked Data C
 
 ## Credential Schema
 
-Below is a `credentialSubject` schema for a credential of type `WorkplaceCredential`.
+Below is a non-normative example of a `credentialSubject` schema for a credential type `WorkplaceCredential`.
 
 REQUIRED claim is only `displayName`. All other claims are OPTIONAL and might be omitted.
 
