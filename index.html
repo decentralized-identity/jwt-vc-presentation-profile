@@ -158,7 +158,7 @@ sequenceDiagram
 <li>As the query language, Presentation Exchange MUST be used and conform to the syntax defined in <a class="term-reference" href="#term:openid4vp">OpenID4VP</a>, a profile of <a class="term-reference" href="#term:presentation-exchange">Presentation Exchange</a>.</li>
 <li>Decentralized Identifiers (DIDs), as defined in <a class="term-reference" href="#term:did-core">DID Core</a>, MUST be used as identifiers of the entities. Implementations MUST support did:web and did:ion as a mandatory DID method as defined in <a class="term-reference" href="#term:did-web">did-web</a> and <a class="term-reference" href="#term:did-ion">did-ion</a>.</li>
 <li>To bind an owner of a DID to a controller of a certain origin, a Well Known DID Configuration MUST be used as defined in <a class="term-reference" href="#term:well-known-did">Well Known DID</a>.</li>
-<li>For Revocation of VCs, Status List 2021 as defined in <a class="term-reference" href="#term:status-list-2021">Status List 2021</a> MUST be used in combination with Identity Hubs as defined in <a class="term-reference" href="#term:identity-hub">Identity Hub</a> (Decentralized Web Node v0.0.1 predraft).</li>
+<li>For Revocation of VCs, Status List 2021 as defined in <a class="term-reference" href="#term:status-list-2021">Status List 2021</a> MUST discovered using either DID Relative URLs stored in an HTTPS URL or ID Hub be used in combination with Identity Hubs as defined in <a class="term-reference" href="#term:identity-hub">Identity Hub</a> (Decentralized Web Node v0.0.1 predraft).</li>
 </ul>
 <p>It is important to note that Cross-device SIOP is susceptible to a session phishing attack, where an attacker relays the request from a good Verifier/RP to a victim and is able to sign in as a victim. Implementers MUST implement mitigations most suitable to the use-case. For more details and concrete mitigations, see section 15 Security Considerations in <a class="term-reference" href="#term:siopv2">SIOPv2</a>.</p>
 <h3 id="authorization-request"><a class="toc-anchor" href="#authorization-request" >§</a> Authorization Request</h3>
@@ -665,7 +665,9 @@ sequenceDiagram
 <h3 id="revocation"><a class="toc-anchor" href="#revocation" >§</a> Revocation</h3>
 <p>StatusList2021 MUST be used for revocation of VCs, as defined in <a class="term-reference" href="#term:status-list-2021">Status List 2021</a>.</p>
 <h4 id="credentialstatus"><a class="toc-anchor" href="#credentialstatus" >§</a> credentialStatus</h4>
-<p>StatusList2021 MUST be discovered using HTTPS URL or DID Relative URLs stored in an ID Hub.</p>
+<p>The issued VC MAY include a <code>credentialStatus</code> property</p>
+<p>When <code>credentialStatus</code> is deinfed it MUST use StatusList2021 , as defined in section 5.1 of <a class="term-reference" href="#term:status-list-2021">Status List 2021</a>.</p>
+<p>StatusList2021 MUST be discovered using either DID Relative URLs stored in an ID Hub or HTTPS URL.</p>
 <p>An Issuer of a VC MAY have an ID Hub serviceEndpoint in the Issuer’s DID Document. ID Hubs are the single endpoint to look up objects associated with a DID, as defined in [Identity-Hub].
 Below is a non-normative example of a DID Document that includes a serviceEndpoint:</p>
 <p>Note: The ID Hub spec is published as a v0.0.1 predraft of <a path-0="identity.foundation"path-1="decentralized-web-node"path-2="spec"path-3=""href="https://identity.foundation/decentralized-web-node/spec/" >Decentralized Web Node</a>. We will continue to use the term ID Hub rather than Decentralized Web Node to avoid confusion. We do not have plans to use a current version of Decentralized Web Node at this time.</p>
@@ -680,7 +682,6 @@ Below is a non-normative example of a DID Document that includes a serviceEndpoi
       <span class="token punctuation">}</span>
 <span class="token punctuation">]</span>
 </code></pre>
-<p>The issued VC MUST include a <code>credentialStatus</code> property, as defined in section 5.1 of <a class="term-reference" href="#term:status-list-2021">Status List 2021</a>:</p>
 <pre class="language-json"><code class="language-json"><span class="token punctuation">{</span>
   <span class="token property">"credentialStatus"</span><span class="token operator">:</span> <span class="token punctuation">{</span>
     <span class="token property">"id"</span><span class="token operator">:</span> <span class="token string">"Qmdfr32sdf32546..."</span><span class="token punctuation">,</span>
@@ -712,8 +713,47 @@ Below is a non-normative example of a DID Document that includes a serviceEndpoi
 </table>
 <p>Note: This profile leverages JWT for signature generation and verification only. There is a rich offering of Linked Data Cryptographic Suites which are not covered by this iteration of the profile.
 For reference and more information on LD signature suites see the <a path-0="w3c-ccg.github.io"path-1="ld-cryptosuite-registry"path-2=""href="https://w3c-ccg.github.io/ld-cryptosuite-registry/" >Linked Data Cryptographic Suite Registry</a>.</p>
+<h2 id="credential-schema"><a class="toc-anchor" href="#credential-schema" >§</a> Credential Schema</h2>
+<p>Below is a non-normative example of a <code>credentialSubject</code> schema for a credential type <code>WorkplaceCredential</code>. It is RECOMMENDED to be used with a Workplace Credential Use-Case defined below.</p>
+<p>REQUIRED claim is only <code>displayName</code>. All other claims are OPTIONAL and might be omitted.</p>
+<pre class="language-json"><code class="language-json"><span class="token punctuation">{</span>
+  <span class="token property">"@context"</span><span class="token operator">:</span> <span class="token punctuation">[</span>
+    <span class="token string">"https://www.w3.org/2018/credentials/v1"</span><span class="token punctuation">,</span>
+  <span class="token punctuation">]</span><span class="token punctuation">,</span>
+  <span class="token property">"type"</span><span class="token operator">:</span> <span class="token punctuation">[</span>
+    <span class="token string">"VerifiableCredential"</span><span class="token punctuation">,</span>
+    <span class="token string">"WorkplaceCredential"</span>
+  <span class="token punctuation">]</span><span class="token punctuation">,</span>
+  <span class="token property">"credentialSubject"</span><span class="token operator">:</span> <span class="token punctuation">{</span>
+    <span class="token comment">// keys to match those defined in @context as agreed upon by interop partners</span>
+    <span class="token property">"displayName"</span><span class="token operator">:</span> <span class="token string">"$.displayName"</span><span class="token punctuation">,</span>
+    <span class="token property">"givenName"</span><span class="token operator">:</span> <span class="token string">"$.givenName"</span><span class="token punctuation">,</span>
+    <span class="token property">"jobTitle"</span><span class="token operator">:</span> <span class="token string">"$.jobTitle"</span><span class="token punctuation">,</span>
+    <span class="token property">"surname"</span><span class="token operator">:</span> <span class="token string">"$.surname"</span><span class="token punctuation">,</span>
+    <span class="token property">"preferredLanguage"</span><span class="token operator">:</span> <span class="token string">"$.preferredLanguage"</span>
+    <span class="token property">"mail"</span><span class="token operator">:</span> <span class="token string">"$.mail"</span><span class="token punctuation">,</span>
+    <span class="token property">"photo"</span><span class="token operator">:</span> <span class="token string">"data:image/jpeg;base64,ewrsfirGWRPrewFEW4..."</span>
+  <span class="token punctuation">}</span><span class="token punctuation">,</span>
+  <span class="token comment">// VC truncated...</span>
+<span class="token punctuation">}</span>
+</code></pre>
 <h2 id="use-cases"><a class="toc-anchor" href="#use-cases" >§</a> Use-Cases</h2>
-<p>Defining or referring to previously published use cases which this profile enables and supports is highly recommended.</p>
+<h3 id="workplace-credential"><a class="toc-anchor" href="#workplace-credential" >§</a> Workplace Credential</h3>
+<p>Workplace credential refers to a use case scenario for Verifiable Credential, where it is issued to the user by its workplace organization. The user, in this case, could be an employee, student, staff, contractor, or vendor. It supports users’ journeys around Onboarding, access to workplace applications, and even Alumni access scenarios. The objective of workplace credentials is to:</p>
+<ul>
+<li>Allow access to workplace applications – e.g. Verified Employee accessing their work email</li>
+<li>Allow access to workplace applications by partners – e.g. Verified Employee at Woodgrove collaborating at Fabrikam</li>
+<li>Allow access to applications on the Internet – e.g. Verified Employee at Woodgrove, unlocking a travel discount with an airline.</li>
+</ul>
+<p>Below is a storyboard that explains one concrete scenario using a workplace credential.</p>
+<ul>
+<li>Alice Smith is a user at Woodgrove and her employer has issued her a  workplace credential.</li>
+<li>Alice gets a notification email stating that she could get a workplace  credential but launching the issuer portal interface.</li>
+<li>Alice uses her smartphone’s camera app or Authenticator app (Wallet app)  to scan the QR Code shown on the portal.</li>
+<li>Alice is presented with an idtoken flow journey. She presents her  corporate username and password credentials to complete the idtoken flow.</li>
+<li>Issuer service takes the claim from idtoken and presents Alice a  Verifiable Credential that she can accept and store in her wallet app.</li>
+<li>Alice can review the credential information and can also review the  activity report for this credential.</li>
+</ul>
 <h2 id="examples"><a class="toc-anchor" href="#examples" >§</a> Examples</h2>
 <p>Embedded or referenced non-normative examples</p>
 <h2 id="implementations"><a class="toc-anchor" href="#implementations" >§</a> Implementations</h2>
@@ -839,7 +879,12 @@ For reference and more information on LD signature suites see the <a path-0="w3c
 <li><a href="#cryptographic-signature" >Cryptographic Signature</a></li>
 </ul>
 </li>
-<li><a href="#use-cases" >Use-Cases</a></li>
+<li><a href="#credential-schema" >Credential Schema</a></li>
+<li><a href="#use-cases" >Use-Cases</a>
+<ul>
+<li><a href="#workplace-credential" >Workplace Credential</a></li>
+</ul>
+</li>
 <li><a href="#examples" >Examples</a></li>
 <li><a href="#implementations" >Implementations</a></li>
 <li><a href="#test-vectors" >Test Vectors</a></li>
