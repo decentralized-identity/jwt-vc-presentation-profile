@@ -146,9 +146,9 @@ sequenceDiagram
 
 It is important to note that Cross-device SIOP is susceptible to a session phishing attack, where an attacker relays the request from a good Verifier/RP to a victim and is able to sign in as a victim. Implementers MUST implement mitigations most suitable to the use-case. For more details and concrete mitigations, see section 15 Security Considerations in [[ref: SIOPv2]].
 
-Note: This profile uses First Implementer's Drafts of Self-Issued OpenID Provider v2 and OpenID for Verifiable Prensetations. This document does not necessarily rely on the latest editor's drafts of these specifications but may choose to do so anytime.
+Note: This profile uses First Implementer's Drafts of Self-Issued OpenID Provider v2 and OpenID for Verifiable Prensetations specifications. This document does not necessarily rely upon the latest editor's drafts of these specifications.
 
-Note: The ID Hub spec is published as a v0.0.1 predraft of [Decentralized Web Node](https://identity.foundation/decentralized-web-node/spec/). We will continue to use the term ID Hub rather than Decentralized Web Node to avoid confusion. We do not have plans to use a current version of Decentralized Web Node at this time.
+Note: The ID Hub spec is published as a v0.0.1 predraft of [Decentralized Web Node](https://identity.foundation/decentralized-web-node/spec/). We will continue to use the term ID Hub rather than Decentralized Web Node to avoid confusion. There are no plans to use a current version of Decentralized Web Node at this time.
 
 ### Authorization Request
 
@@ -544,10 +544,10 @@ Embedded or referenced test suites.
 ~ [Decentralized Identifiers (DIDs) v1.0](https://www.w3.org/TR/2021/PR-did-core-20210803/). Manu Sporny, Dave Longley, Markus Sabadello, Drummond Reed, Orie Steele, Christopher Allen. 2021.08. Status: W3C Proposed Recommendation.
 
 [[def: SIOPv2]]
-~ [Self-Issued OpenID Provider v2](https://openid.net/specs/openid-connect-self-issued-v2-1_0-ID1.html). Kristina Yasuda, Michael B. Jones, Torsten Lodderstedt. 2022.04. Status: Standards Track.
+~ [Self-Issued OpenID Provider v2 (First Implementer’s Draft)](https://openid.net/specs/openid-connect-self-issued-v2-1_0-ID1.html). Kristina Yasuda, Michael B. Jones, Torsten Lodderstedt. 2022.04. Status: Standards Track.
 
 [[def: OpenID4VP]]
-~ [OpenID for Verifiable Presentations](https://openid.net/specs/openid-connect-4-verifiable-presentations-1_0-ID1.html). Oliver Terbu, Torsten Lodderstedt, Kristina Yasuda, Adam Lemmon, Tobias Looker. 2022.04. Status: Standards Track.
+~ [OpenID for Verifiable Presentations (First Implementer’s Draft)](https://openid.net/specs/openid-connect-4-verifiable-presentations-1_0-ID1.html). Oliver Terbu, Torsten Lodderstedt, Kristina Yasuda, Adam Lemmon, Tobias Looker. 2022.04. Status: Standards Track.
 
 [[def: VC Data Model]]
 ~ [Verifiable Credentials Data Model v1.1](https://www.w3.org/TR/vc-data-model/). Manu Sporny, Dave Longley, David Chadwick. 2021.08. Status: W3C Proposed Recommendation.
