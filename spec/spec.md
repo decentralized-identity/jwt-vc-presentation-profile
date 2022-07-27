@@ -83,9 +83,61 @@ A description to the reader on how the document is structured.
 
 ## Terminology
 
-Common terms in this document come from the specifications listed in (#reference).
+[[def:Authorization Request]]
+~ OAuth 2.0 Authorization Request extended by [[ref:OIDC]] and [[ref:OpenID4VP]]
 
-Note: the term Verifier in the [[ref: VC Data Model v1.1]] corresponds to a term Relying Party (RP) in [[ref:SIOPv2]].
+[[def:Authorization Response]]
+~ OAuth 2.0 Authorization Response extended by [[ref:OIDC]] and [[ref:OpenID4VP]]
+
+[[def:Claim, Claims]]
+~ An assertion made about a subject
+
+[[def:Decentralized Identifier, DID]]
+~ An identifier that enables verifiable, decentralized digital identity as defined by the W3C specification
+  [[ref: DID Core]]. Known as a DID.
+
+[[def:End User]]
+~ Participant
+
+[[def:Holder]]
+~ An entity that possesses or holds verifiable credentials and can generate verifiable presentations from them
+
+[[def: OpenID Provider (OP), OpenID Provider, OP]]
+~ OAuth 2.0 Authentication Server implementing [[ref:OIDC]] and [[ref:OpenID4VP]]
+
+[[def: Presentation]] 
+~ Data derived from one or more verifiable credentials, issued by one or more issuers, that is shared with a verifier
+
+[[def: Relying Party (RP), Relying Party, RP]]
+~ OAuth 2.0 Client application using [[ref:OIDC]] and [[ref:OpenID4VP]] in [[ref:SIOPv2]]. Synonymous with term
+  [[ref:Verifier]] in [[ref: VC Data Model]]
+
+[[def:Request Object]]
+~ JWT that contains a set of request parameters as its [[ref:Claims]]
+  
+[[def:Self Issued OpenID Provider (SIOP), Self Issued OpenID Provider, SIOP]]  
+~ An OpenID Provider (OP) used by an [[ref:End User]] to prove control over a [[ref:DID]]
+
+[[def:Verifiable Credential (VC), Verifiable Credential, VC]]
+~ A set of one or more [[ref:Claims]] made by an issuer that is tamper-evident and has authorship that can be cryptographically
+  verified.
+
+[[def:Verifiable Presentation (VP), Verifiable Presentation, VP]] 
+~ A [[ref:Presentation]] that is tamper-evident and has authorship that can be cryptographically verified
+
+[[def:Verifier]]
+~ An entity that receives one or more verifiable credential inside a verifiable presentation for processing. Synonymous
+  with the term [[ref: Relying Party (RP)]]
+
+[[def:Verification]]
+~ The process in which a [[ref:Verifier]] validates that the verifiable credential inside a verifiable presentation is authentic
+  and a timely statement of the issuer or presenter
+
+[[def:Wallet]]
+~ A credential repository that acts as a [[ref:Self Issued OpenID Provider (SIOP)]]
+
+Other common terms in this document come from the specifications listed in (#reference).
+>>>>>>> 2118cbb (add terms for terminology section)
 
 ## Profile
 
