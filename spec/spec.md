@@ -539,10 +539,13 @@ Embedded or referenced non-normative examples
 - Mattr
 - Ping Identity
 
-## Test Vectors
+## Testing
+
+Implementations may test conformance of the wallets to this profile using this [verification website](https://vcinteroptesting.azurewebsites.net/verifier).
+
+### Test Vectors
 
 Embedded or referenced test vectors.
-
 
 ## References
 
