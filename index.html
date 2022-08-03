@@ -71,7 +71,7 @@ customElements.define("slide-panels",class extends HTMLElement{static get observ
 </dl>
 <hr>
 <h2 id="abstract"><a class="toc-anchor" href="#abstract" >§</a> Abstract</h2>
-<p>The JWT VC Presentation Profile defines a standardized way to interoperably exchange <a class="term-reference" href="#term:verifiable-credentials">Verifiable Credentials</a> (VCs) between digital <a class="term-reference" href="#term:wallets">Wallets</a> and credential <a class="term-reference" href="#term:verifiers">Verifiers</a>.</p>
+<p>The JWT VC Presentation Profile defines a set of specifications to enable the interoperable presentation of <a class="term-reference" href="#term:verifiable-credentials">Verifiable Credentials</a> (VCs) between digital <a class="term-reference" href="#term:wallets">Wallets</a> and credential <a class="term-reference" href="#term:verifiers">Verifiers</a>.</p>
 <p>This document is <strong>specification profile</strong> not a specification. It is a collection of pre-existing specficiations with all but required optionality stripped from them with the purpose of ensuring interoperability.</p>
 <p>Currently, there are many published specifications for exchanging VCs between <a class="term-reference" href="#term:wallets">Wallets</a> and <a class="term-reference" href="#term:verifiers">Verifiers</a>. The Wallet and Verifier providers have to choose which standards to operate under and hope that the external parties they wish to exchange VCs with support those same standards. Specifications tend to be very broad, flexible, and un-opinionated. This is an advantage when building use cases and providing optionality to the implementers. But, in the case of exchanging VCs, it can cause misalignment. The more optionality in the specification, the more complex and expensive it becomes to deliver code, maintain a solution, and verify a VC. All of this complexity decreases the liklihood of successful interop.</p>
 <p>The JWT VC Presentation Profile, once adopted by providers, enables the seamless verification of VCs. It is based on <a class="term-reference" href="#term:openid4vp">OpenID4VP</a> which leverages the existing infrastructure and security of <a class="term-reference" href="#term:open-id-connect-(oidc)">Open ID Connect (OIDC)</a> and OAuth 2.0 and reduces implementation cost for existing OIDC Relying Parties to become VC verifiers. The profile relies on <a class="term-reference" href="#term:presentation-exchange">Presentation Exchange</a> for the presentation of VCs, <a class="term-reference" href="#term:well-known-dids">Well Known DIDs</a> for trust establishment, and <a class="term-reference" href="#term:status-list-2021">Status List 2021</a> for revocation of VCs.</p>
@@ -772,7 +772,9 @@ For reference and more information on LD signature suites see the <a path-0="w3c
 <li>Mattr</li>
 <li>Ping Identity</li>
 </ul>
-<h2 id="test-vectors"><a class="toc-anchor" href="#test-vectors" >§</a> Test Vectors</h2>
+<h2 id="testing"><a class="toc-anchor" href="#testing" >§</a> Testing</h2>
+<p>Implementations may test conformance of the wallets to this profile using this <a path-0="vcinteroptesting.azurewebsites.net"path-1="verifier"href="https://vcinteroptesting.azurewebsites.net/verifier" >verification website</a>.</p>
+<h3 id="test-vectors"><a class="toc-anchor" href="#test-vectors" >§</a> Test Vectors</h3>
 <p>Embedded or referenced test vectors.</p>
 <h2 id="references"><a class="toc-anchor" href="#references" >§</a> References</h2>
 <h3 id="normative-references"><a class="toc-anchor" href="#normative-references" >§</a> Normative References</h3>
@@ -896,7 +898,11 @@ For reference and more information on LD signature suites see the <a path-0="w3c
 </li>
 <li><a href="#examples" >Examples</a></li>
 <li><a href="#implementations" >Implementations</a></li>
+<li><a href="#testing" >Testing</a>
+<ul>
 <li><a href="#test-vectors" >Test Vectors</a></li>
+</ul>
+</li>
 <li><a href="#references" >References</a>
 <ul>
 <li><a href="#normative-references" >Normative References</a></li>
