@@ -18,6 +18,7 @@ Contributors:
 ~ Valerie Lanard (Workday)
 ~ Daniel Godbout (Microsoft)
 ~ Rohit Gulati (Microsoft)
+~ Eric Kuhn (Kraken)
 
 Participate:
 ~ [GitHub repo](https://github.com/decentralized-identity/jwt-vc-presentation-profile)
