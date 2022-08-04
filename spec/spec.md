@@ -539,11 +539,7 @@ Below is a storyboard that explains one concrete scenario using a workplace cred
 - Issuer service takes the claim from idtoken and presents Alice a  Verifiable Credential that she can accept and store in her wallet app.
 - Alice can review the credential information and can also review the  activity report for this credential.
 
-<<<<<<< HEAD
-<img src="assets/workplacecredential_storyboard.svg" width="1000" height="600">
-=======
 ![WorkplaceCredential Storyboard](./spec/assets/workplacecredential_storyboard.png)
->>>>>>> ed23c2026fbb6deb08c14bcba762c2e617fedc3b
 
 ## Examples
 
