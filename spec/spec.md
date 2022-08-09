@@ -86,6 +86,8 @@ A description to the reader on how the document is structured.
 
 ## Terminology
 
+This section defines common terms from the profile for the reader's ease and convenience. These, as well as other useful terms, can be found in more detail within the specifications from which they originate. See [[ref:References]].
+
 [[def:Authorization Request]]
 ~ OAuth 2.0 Authorization Request extended by [[ref:OIDC]] and [[ref:OpenID4VP]]
 
@@ -93,17 +95,16 @@ A description to the reader on how the document is structured.
 ~ OAuth 2.0 Authorization Response extended by [[ref:OIDC]] and [[ref:OpenID4VP]]
 
 [[def:Claim, Claims]]
-~ An assertion made about a subject
+~ An assertion made about the subject of a credential
 
 [[def:Decentralized Identifier, DID]]
-~ An identifier that enables verifiable, decentralized digital identity as defined by the W3C specification
-  [[ref: DID Core]]. Known as a DID.
+~ An identifier with its core ability being enabling Clients to obtain key material and other metadata by reference
 
 [[def:End User]]
 ~ Participant
 
 [[def:Holder]]
-~ An entity that possesses or holds verifiable credentials and can generate verifiable presentations from them
+~ An entity that possesses or holds verifiable credentials and can generate verifiable presentations from them as defined in [[ref: VC Data Model]].
 
 [[def: OpenID Provider (OP), OpenID Provider, OP]]
 ~ OAuth 2.0 Authentication Server implementing [[ref:OIDC]] and [[ref:OpenID4VP]]
@@ -119,7 +120,7 @@ A description to the reader on how the document is structured.
 ~ JWT that contains a set of request parameters as its [[ref:Claims]]
   
 [[def:Self Issued OpenID Provider (SIOP), Self Issued OpenID Provider, SIOP]]  
-~ An OpenID Provider (OP) used by an [[ref:End User]] to prove control over a [[ref:DID]]
+~ An OpenID Provider (OP) used by an [[ref:End User]] to prove control over a cryptographically verifiable identifier such as a [[ref:DID]].
 
 [[def:Verifiable Credential (VC), Verifiable Credential, VC]]
 ~ A set of one or more [[ref:Claims]] made by an issuer that is tamper-evident and has authorship that can be cryptographically
@@ -137,10 +138,7 @@ A description to the reader on how the document is structured.
   and a timely statement of the issuer or presenter
 
 [[def:Wallet]]
-~ A credential repository that acts as a [[ref:Self Issued OpenID Provider (SIOP)]]
-
-Other common terms in this document come from the specifications listed in (#reference).
->>>>>>> 2118cbb (add terms for terminology section)
+~ A software application, usually provided by some commercial entity, that receives, stores, presents, and manages credentials and key material of the End-User. Acts as a [[ref:Self Issued OpenID Provider (SIOP)]]
 
 ## Profile
 

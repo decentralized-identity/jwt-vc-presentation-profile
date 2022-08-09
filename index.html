@@ -115,20 +115,20 @@ customElements.define("slide-panels",class extends HTMLElement{static get observ
 <h2 id="structure-of-this-document"><a class="toc-anchor" href="#structure-of-this-document" >§</a> Structure of this Document</h2>
 <p>A description to the reader on how the document is structured.</p>
 <h2 id="terminology"><a class="toc-anchor" href="#terminology" >§</a> Terminology</h2>
+<p>This section defines common terms from the profile for the reader’s ease and convenience. These, as well as other useful terms, can be found in more detail within the specifications from which they originate. See <a class="term-reference" href="#term:references">References</a>.</p>
 <dl>
 <dt><span id="term:authorization-request">Authorization Request</span></dt>
 <dd>OAuth 2.0 Authorization Request extended by <a class="term-reference" href="#term:oidc">OIDC</a> and <a class="term-reference" href="#term:openid4vp">OpenID4VP</a></dd>
 <dt><span id="term:authorization-response">Authorization Response</span></dt>
 <dd>OAuth 2.0 Authorization Response extended by <a class="term-reference" href="#term:oidc">OIDC</a> and <a class="term-reference" href="#term:openid4vp">OpenID4VP</a></dd>
 <dt><span id="term:claims"><span id="term:claim">Claim</span></span></dt>
-<dd>An assertion made about a subject</dd>
+<dd>An assertion made about the subject of a credential</dd>
 <dt><span id="term:did"><span id="term:decentralized-identifier">Decentralized Identifier</span></span></dt>
-<dd>An identifier that enables verifiable, decentralized digital identity as defined by the W3C specification
-<a class="term-reference" href="#term:did-core">DID Core</a>. Known as a DID.</dd>
+<dd>An identifier with its core ability being enabling Clients to obtain key material and other metadata by reference</dd>
 <dt><span id="term:end-user">End User</span></dt>
 <dd>Participant</dd>
 <dt><span id="term:holder">Holder</span></dt>
-<dd>An entity that possesses or holds verifiable credentials and can generate verifiable presentations from them</dd>
+<dd>An entity that possesses or holds verifiable credentials and can generate verifiable presentations from them as defined in <a class="term-reference" href="#term:vc-data-model">VC Data Model</a>.</dd>
 <dt><span id="term:op"><span id="term:openid-provider"><span id="term:openid-provider-(op)">OpenID Provider (OP)</span></span></span></dt>
 <dd>OAuth 2.0 Authentication Server implementing <a class="term-reference" href="#term:oidc">OIDC</a> and <a class="term-reference" href="#term:openid4vp">OpenID4VP</a></dd>
 <dt><span id="term:presentation">Presentation</span></dt>
@@ -139,7 +139,7 @@ customElements.define("slide-panels",class extends HTMLElement{static get observ
 <dt><span id="term:request-object">Request Object</span></dt>
 <dd>JWT that contains a set of request parameters as its <a class="term-reference" href="#term:claims">Claims</a></dd>
 <dt><span id="term:siop"><span id="term:self-issued-openid-provider"><span id="term:self-issued-openid-provider-(siop)">Self Issued OpenID Provider (SIOP)</span></span></span></dt>
-<dd>An OpenID Provider (OP) used by an <a class="term-reference" href="#term:end-user">End User</a> to prove control over a <a class="term-reference" href="#term:did">DID</a></dd>
+<dd>An OpenID Provider (OP) used by an <a class="term-reference" href="#term:end-user">End User</a> to prove control over a cryptographically verifiable identifier such as a <a class="term-reference" href="#term:did">DID</a>.</dd>
 <dt><span id="term:vc"><span id="term:verifiable-credential"><span id="term:verifiable-credential-(vc)">Verifiable Credential (VC)</span></span></span></dt>
 <dd>A set of one or more <a class="term-reference" href="#term:claims">Claims</a> made by an issuer that is tamper-evident and has authorship that can be cryptographically
 verified.</dd>
@@ -152,10 +152,8 @@ with the term <a class="term-reference" href="#term:relying-party-(rp)">Relying 
 <dd>The process in which a <a class="term-reference" href="#term:verifier">Verifier</a> validates that the verifiable credential inside a verifiable presentation is authentic
 and a timely statement of the issuer or presenter</dd>
 <dt><span id="term:wallet">Wallet</span></dt>
-<dd>A credential repository that acts as a <a class="term-reference" href="#term:self-issued-openid-provider-(siop)">Self Issued OpenID Provider (SIOP)</a></dd>
+<dd>A software application, usually provided by some commercial entity, that receives, stores, presents, and manages credentials and key material of the End-User. Acts as a <a class="term-reference" href="#term:self-issued-openid-provider-(siop)">Self Issued OpenID Provider (SIOP)</a></dd>
 </dl>
-<p>Other common terms in this document come from the specifications listed in (#reference).</p>
->>>>>>> 2118cbb (add terms for terminology section)
 <h2 id="profile"><a class="toc-anchor" href="#profile" >§</a> Profile</h2>
 <h3 id="the-protocol-flow"><a class="toc-anchor" href="#the-protocol-flow" >§</a> The Protocol Flow</h3>
 <p>This section briefly describes the end to end verification flow. Concepts and terms mentioned here will be described in more detail in subsequent sections of this document.</p>
