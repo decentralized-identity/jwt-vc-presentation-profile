@@ -135,7 +135,7 @@ This section defines common terms from the profile for the reader's ease and con
   and a timely statement of the issuer or presenter
 
 [[def:Wallet]]
-~ A software application, usually provided by some commercial entity, that receives, stores, presents, and manages credentials and key material of the End-User. Acts as a [[ref:Self Issued OpenID Provider (SIOP)]]
+~ An entity that receives, stores, presents, and manages credentials and key material of the End User. Acts as a [[ref:Self Issued OpenID Provider (SIOP)]]
 
 ## Profile
 
