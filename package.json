@@ -15,6 +15,6 @@
     "url": "https://github.com/decentralized-identity/jwt-vc-presentation-profile/issues"
   },
   "dependencies": {
-    "spec-up": "0.10.3"
+    "spec-up": "^0.10.3"
   }
 }
