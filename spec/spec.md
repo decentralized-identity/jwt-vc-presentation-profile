@@ -46,7 +46,7 @@ A downside to developing specifications in such a collaborative way is that they
 
 ### Audience
 
-Who is the audience for this document.
+The audience of the document is broad and can range from Open ID and OAuth providers to verifiable credential implementers and/or enthusiasts. The first few sections give an overview of the problem area and profile requirements for JWT VC interoperability. Subsequent sections are detailed and technical, describing the protocol flow and request-responses.
 
 ## Status of This Document
 
