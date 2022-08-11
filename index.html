@@ -71,13 +71,15 @@ customElements.define("slide-panels",class extends HTMLElement{static get observ
 </dl>
 <hr>
 <h2 id="abstract"><a class="toc-anchor" href="#abstract" >§</a> Abstract</h2>
-<p>The JWT VC Presentation Profile defines a set of specifications to enable the interoperable presentation of Verifiable Credentials between Wallets and Verifiers/RPs.</p>
+<p>The JWT VC Presentation Profile defines a standardized way to interoperably exchange <a class="term-reference" href="#term:verifiable-credentials">Verifiable Credentials</a> (VCs) between digital <a class="term-reference" href="#term:wallets">Wallets</a> and credential <a class="term-reference" href="#term:verifiers">Verifiers</a>.</p>
+<p>This document is <strong>specification profile</strong> not a specification. It is a collection of pre-existing specficiations with all but required optionality stripped from them with the purpose of ensuring interoperability.</p>
+<p>Currently, there are many published specifications for exchanging VCs between <a class="term-reference" href="#term:wallets">Wallets</a> and <a class="term-reference" href="#term:verifiers">Verifiers</a>. The Wallet and Verifier providers have to choose which standards to operate under and hope that the external parties they wish to exchange VCs with support those same standards. Specifications tend to be very broad, flexible, and un-opinionated. This is an advantage when building use cases and providing optionality to the implementers. But, in the case of exchanging VCs, it can cause misalignment. The more optionality in the specification, the more complex and expensive it becomes to deliver code, maintain a solution, and verify a VC. All of this complexity decreases the liklihood of successful interop.</p>
+<p>The JWT VC Presentation Profile, once adopted by providers, enables the seamless verification of VCs. It is based on <a class="term-reference" href="#term:openid4vp">OpenID4VP</a> which leverages the existing infrastructure and security of <a class="term-reference" href="#term:open-id-connect-(oidc)">Open ID Connect (OIDC)</a> and OAuth 2.0 and reduces implementation cost for existing OIDC Relying Parties to become VC verifiers. The profile relies on <a class="term-reference" href="#term:presentation-exchange">Presentation Exchange</a> for the presentation of VCs, <a class="term-reference" href="#term:well-known-dids">Well Known DIDs</a> for trust establishment, and <a class="term-reference" href="#term:status-list-2021">Status List 2021</a> for revocation of VCs.</p>
 <h3 id="audience"><a class="toc-anchor" href="#audience" >§</a> Audience</h3>
-<p>Who is the audience for this document.</p>
+<p>The audience of the document is broad and can range from Open ID and OAuth providers to verifiable credential implementers and/or enthusiasts. The first few sections give an overview of the problem area and profile requirements for JWT VC interoperability. Subsequent sections are detailed and technical, describing the protocol flow and request-responses.</p>
 <h2 id="status-of-this-document"><a class="toc-anchor" href="#status-of-this-document" >§</a> Status of This Document</h2>
 <p>The status of the JWT VC Presentation Profile v1.0.0 is a PRE-DRAFT specification under development within the Decentralized Identity Foundation (DIF).</p>
 <h3 id="description"><a class="toc-anchor" href="#description" >§</a> Description</h3>
-<p>The <a class="term-reference" href="#term:vc-data-model-v1.1">VC Data Model v1.1</a> defines the data model of Verifiable Credentials (VCs) but does not prescribe standards for transport protocol, key management, authentication, query language, etc. As a result, implementers must decide which standards to use for their presentations without a guarantee that others will support the same set of standards.</p>
 <p>This document aims to provide a path to interoperability by standardizing the set of specifications that enable the presentation of JWT-VCs between implementers. Future versions of this document will include details on issuance and wallet interoperability. Ultimately, this profile will define a standardized approach to Verifiable Credentials so that distributed developers, apps, and systems can share credentials through common means.</p>
 <h3 id="scope"><a class="toc-anchor" href="#scope" >§</a> Scope</h3>
 <h4 id="scope-2"><a class="toc-anchor" href="#scope-2" >§</a> Scope</h4>
@@ -775,7 +777,7 @@ For reference and more information on LD signature suites see the <a path-0="w3c
 <h2 id="references"><a class="toc-anchor" href="#references" >§</a> References</h2>
 <h3 id="normative-references"><a class="toc-anchor" href="#normative-references" >§</a> Normative References</h3>
 <dl>
-<dt><span id="term:oidc">OIDC</span></dt>
+<dt><span id="term:open-id-connect-(oidc)"><span id="term:oidc">OIDC</span></span></dt>
 <dd><a path-0="openid.net"path-1="specs"path-2="openid-connect-core-1_0.html"href="https://openid.net/specs/openid-connect-core-1_0.html" >Open ID Connect</a>. Nat Sakimura, John Bradley, Michael B. Jones, Breno de Medeiros, Chuck Mortimore. 2014.11. Status: Approved Specification.</dd>
 <dt><span id="term:did-core">DID Core</span></dt>
 <dd><a path-0="www.w3.org"path-1="TR"path-2="2021"path-3="PR-did-core-20210803"path-4=""href="https://www.w3.org/TR/2021/PR-did-core-20210803/" >Decentralized Identifiers (DIDs) v1.0</a>. Manu Sporny, Dave Longley, Markus Sabadello, Drummond Reed, Orie Steele, Christopher Allen. 2021.08. Status: W3C Proposed Recommendation.</dd>
@@ -795,7 +797,7 @@ For reference and more information on LD signature suites see the <a path-0="w3c
 <dd><a path-0="openid.net"path-1="specs"path-2="openid-connect-registration-1_0.html"href="https://openid.net/specs/openid-connect-registration-1_0.html" >OpenID Connect Dynamic Client Registration 1.0 incorporating errata set 1</a>. Nat Sakimura, John Bradley, Michael B. Jones. 2014.11. Status: Approved Specification.</dd>
 <dt><span id="term:sidetree">Sidetree</span></dt>
 <dd><a path-0="identity.foundation"path-1="sidetree"path-2="spec"path-3=""href="https://identity.foundation/sidetree/spec/" >Sidetree v1.0.0</a>. Daniel Buchner, Orie Steele, Troy Ronda. 2021.03. Status: DIF Ratified Specification.</dd>
-<dt><span id="term:well-known-did">Well Known DID</span></dt>
+<dt><span id="term:well-known-dids"><span id="term:well-known-did">Well Known DID</span></span></dt>
 <dd><a path-0="identity.foundation"path-1=".well-known"path-2="resources"path-3="did-configuration"path-4=""href="https://identity.foundation/.well-known/resources/did-configuration/" >Well Known DID Configuration</a>. Daniel Buchner, Orie Steele, Tobias Looker. 2021.01. Status: DIF Working Group Approved Draft.</dd>
 <dt><span id="term:identity-hub-(0.0.1-predraft)">Identity Hub (0.0.1 Predraft)</span></dt>
 <dd><a path-0="identity.foundation"path-1="decentralized-web-node"path-2="spec"path-3="0.0.1-predraft"path-4=""href="https://identity.foundation/decentralized-web-node/spec/0.0.1-predraft/" >Identity Hub - Decentralized Web Node 0.0.1 Predraft</a></dd>

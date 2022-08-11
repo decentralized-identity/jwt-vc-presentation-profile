@@ -29,20 +29,13 @@ Participate:
 
 ## Abstract
   
-The JWT VC Presentation Profile defines a standardized way to exchange Verifiable Credentials between Wallets and Verifiers to enable interoperable prsentation.
+The JWT VC Presentation Profile defines a standardized way to interoperably exchange [[ref:Verifiable Credentials]] (VCs) between digital [[ref: Wallets]] and credential [[ref: Verifiers]].
 
+This document is **specification profile** not a specification. It is a collection of pre-existing specficiations with all but required optionality stripped from them with the purpose of ensuring interoperability.
 
-to enable the interoperable presentation of Verifiable Credentials between Wallets and Verifiers.
+Currently, there are many published specifications for exchanging VCs between [[ref:Wallets]] and [[ref:Verifiers]]. The Wallet and Verifier providers have to choose which standards to operate under and hope that the external parties they wish to exchange VCs with support those same standards. Specifications tend to be very broad, flexible, and un-opinionated. This is an advantage when building use cases and providing optionality to the implementers. But, in the case of exchanging VCs, it can cause misalignment. The more optionality in the specification, the more complex and expensive it becomes to deliver code, maintain a solution, and verify a VC. All of this complexity decreases the liklihood of successful interop.
 
-The JWT VC Presentation Profile defines a standardized way to exchange Verifiable Credentials between Wallets and Verifiers.
-
-The JWT VC Presentation Profile defines a set of specifications to enable the interoperable presentation of Verifiable Credentials between Wallets and Verifiers/RPs.
-
-As a profile, this document is not a specification but rather a collection of specficiations with all optionality removed. This enables verifiers and wallets to implement a small set of standards, did methods, etc. while at the same time ensuring interoperability.
-
-Currently, there are many published specifications for exchanging VCs between digital wallets (holders) and verifiers. The wallet and verifier providers have to choose which standards to operate under and hope that the external parties they wish to exchange VCs with support those same standards.
-
-A downside to developing specifications in such a collaborative way is that they tend to be very broad, flexible, and un-opinionated. This is an advantage when building use cases and providing optionality to the implementers. But, in the case of exchanging VCs, it can cause misalignment. The more optionality in the specification, the more complex and expensive it becomes to deliver code, maintain a solution, and happily verify a VC.
+The JWT VC Presentation Profile, once adopted by providers, enables the seamless verification of VCs. It is based on [[ref: OpenID4VP]] which leverages the existing infrastructure and security of [[ref: Open ID Connect (OIDC)]] and OAuth 2.0 and reduces implementation cost for existing OIDC Relying Parties to become VC verifiers. The profile relies on [[ref: Presentation Exchange]] for the presentation of VCs, [[ref:Well Known DIDs]] for trust establishment, and [[ref:Status List 2021]] for revocation of VCs.
 
 ### Audience
 
@@ -54,10 +47,7 @@ The status of the JWT VC Presentation Profile v1.0.0 is a PRE-DRAFT specificatio
 
 ### Description
 
-The [[ref: VC Data Model v1.1]] defines the data model of Verifiable Credentials (VCs) but does not prescribe standards for transport protocol, key management, authentication, query language, etc. As a result, implementers must decide which standards to use for their presentations without a guarantee that others will support the same set of standards.
-
 This document aims to provide a path to interoperability by standardizing the set of specifications that enable the presentation of JWT-VCs between implementers. Future versions of this document will include details on issuance and wallet interoperability. Ultimately, this profile will define a standardized approach to Verifiable Credentials so that distributed developers, apps, and systems can share credentials through common means.
-
 
 ### Scope
 
@@ -578,7 +568,7 @@ Embedded or referenced test vectors.
 
 ### Normative References
 
-[[def: OIDC]]
+[[def: OIDC,Open ID Connect (OIDC)]]
 ~ [Open ID Connect](https://openid.net/specs/openid-connect-core-1_0.html). Nat Sakimura, John Bradley, Michael B. Jones, Breno de Medeiros, Chuck Mortimore. 2014.11. Status: Approved Specification.
 
 [[def: DID Core]]
@@ -608,7 +598,7 @@ Embedded or referenced test vectors.
 [[def: Sidetree]]
 ~ [Sidetree v1.0.0](https://identity.foundation/sidetree/spec/). Daniel Buchner, Orie Steele, Troy Ronda. 2021.03. Status: DIF Ratified Specification.
 
-[[def: Well Known DID]]
+[[def: Well Known DID,Well Known DIDs]]
 ~ [Well Known DID Configuration](https://identity.foundation/.well-known/resources/did-configuration/). Daniel Buchner, Orie Steele, Tobias Looker. 2021.01. Status: DIF Working Group Approved Draft.
 
 [[def: Identity Hub (0.0.1 Predraft)]]
