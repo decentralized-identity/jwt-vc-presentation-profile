@@ -29,7 +29,7 @@ Participate:
 
 ## Abstract
 
-The JWT VC Presentation Profile defines a standardized way to interoperably exchange [[ref:Verifiable Credentials]] (VCs) between digital [[ref: Wallets]] and credential [[ref: Verifiers]].
+The JWT VC Presentation Profile defines a set of specifications to enable the interoperable presentation of [[ref:Verifiable Credentials]] (VCs) between digital [[ref: Wallets]] and credential [[ref: Verifiers]].
 
 This document is not a specification, but a **profile**. It outlines existing specifications required for implementations to interoperate among each other. It also clarifies mandatory to implement features for the optionalities mentioned in the referenced specifications.
 
