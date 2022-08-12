@@ -29,11 +29,15 @@ Participate:
 
 ## Abstract
 
-The JWT VC Presentation Profile defines a set of specifications to enable the interoperable presentation of Verifiable Credentials between Wallets and Verifiers/RPs.
+The JWT VC Presentation Profile defines a set of specifications to enable the interoperable presentation of [[ref:Verifiable Credentials]] (VCs) between digital [[ref: Wallets]] and credential [[ref: Verifiers]].
+
+This document is not a specification, but a **profile**. It outlines existing specifications required for implementations to interoperate among each other. It also clarifies mandatory to implement features for the optionalities mentioned in the referenced specifications.
+
+The profile uses OpenID for Verifiable Presentations ([[ref: OpenID4VP ID1]]) as the base protocol for the request and verification of JWT VCs encapsulated in [[ref:Verifiable Presentations]]. A full list of the open standards used in this profile can be found in [Overview of the Open Standards Requirements](#overview-of-the-open-standards-requirements).
 
 ### Audience
 
-Who is the audience for this document.
+The audience of the document is broad and can range from Open ID and OAuth providers to verifiable credential implementers and/or enthusiasts. The first few sections give an overview of the problem area and profile requirements for JWT VC interoperability. Subsequent sections are detailed and technical, describing the protocol flow and request-responses.
 
 ## Status of This Document
 
@@ -119,14 +123,14 @@ This section consolidates in one place common terms used across open standards t
 [[def:Self Issued OpenID Provider (SIOP), Self Issued OpenID Provider, SIOP]]  
 ~ An OpenID Provider (OP) used by an [[ref:End User]] to prove control over a cryptographically verifiable identifier such as a [[ref:DID]].
 
-[[def:Verifiable Credential (VC), Verifiable Credential, VC]]
+[[def:Verifiable Credential (VC), Verifiable Credential, VC, Verifiable Credentials]]
 ~ A set of one or more [[ref:Claims]] made by an issuer that is tamper-evident and has authorship that can be cryptographically
   verified.
 
-[[def:Verifiable Presentation (VP), Verifiable Presentation, VP]] 
+[[def:Verifiable Presentation (VP), Verifiable Presentation, VP, Verifiable Presentations]] 
 ~ A [[ref:Presentation]] that is tamper-evident and has authorship that can be cryptographically verified
 
-[[def:Verifier]]
+[[def:Verifier, Verifiers]]
 ~ An entity that receives one or more verifiable credential inside a verifiable presentation for processing. Synonymous
   with the term [[ref: Relying Party (RP)]]
 
@@ -134,7 +138,7 @@ This section consolidates in one place common terms used across open standards t
 ~ The process in which a [[ref:Verifier]] validates that the verifiable credential inside a verifiable presentation is authentic
   and a timely statement of the issuer or presenter
 
-[[def:Wallet]]
+[[def:Wallet, Wallets]]
 ~ An entity that receives, stores, presents, and manages credentials and key material of the End User. Acts as a [[ref:Self Issued OpenID Provider (SIOP)]]
 
 ## Profile
