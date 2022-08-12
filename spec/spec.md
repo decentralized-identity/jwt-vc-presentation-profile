@@ -31,11 +31,9 @@ Participate:
 
 The JWT VC Presentation Profile defines a standardized way to interoperably exchange [[ref:Verifiable Credentials]] (VCs) between digital [[ref: Wallets]] and credential [[ref: Verifiers]].
 
-This document is not a specification, but a **profile**. It outlines existing specifications required for implementations to interoperate among each other. It also clarifies mandatory to implement features for the optionalities allowed in the referenced specifications.
+This document is not a specification, but a **profile**. It outlines existing specifications required for implementations to interoperate among each other. It also clarifies mandatory to implement features for the optionalities mentioned in the referenced specifications.
 
-Currently, there are many published specifications for exchanging VCs between [[ref:Wallets]] and [[ref:Verifiers]]. The Wallet and Verifier providers have to choose which standards to operate under and hope that the external parties they wish to exchange VCs with support those same standards. Specifications tend to be very broad, flexible, and un-opinionated. This is an advantage when building use cases and providing optionality to the implementers. But, in the case of exchanging VCs, it can cause misalignment. The more optionality in the specification, the more complex and expensive it becomes to deliver code, maintain a solution, and verify a VC. All of this complexity decreases the liklihood of successful interop.
-
-The JWT VC Presentation Profile, once adopted by providers, enables the seamless verification of VCs. It is based on [[ref: OpenID4VP]] which leverages the existing infrastructure and security of [[ref: Open ID Connect (OIDC)]] and OAuth 2.0 and reduces implementation cost for existing OIDC Relying Parties to become VC verifiers. The profile relies on [[ref: Presentation Exchange]] for the presentation of VCs, [[ref:Well Known DIDs]] for trust establishment, and [[ref:Status List 2021]] for revocation of VCs.
+The profile uses OpenID for Verifiable Presentations ([[ref: OpenID4VP ID1]]) as the base protocol for the request and verification of JWT VCs encapsultaed in [[ref:Verifiable Presentations]]. A full list of the open standards used in this profile can be found in [Overview of the Open Standards Requirements](#overview-of-the-open-standards-requirements).
 
 ### Audience
 
@@ -126,7 +124,7 @@ This section consolidates in one place common terms used across open standards t
 ~ A set of one or more [[ref:Claims]] made by an issuer that is tamper-evident and has authorship that can be cryptographically
   verified.
 
-[[def:Verifiable Presentation (VP), Verifiable Presentation, VP]] 
+[[def:Verifiable Presentation (VP), Verifiable Presentation, Verifiable Presentations, VP]] 
 ~ A [[ref:Presentation]] that is tamper-evident and has authorship that can be cryptographically verified
 
 [[def:Verifier]]
