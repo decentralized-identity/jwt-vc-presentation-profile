@@ -83,7 +83,7 @@ A description to the reader on how the document is structured.
 
 ## Terminology
 
-This section defines common terms from the profile for the reader's ease and convenience. These, as well as other useful terms, can be found in more detail within the specifications from which they originate. See [[ref:References]].
+This section consolidates in one place common terms used across open standards that this profile consists of. For the details of these, as well as other useful terms, see text within each of the specification listed in [[ref:References]].
 
 [[def:Authorization Request]]
 ~ OAuth 2.0 Authorization Request extended by [[ref:OIDC]] and [[ref:OpenID4VP]]
