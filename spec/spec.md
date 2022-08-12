@@ -31,7 +31,7 @@ Participate:
 
 The JWT VC Presentation Profile defines a standardized way to interoperably exchange [[ref:Verifiable Credentials]] (VCs) between digital [[ref: Wallets]] and credential [[ref: Verifiers]].
 
-This document is **specification profile** not a specification. It is a collection of pre-existing specficiations with all but required optionality stripped from them with the purpose of ensuring interoperability.
+This document is not a specification, but a **profile**. It outlines existing specifications required for implementations to interoperate among each other. It also clarifies mandatory to implement features for the optionalities allowed in the referenced specifications.
 
 Currently, there are many published specifications for exchanging VCs between [[ref:Wallets]] and [[ref:Verifiers]]. The Wallet and Verifier providers have to choose which standards to operate under and hope that the external parties they wish to exchange VCs with support those same standards. Specifications tend to be very broad, flexible, and un-opinionated. This is an advantage when building use cases and providing optionality to the implementers. But, in the case of exchanging VCs, it can cause misalignment. The more optionality in the specification, the more complex and expensive it becomes to deliver code, maintain a solution, and verify a VC. All of this complexity decreases the liklihood of successful interop.
 
