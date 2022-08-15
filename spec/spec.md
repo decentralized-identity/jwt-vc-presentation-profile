@@ -203,6 +203,28 @@ This profile uses certain versions of specifications that have not yet reached f
   - First Implementer's Draft of OpenID for Verifiable Prensetations specification
   - ID Hub specification published as a v0.0.1 predraft of [Decentralized Web Node](https://identity.foundation/decentralized-web-node/spec/). We will continue to use the term ID Hub rather than Decentralized Web Node to avoid confusion.
 
+### JWT-VCs
+
+#### Using JWT claims instead of their counterparts in the data model specification
+
+Section 6.3.1 of [[ref: VC Data Model v1.1]] provides two options how to encode properties defined in VC Data Model v1.1 as a JWT. 
+
+For the purpose of this profile, registered JWT claims `exp`, `iss`, `nbf`, `jti`, `sub` and `aud` MUST be used instead of their respective counterparts defined in VC Data Model v1.1.
+
+#### Base64url Encoding of a JWT encoded VC included in a VP
+
+Verifiable Credential included in a JWT-encoded Verifiable Presentation MUST be Base64url encoded. 
+
+Base64url encoding is defined as a case64 encoding using the URL- and filename-safe character set defined in Section 5 of RFC4648, with all trailing '=' characters omitted (as permitted by Section 3.2 of RFC4648) and without the inclusion of any line breaks, whitespace, or other additional characters. Note that the base64url encoding of the empty octet sequence is the empty string. (See Appendix C of RFC7515 for notes on implementing base64url encoding without padding.)
+
+#### `exp` JWT claim
+
+`exp` JWT claim in JWT encoded VC or VP MUST be used to set the value of the "expirationDate" of the VC or VP, and not of the credentialSubject.
+
+#### `nbf` JWT claim
+
+[[ref: VC Data Model v1.1]] specifies that "issuanceDate" property MUST be represented as an `nbf` JWT claim, and not `iat` JWT claim. This might sounds couterintuitive, but the implementers of this profile MUST follow this guidance.
+
 ### Authorization Request
 
 [[ref: SIOPv2 ID1]] MUST be used for key management and authentication, [[ref: OpenID4VP ID1]] MUST be used to transport Verifiable Credentials, and [[ref: Presentation Exchange]] MUST be used as a query language as defined in [[ref: OpenID4VP ID1]].
