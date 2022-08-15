@@ -565,7 +565,7 @@ While ION supports any public key JWK representation in a DID Document, implemen
 Note: This profile leverages JWT for signature generation and verification only. There is a rich offering of Linked Data Cryptographic Suites which are not covered by this iteration of the profile.
 For reference and more information on LD signature suites see the [Linked Data Cryptographic Suite Registry](https://w3c-ccg.github.io/ld-cryptosuite-registry/).
 
-## Credential Schema
+## Credential type `WokrplaceCredential`
 
 Below is a description of a `credentialSubject` for a credential type `WorkplaceCredential`. It is RECOMMENDED to be used with a Workplace Credential Use-Case defined below. However the usage of this credential type is OPTIONAL and is not required to be compliant with this profile.
 
