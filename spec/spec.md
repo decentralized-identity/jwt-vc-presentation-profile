@@ -574,7 +574,7 @@ Below is a description of a `credentialSubject` for a credential type `Workplace
 - `surname`  OPTIONAL. String. The user's surname (family name or last name). Maximum length is 64 characters.
 - `jobTitle` OPTIONAL. String. The user's job title. Maximum length is 128 characters.
 - `preferredLanguage` OPTIONAL. String. The preferred language for the user. Should follow ISO 639-1 Code, for example en-US.
-- `photo`  OPTIONAL. The user's profile photo. Should be encoded in base64.
+- `photo`  OPTIONAL. The user's profile photo. The data is binary and not encoded in base64.
 
 ```json
 [[insert: ./spec/assets/workplace_credential_vc.json]]
