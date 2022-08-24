@@ -29,7 +29,7 @@ Participate:
 
 ## Abstract
 
-The JWT VC Presentation Profile defines a set of specifications to enable the interoperable presentation of [[ref:Verifiable Credentials]] (VCs) between digital [[ref: Wallets]] and credential [[ref: Verifiers]].
+The JWT VC Presentation Profile defines a set of requirements against existing specifications to enable the interoperable presentation of [[ref:Verifiable Credentials]] (VCs) between [[ref: Wallets]] and [[ref: Verifiers]].
 
 This document is not a specification, but a **profile**. It outlines existing specifications required for implementations to interoperate among each other. It also clarifies mandatory to implement features for the optionalities mentioned in the referenced specifications.
 
@@ -37,7 +37,7 @@ The profile uses OpenID for Verifiable Presentations ([[ref: OpenID4VP ID1]]) as
 
 ### Audience
 
-The audience of the document is broad and can range from Open ID and OAuth providers to verifiable credential implementers and/or enthusiasts. The first few sections give an overview of the problem area and profile requirements for JWT VC interoperability. Subsequent sections are detailed and technical, describing the protocol flow and request-responses.
+The audience of the document includes verifiable credential implementers and/or enthusiasts. The first few sections give an overview of the problem area and profile requirements for JWT VC interoperability. Subsequent sections are detailed and technical, describing the protocol flow and request-responses.
 
 ## Status of This Document
 
@@ -123,7 +123,7 @@ This section consolidates in one place common terms used across open standards t
 [[def:Self Issued OpenID Provider (SIOP), Self Issued OpenID Provider, SIOP]]  
 ~ An OpenID Provider (OP) used by an [[ref:End User]] to prove control over a cryptographically verifiable identifier such as a [[ref:DID]].
 
-[[def:Verifiable Credential (VC), Verifiable Credential, VC, Verifiable Credentials]]
+[[def:Verifiable Credential, VC, Verifiable Credentials]]
 ~ A set of one or more [[ref:Claims]] made by an issuer that is tamper-evident and has authorship that can be cryptographically
   verified.
 

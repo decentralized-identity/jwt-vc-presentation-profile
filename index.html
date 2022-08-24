@@ -71,11 +71,11 @@ customElements.define("slide-panels",class extends HTMLElement{static get observ
 </dl>
 <hr>
 <h2 id="abstract"><a class="toc-anchor" href="#abstract" >§</a> Abstract</h2>
-<p>The JWT VC Presentation Profile defines a set of specifications to enable the interoperable presentation of <a class="term-reference" href="#term:verifiable-credentials">Verifiable Credentials</a> (VCs) between digital <a class="term-reference" href="#term:wallets">Wallets</a> and credential <a class="term-reference" href="#term:verifiers">Verifiers</a>.</p>
+<p>The JWT VC Presentation Profile defines a set of requirements against existing specifications to enable the interoperable presentation of <a class="term-reference" href="#term:verifiable-credentials">Verifiable Credentials</a> (VCs) between <a class="term-reference" href="#term:wallets">Wallets</a> and <a class="term-reference" href="#term:verifiers">Verifiers</a>.</p>
 <p>This document is not a specification, but a <strong>profile</strong>. It outlines existing specifications required for implementations to interoperate among each other. It also clarifies mandatory to implement features for the optionalities mentioned in the referenced specifications.</p>
 <p>The profile uses OpenID for Verifiable Presentations (<a class="term-reference" href="#term:openid4vp-id1">OpenID4VP ID1</a>) as the base protocol for the request and verification of JWT VCs encapsulated in <a class="term-reference" href="#term:verifiable-presentations">Verifiable Presentations</a>. A full list of the open standards used in this profile can be found in <a href="#overview-of-the-open-standards-requirements" >Overview of the Open Standards Requirements</a>.</p>
 <h3 id="audience"><a class="toc-anchor" href="#audience" >§</a> Audience</h3>
-<p>The audience of the document is broad and can range from Open ID and OAuth providers to verifiable credential implementers and/or enthusiasts. The first few sections give an overview of the problem area and profile requirements for JWT VC interoperability. Subsequent sections are detailed and technical, describing the protocol flow and request-responses.</p>
+<p>The audience of the document includes verifiable credential implementers and/or enthusiasts. The first few sections give an overview of the problem area and profile requirements for JWT VC interoperability. Subsequent sections are detailed and technical, describing the protocol flow and request-responses.</p>
 <h2 id="status-of-this-document"><a class="toc-anchor" href="#status-of-this-document" >§</a> Status of This Document</h2>
 <p>The status of the JWT VC Presentation Profile v1.0.0 is a PRE-DRAFT specification under development within the Decentralized Identity Foundation (DIF).</p>
 <h3 id="description"><a class="toc-anchor" href="#description" >§</a> Description</h3>
@@ -140,7 +140,7 @@ customElements.define("slide-panels",class extends HTMLElement{static get observ
 <dd>JWT that contains a set of request parameters as its <a class="term-reference" href="#term:claims">Claims</a></dd>
 <dt><span id="term:siop"><span id="term:self-issued-openid-provider"><span id="term:self-issued-openid-provider-(siop)">Self Issued OpenID Provider (SIOP)</span></span></span></dt>
 <dd>An OpenID Provider (OP) used by an <a class="term-reference" href="#term:end-user">End User</a> to prove control over a cryptographically verifiable identifier such as a <a class="term-reference" href="#term:did">DID</a>.</dd>
-<dt><span id="term:verifiable-credentials"><span id="term:vc"><span id="term:verifiable-credential"><span id="term:verifiable-credential-(vc)">Verifiable Credential (VC)</span></span></span></span></dt>
+<dt><span id="term:verifiable-credentials"><span id="term:vc"><span id="term:verifiable-credential">Verifiable Credential</span></span></span></dt>
 <dd>A set of one or more <a class="term-reference" href="#term:claims">Claims</a> made by an issuer that is tamper-evident and has authorship that can be cryptographically
 verified.</dd>
 <dt><span id="term:verifiable-presentations"><span id="term:vp"><span id="term:verifiable-presentation"><span id="term:verifiable-presentation-(vp)">Verifiable Presentation (VP)</span></span></span></span></dt>
