@@ -207,7 +207,7 @@ This profile uses certain versions of specifications that have not yet reached f
 
 #### Using JWT claims instead of their counterparts in the data model specification
 
-Section 6.3.1 of [[ref: VC Data Model v1.1]] provides two options how to encode properties defined in VC Data Model v1.1 as a JWT. 
+Section 6.3.1 of [[ref: VC Data Model v1.1]] provides two options for how to encode properties defined in VC Data Model v1.1 as a JWT. 
 
 For the purpose of this profile, registered JWT claims `exp`, `iss`, `nbf`, `jti`, `sub` and `aud` MUST be used in a JWT-VC instead of their respective counterparts defined in VC Data Model v1.1.
 
