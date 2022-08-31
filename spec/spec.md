@@ -516,42 +516,130 @@ The following two serviceEndpoints MUST be supported in the DID Document, but on
 
 ### Revocation
 
-StatusList2021 MUST be used for revocation of VCs, as defined in [[ref: Status List 2021]].
+The profile utilizes [[ref: Status List 2021]] specification and outlines the status information of VCs as binary values.  
+When an issuer desires to enable status information for a verifiable credential, they MAY add a status property that uses the data model described in this specification. Credential status (credentialStatus) property in the Verifiable Credential provides the information on the current status of the credential. The issued VC may include a credentialStatus property, as defined in section 2.1 of [[ref: Status List 2021]]. An Issuer of a VC must use the HTTPS URL Structure or the DID Relative URLs stored in an ID Hub to host the status list as outlined in the specification. The issuer keeps a bitstring list of all verifiable credentials it has issued. Each verifiable credential is associated with a position in the list. If the binary value of the position in the list is 1 (one), the verifiable credential is revoked, if it is 0 (zero) it is not revoked.
 
-#### credentialStatus
+#### DID-Relative URL Structure
+An Issuer of a VC may have an “IdentityHub” node serviceEndpoint in the Issuer's DID Document. Identity Hub nodes are the single endpoint to look up objects associated with a DID, as defined in [[def: Identity Hub (0.0.1 Predraft)]] (Decentralized Web Node v0.0.1 predraft)). 
+The following process defines how a DID-Relative URL is composed:
+1.	Let the base URI authority portion of the DID URL string be the target DID being addressed.
+2.	Append a service parameter to the DID URL string with the value IdentityHub.
+3.	Assemble an array of the Message Descriptor objects are desired for encoding in the DID-relative URL
+4.	JSON stringify the array of Message Descriptor objects from Step 3, then Base64Url encode the stringified output.
+5.	Append a queries parameter to the DID URL string with the value set to the JSON stringified, Base64Url encoded output of Step 4.
 
-The issued VC MAY include a `credentialStatus` property
-
-When `credentialStatus` is deinfed it MUST use StatusList2021 , as defined in section 5.1 of [[ref: Status List 2021]].
-
-StatusList2021 MUST be discovered using either DID Relative URLs stored in an ID Hub or HTTPS URL. 
-
-An Issuer of a VC MAY have an ID Hub serviceEndpoint in the Issuer's DID Document. ID Hubs are the single endpoint to look up objects associated with a DID, as defined in [Identity-Hub].
+##### DID-relative URLs are composed of the following segments
+```json
+did:example:123 + ?service=IdentityHub + &queries= + toBase64Url( JSON.stringify( [{ DESCRIPTOR_1 }, { DESCRIPTOR_N }] ) )
+did:example:123?service=IdentityHub&queries=W3sgTUVTU0FHRV8xIH0sIHsgTUVTU0FHRV9OIH1d..
+```
+The **queries* parameter value is neither JSON stringified nor Base64Url encoded, but should be when using Identity Hub URLs in practice 
+```json
+did:example:123?service=IdentityHub&queries=[{ "method": "CollectionsQuery", "schema": "https://schema.org/SocialMediaPosting" }]
+```
+```json
+did:example:123?service=IdentityHub&queries=W3sgTUVTU0FHRV8xIH0sIHsgTUVTU0FHRV9OIH1d...
+```
+**Resolve DID to locate the Identity Hub URIs:**
+```json
+did:example:123 --> resolve to Identity Hub endpoint(s) --> https://hub.example.com/
+```
 Below is a non-normative example of a DID Document that includes a serviceEndpoint:
-
 ```json
 "service": [
-      {
-        "id": "hubs",
+        "id": "#hub",
         "type": "IdentityHub",
-        "serviceEndpoint": [
-          "https://hubs.microsoft.com",
-          "https://datastore.protonmail.com"
-        ]
+        "serviceEndpoint": {
+          "instances": [
+            "https://beta.hub.msidentity.com/v1.0/a492cff2-d733-4057-95a5-a71fc3695bc8"  ],
+          "origins": []
+        }
       }
-]
+    ],
 ```
+Using the "CollectionsQuery" method and the message descriptor as "objectId", encodedlist can be queried. "objectId" is the "id" field in credentialstatus.
 
+Below is a non-normative example of credentialStatus property defined in VC: 
 ```json
-{
-  "credentialStatus": {
-    "id": "Qmdfr32sdf32546...",
-    "type": "StatusList2021",
-    "statusListIndex": "94567",
-    "statusListCredential": 'did:ion:123?service=IdentityHub&relativeRef=?messages=[{ type: "CollectionsQuery", statement: { id: "Qmdfr32sdf32546..." }}]'
-  }
+"credentialStatus": {	
+  "id": "Qmdfr32sdf32546...",
+  "type": "StatusList2021",
+ "statusPurpose": "revocation",
+  "statusListIndex": "94567",
+  "statusListCredential": 'did:ion:123?service=IdentityHub&queries=W3sibWV0aG9kIjoiQ29sbGVjdGlvbnNRdWVyeSIsI…..'
 }
 ```
+
+**Construct the Request Object:**
+
+* Create a JSON object for the request.
+* The Request Object MUST include a id property, and its value MUST be an [RFC4122] UUID Version 4 string to identify the request.
+* The Request Object MUST include a target property, and its value MUST be the Decentralized Identifier base URI of the DID-relative URL.
+* The Request Object MUST include a messages property, and its value MUST be an array composed of Message objects that are generated by parsing the DID-relative URL’s queries parameter value as a JSON array and performing the following steps for each entry.:
+  + Construct a Message object.
+  + Set the descriptor property of the Message object to the entry, ensuring it is a valid Message Descriptor object.
+  + Augment the Message object with any signing and authorization values required, as described in the Messages section.
+  + Append the object to the Request Object’s messages array.
+
+***HTTP POST example:***
+
+```json
+POST https://hub.example.com/
+
+BODY {
+  "requestId": "c5784162-84af-4aab-aff5-f1f8438dfc3d",
+  "target": "did:example:123",
+  "messages": [
+    {
+      "descriptor": {
+        "method": "CollectionsQuery",
+        "objectId": "b6464162-84af-4aab-aff5-f1f8438dfc1e"
+      }
+    },
+    {...}
+  ]
+}
+```
+
+#### HTTPS URL Structure
+An Issuer of a VC may issue VCs with HTTPS URL defined in credentialStatus for statusListCredential. Below is a non-normative example of credentialStatus property defined in VC: 
+```json
+"credentialStatus":
+{
+    "id": " https://example.com/credentials/status/3#234243",
+    "type": " RevocationList2021Status",
+    "statusListIndex": "234243",
+    "statusListCredential": " https://example.com/credentials/status/3"
+  }
+```
+
+
+#### StatusList2021Credential
+When a status list is published, the result is a verifiable credential that encapsulates the status list. 
+ 
+Example StatusList2021Credential from the spec [[ref: Status List 2021]]
+```json
+{
+  "@context": [
+    "https://www.w3.org/2018/credentials/v1",
+    "https://w3id.org/vc/status-list/2021/v1"
+  ],
+  "id": "https://example.com/credentials/status/3",
+  "type": ["VerifiableCredential", "StatusList2021Credential"],
+  "issuer": "did:example:12345",
+  "issued": "2021-04-05T14:27:40Z",
+  "credentialSubject": {
+    "id": "https://example.com/status/3#list",
+    "type": "StatusList2021",
+    "statusPurpose": "revocation",
+    "encodedList": "H4sIAAAAAAAAA-3BMQEAAADCoPVPbQwfoAAAAAAAAAAAAAAAAAAAAIC3AYbSVKsAQAAA"
+  },
+  "proof": { ... }
+}
+```
+The **encodedList property** of the credential subject MUST be the GZIP-compressed [RFC1952], base-64url encoded [RFC4648] bitstring values for the associated range of verifiable credential status values. The uncompressed bitstring MUST be at least 16KB in size and the bitarray uses little endian ordering. 
+
+VC Status check step follows the “Validate Algorithm” steps as outlined in section 3.2 in the [[ref: Status List 2021]] specification.
 
 ### Cryptographic Signature
 
