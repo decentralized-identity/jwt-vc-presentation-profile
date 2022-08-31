@@ -261,7 +261,7 @@ The Self-Issued OP request object obtained via request_uri MUST include the foll
 * `response_mode`
   * REQUIRED. MUST be `post`. Self-Issued OP Response will be sent as an HTTP POST request.
 * `client_id`
-  * REQUIRED. MUST be a DID of a Verifier/RP. MUST use DID method ION.
+  * REQUIRED. MUST be a DID of a Verifier/RP.
 * `redirect_uri`
   * REQUIRED. URI where the response will be sent.
 * `nonce`
@@ -282,13 +282,13 @@ The Verifier/RP MUST use static Self-Issued OP metadata as defined in section 6.
 
 The Self-Issued OP request MUST be signed. Decentralized Identifier resolution as defined in section 10.2.2.2. of [[ref: SIOPv2 ID1]] MUST be used as the Verifier/RP Registration Metadata Resolution Method.
 
-The RP MUST support Subject Syntax Type `did:ion` as specified in section 9.2.3. in [[ref: SIOPv2 ID1]]. RP's `client_id` MUST be expressed as using a `did:ion` URI, and the public key used to sign the request MUST be obtained from the `verificationMethod` property of a DID Document. The public key used to sign the request in question MUST be identified by the `kid` in the header of the signed request.
+The RP MUST support Subject Syntax Type as specified in section 9.2.3 and include the DID methods required by this profile. in [[ref: SIOPv2 ID1]]. RP's `client_id` MUST be expressed using a DID method URI (of a DID method supported by this profile), and the public key used to sign the request MUST be obtained from the `verificationMethod` property of a DID Document. The public key used to sign the request in question MUST be identified by the `kid` in the header of the signed request.
 
 All RP metadata other than the public key MUST be obtained from the `registration` parameter as defined in section 6.3.1. of [[ref: SIOPv2 ID1]].
 
 The following are Verifier/RP Registration Metadata parameters and values:
 * `subject_syntax_types_supported`
-  * REQUIRED. MUST include `did:ion`. Defined in [[ref: SIOPv2 ID1]].
+  * REQUIRED. MUST include the DID methods required by this profile (`did:ion`, `did:web`). Defined in [[ref: SIOPv2 ID1]].
 * `vp_formats`
   * REQUIRED. MUST include `jwt_vp` and `jwt_vc`, and support signature algorithms `ES256K` and `EdDSA`. Defined in [[ref: OpenID4VP ID1]].
 * `client_name`
@@ -304,6 +304,7 @@ Below is a normative example of claims included in the `registration` parameter:
 ```json
 {
   "subject_syntax_types_supported": [
+    "did:web",
     "did:ion"
   ],
   "vp_formats": {
@@ -465,7 +466,7 @@ Below is a non-normative example of a decoded VC in a JSON format, signed as a J
 
 ### Decentralized Identifiers
 
-This profile utilizes Decentralized Identifiers (DIDs) as a cryptographically verifiable identifier of the Verifier/RP and Self-Issued OP and that resolve to cryptographic key material. Implementations of this profile MUST support DID Method ION.
+This profile utilizes Decentralized Identifiers (DIDs) as a cryptographically verifiable identifier of the Verifier/RP and Self-Issued OP and that resolve to cryptographic key material.
 
 ION DIDs can operate in both long-form and short-form. Implementations of this profile MUST be able to consume both long-form and short-form DIDs regardless of whether they are anchored.
 
