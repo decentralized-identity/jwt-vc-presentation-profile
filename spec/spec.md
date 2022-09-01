@@ -565,9 +565,9 @@ While ION supports any public key JWK representation in a DID Document, implemen
 Note: This profile leverages JWT for signature generation and verification only. There is a rich offering of Linked Data Cryptographic Suites which are not covered by this iteration of the profile.
 For reference and more information on LD signature suites see the [Linked Data Cryptographic Suite Registry](https://w3c-ccg.github.io/ld-cryptosuite-registry/).
 
-## Credential type `WorkplaceCredential`
+## Credential type `VerifiedEmployee`
 
-Below is a description of a `credentialSubject` for a credential type `WorkplaceCredential`. It is RECOMMENDED to be used with a Workplace Credential Use-Case defined below. However the usage of this credential type is OPTIONAL and is not required to be compliant with this profile.
+Below is a description of a `credentialSubject` for a credential type `VerifiedEmployee`. It is RECOMMENDED to be used with a Workplace Credential Use-Case defined below. However the usage of this credential type is OPTIONAL and is not required to be compliant with this profile.
 
 - `displayName` REQUIRED. String. The name displayed for the user. This is usually the combination of the user's first name and last name. Maximum length is 256 characters.
 - `givenName` OPTIONAL. String. The given name (first name) of the user. Maximum length is 64 characters.
