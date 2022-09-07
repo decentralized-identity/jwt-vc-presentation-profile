@@ -215,9 +215,9 @@ For the purpose of this profile, registered JWT claims `exp`, `iss`, `nbf`, `jti
 
 #### Base64url Encoding of a JWT encoded VC included in a VP
 
-Verifiable Credential included in a JWT-encoded Verifiable Presentation MUST be Base64url encoded. 
+Verifiable Credentials included in a JWT-encoded Verifiable Presentation MUST be Base64url encoded. 
 
-Base64url encoding is defined as a case64 encoding using the URL- and filename-safe character set defined in Section 5 of RFC4648, with all trailing '=' characters omitted (as permitted by Section 3.2 of RFC4648) and without the inclusion of any line breaks, whitespace, or other additional characters. Note that the base64url encoding of the empty octet sequence is the empty string. (See Appendix C of RFC7515 for notes on implementing base64url encoding without padding.)
+Base64url encoding is defined as a base64 encoding using the URL and filename safe character set defined in Section 5 of RFC4648, with all trailing '=' characters omitted (as permitted by Section 3.2 of RFC4648) and without the inclusion of any line breaks, whitespace, or other additional characters. Note that the base64url encoding of the empty octet sequence is the empty string. (See Appendix C of RFC7515 for notes on implementing base64url encoding without padding.)
 
 #### `exp` JWT claim
 
@@ -225,7 +225,7 @@ Base64url encoding is defined as a case64 encoding using the URL- and filename-s
 
 #### `nbf` JWT claim
 
-[[ref: VC Data Model v1.1]] specifies that "issuanceDate" property MUST be represented as an `nbf` JWT claim, and not `iat` JWT claim. This might sounds couterintuitive, but the implementers of this profile MUST follow this guidance.
+[[ref: VC Data Model v1.1]] specifies that "issuanceDate" property MUST be represented as an `nbf` JWT claim, and not `iat` JWT claim. This might sound couterintuitive, but the implementers of this profile MUST follow this guidance.
 
 ### Authorization Request
 
