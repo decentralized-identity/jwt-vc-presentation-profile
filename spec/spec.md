@@ -211,7 +211,7 @@ Section 6.3.1 of [[ref: VC Data Model v1.1]] provides two options for how to enc
   1. Use registered JWT claims instead of respective counterparts defined in a VC Data Model v1.1.
   2. Use JWT claims in addition to VC Data Model v1.1 counterparts
 
-For the purpose of this profile, registered JWT claims `exp`, `iss`, `nbf`, `jti`, `sub` and `aud` MUST be used in a JWT-VC instead of their respective counterparts defined in VC Data Model v1.1.
+For the purpose of this profile, registered JWT claims `exp`, `iss`, `nbf`, `jti`, `sub` and `aud` MUST be used in a JWT VC instead of their respective counterparts defined in VC Data Model v1.1.
 
 #### Base64url Encoding of a JWT encoded VC included in a VP
 
