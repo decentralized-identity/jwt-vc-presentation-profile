@@ -207,6 +207,17 @@ sequenceDiagram
 <li>First Implementer’s Draft of OpenID for Verifiable Prensetations specification</li>
 <li>ID Hub specification published as a v0.0.1 predraft of <a path-0="identity.foundation"path-1="decentralized-web-node"path-2="spec"path-3=""href="https://identity.foundation/decentralized-web-node/spec/" >Decentralized Web Node</a>. We will continue to use the term ID Hub rather than Decentralized Web Node to avoid confusion.</li>
 </ul>
+<h3 id="jwt-vcs"><a class="toc-anchor" href="#jwt-vcs" >§</a> JWT-VCs</h3>
+<h4 id="using-jwt-claims-instead-of-their-counterparts-in-the-data-model-specification"><a class="toc-anchor" href="#using-jwt-claims-instead-of-their-counterparts-in-the-data-model-specification" >§</a> Using JWT claims instead of their counterparts in the data model specification</h4>
+<p>Section 6.3.1 of <a class="term-reference" href="#term:vc-data-model-v1.1">VC Data Model v1.1</a> provides two options how to encode properties defined in VC Data Model v1.1 as a JWT.</p>
+<p>For the purpose of this profile, registered JWT claims <code>exp</code>, <code>iss</code>, <code>nbf</code>, <code>jti</code>, <code>sub</code> and <code>aud</code> MUST be used instead of their respective counterparts defined in VC Data Model v1.1.</p>
+<h4 id="base64url-encoding-of-a-jwt-encoded-vc-included-in-a-vp"><a class="toc-anchor" href="#base64url-encoding-of-a-jwt-encoded-vc-included-in-a-vp" >§</a> Base64url Encoding of a JWT encoded VC included in a VP</h4>
+<p>Verifiable Credential included in a JWT-encoded Verifiable Presentation MUST be Base64url encoded.</p>
+<p>Base64url encoding is defined as a case64 encoding using the URL- and filename-safe character set defined in Section 5 of RFC4648, with all trailing ‘=’ characters omitted (as permitted by Section 3.2 of RFC4648) and without the inclusion of any line breaks, whitespace, or other additional characters. Note that the base64url encoding of the empty octet sequence is the empty string. (See Appendix C of RFC7515 for notes on implementing base64url encoding without padding.)</p>
+<h4 id="exp-jwt-claim"><a class="toc-anchor" href="#exp-jwt-claim" >§</a> <code>exp</code> JWT claim</h4>
+<p><code>exp</code> JWT claim in JWT encoded VC or VP MUST be used to set the value of the “expirationDate” of the VC or VP, and not of the credentialSubject.</p>
+<h4 id="nbf-jwt-claim"><a class="toc-anchor" href="#nbf-jwt-claim" >§</a> <code>nbf</code> JWT claim</h4>
+<p><a class="term-reference" href="#term:vc-data-model-v1.1">VC Data Model v1.1</a> specifies that “issuanceDate” property MUST be represented as an <code>nbf</code> JWT claim, and not <code>iat</code> JWT claim. This might sounds couterintuitive, but the implementers of this profile MUST follow this guidance.</p>
 <h3 id="authorization-request"><a class="toc-anchor" href="#authorization-request" >§</a> Authorization Request</h3>
 <p><a class="term-reference" href="#term:siopv2-id1">SIOPv2 ID1</a> MUST be used for key management and authentication, <a class="term-reference" href="#term:openid4vp-id1">OpenID4VP ID1</a> MUST be used to transport Verifiable Credentials, and <a class="term-reference" href="#term:presentation-exchange">Presentation Exchange</a> MUST be used as a query language as defined in <a class="term-reference" href="#term:openid4vp-id1">OpenID4VP ID1</a>.</p>
 <h4 id="invoking-self-issued-op"><a class="toc-anchor" href="#invoking-self-issued-op" >§</a> Invoking Self-Issued OP</h4>
@@ -896,6 +907,14 @@ For reference and more information on LD signature suites see the <a path-0="w3c
 <ul>
 <li><a href="#the-protocol-flow" >The Protocol Flow</a></li>
 <li><a href="#overview-of-the-open-standards-requirements" >Overview of the Open Standards Requirements</a></li>
+<li><a href="#jwt-vcs" >JWT-VCs</a>
+<ul>
+<li><a href="#using-jwt-claims-instead-of-their-counterparts-in-the-data-model-specification" >Using JWT claims instead of their counterparts in the data model specification</a></li>
+<li><a href="#base64url-encoding-of-a-jwt-encoded-vc-included-in-a-vp" >Base64url Encoding of a JWT encoded VC included in a VP</a></li>
+<li><a href="#exp-jwt-claim" ><code>exp</code> JWT claim</a></li>
+<li><a href="#nbf-jwt-claim" ><code>nbf</code> JWT claim</a></li>
+</ul>
+</li>
 <li><a href="#authorization-request" >Authorization Request</a>
 <ul>
 <li><a href="#invoking-self-issued-op" >Invoking Self-Issued OP</a></li>
