@@ -203,7 +203,7 @@ This profile uses certain versions of specifications that have not yet reached f
   - First Implementer's Draft of OpenID for Verifiable Prensetations specification
   - ID Hub specification published as a v0.0.1 predraft of [Decentralized Web Node](https://identity.foundation/decentralized-web-node/spec/). We will continue to use the term ID Hub rather than Decentralized Web Node to avoid confusion.
 
-### JWT-VCs
+### JWT VCs
 
 #### Using JWT claims instead of their counterparts in the data model specification
 
