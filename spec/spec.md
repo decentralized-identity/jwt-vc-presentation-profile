@@ -332,7 +332,7 @@ Other Registration parameters defined in [[ref: OIDC Registration]] can be used.
 
 To strengthen trust between the Verifier/RP and End-user, a Verifier/RP's DID must be bound to its website. This proves the Verifier/RP controls both the DID and the origin and allows the End-user to verify this relationship. To bind an owner of a DID to a controller of a certain origin, Well Known DID Configuration MUST be used as defined in [[ref: Well Known DID]].
 
-Validation of Domain Linkage Credentials by the wallet MUST follow the steps given in the [[ref: Well Known DID]] specification. Additional checks, e.g. of revocation, are not required by this profile. Since Domain Linkage Credentials are being managed by the Verifier/RP, updating the DID Configuration Resource directly, the usage of a credentialStatus property for revocation in a Domain Linkage Credential typically is of little use. Expiration of the Domain Linkage Credential does need to be taken into account.
+Validation of Domain Linkage Credentials by the wallet MUST follow the steps given in the [[ref: Well Known DID]] specification. To check validity of the Domain Linkage Credential, expiration property MUST be taken into account. Additional checks, e.g. of revocation, are not required by this profile. Since the Verifier/RP manages Domain Linkage Credentials and directly updates the DID Configuration Resource, the usage of a credentialStatus property for revocation in a Domain Linkage Credential typically is of little use. 
 
 When creating a Verifier/RP's DID, the domain linked to that DID MUST be included in a `serviceEndpoint` property of the DID Document as shown in a non-normative response below:
 
