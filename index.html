@@ -720,33 +720,116 @@ sequenceDiagram
 <li><span id="term:identity-hub-(0.0.1-predraft)">Identity Hub (0.0.1 Predraft)</span> (Decentralized Web Node v0.0.1 predraft))</li>
 </ol>
 <h3 id="revocation"><a class="toc-anchor" href="#revocation" >§</a> Revocation</h3>
-<p>StatusList2021 MUST be used for revocation of VCs, as defined in <a class="term-reference" href="#term:status-list-2021">Status List 2021</a>.</p>
-<h4 id="credentialstatus"><a class="toc-anchor" href="#credentialstatus" >§</a> credentialStatus</h4>
-<p>The issued VC MAY include a <code>credentialStatus</code> property</p>
-<p>When <code>credentialStatus</code> is deinfed it MUST use StatusList2021 , as defined in section 5.1 of <a class="term-reference" href="#term:status-list-2021">Status List 2021</a>.</p>
-<p>StatusList2021 MUST be discovered using either DID Relative URLs stored in an ID Hub or HTTPS URL.</p>
-<p>An Issuer of a VC MAY have an ID Hub serviceEndpoint in the Issuer’s DID Document. ID Hubs are the single endpoint to look up objects associated with a DID, as defined in [Identity-Hub].
-Below is a non-normative example of a DID Document that includes a serviceEndpoint:</p>
-<pre class="language-json"><code class="language-json"><span class="token property">"service"</span><span class="token operator">:</span> <span class="token punctuation">[</span>
-      <span class="token punctuation">{</span>
-        <span class="token property">"id"</span><span class="token operator">:</span> <span class="token string">"hubs"</span><span class="token punctuation">,</span>
-        <span class="token property">"type"</span><span class="token operator">:</span> <span class="token string">"IdentityHub"</span><span class="token punctuation">,</span>
-        <span class="token property">"serviceEndpoint"</span><span class="token operator">:</span> <span class="token punctuation">[</span>
-          <span class="token string">"https://hubs.microsoft.com"</span><span class="token punctuation">,</span>
-          <span class="token string">"https://datastore.protonmail.com"</span>
-        <span class="token punctuation">]</span>
-      <span class="token punctuation">}</span>
-<span class="token punctuation">]</span>
+<p>The profile utilizes <a class="term-reference" href="#term:status-list-2021">Status List 2021</a> specification and outlines the status information of VCs as binary values.<br>
+When an issuer desires to enable status information for a verifiable credential, they MAY add a status property that uses the data model described in this specification. Credential status (credentialStatus) property in the Verifiable Credential provides the information on the current status of the credential. The issued VC may include a credentialStatus property, as defined in section 2.1 of <a class="term-reference" href="#term:status-list-2021">Status List 2021</a>. An Issuer of a VC must use the HTTPS URL Structure or the DID Relative URLs stored in an ID Hub to host the status list as outlined in the specification. The issuer keeps a bitstring list of all verifiable credentials it has issued. Each verifiable credential is associated with a position in the list. If the binary value of the position in the list is 1 (one), the verifiable credential is revoked, if it is 0 (zero) it is not revoked.</p>
+<h4 id="did-relative-url-structure"><a class="toc-anchor" href="#did-relative-url-structure" >§</a> DID-Relative URL Structure</h4>
+<p>An Issuer of a VC may have an “IdentityHub” node serviceEndpoint in the Issuer’s DID Document. Identity Hub nodes are the single endpoint to look up objects associated with a DID, as defined in <span id="term:identity-hub-(0.0.1-predraft)">Identity Hub (0.0.1 Predraft)</span> (Decentralized Web Node v0.0.1 predraft)).
+The following process defines how a DID-Relative URL is composed:</p>
+<ol>
+<li>Let the base URI authority portion of the DID URL string be the target DID being addressed.</li>
+<li>Append a service parameter to the DID URL string with the value IdentityHub.</li>
+<li>Assemble an array of the Message Descriptor objects are desired for encoding in the DID-relative URL</li>
+<li>JSON stringify the array of Message Descriptor objects from Step 3, then Base64Url encode the stringified output.</li>
+<li>Append a queries parameter to the DID URL string with the value set to the JSON stringified, Base64Url encoded output of Step 4.</li>
+</ol>
+<h5 id="did-relative-urls-are-composed-of-the-following-segments"><a class="toc-anchor" href="#did-relative-urls-are-composed-of-the-following-segments" >§</a> DID-relative URLs are composed of the following segments</h5>
+<pre class="language-json"><code class="language-json">did<span class="token operator">:</span>example<span class="token operator">:</span><span class="token number">123</span> + ?service=IdentityHub + &amp;queries= + toBase64Url( JSON.stringify( <span class="token punctuation">[</span><span class="token punctuation">{</span> DESCRIPTOR_1 <span class="token punctuation">}</span><span class="token punctuation">,</span> <span class="token punctuation">{</span> DESCRIPTOR_N <span class="token punctuation">}</span><span class="token punctuation">]</span> ) )
+did<span class="token operator">:</span>example<span class="token operator">:</span><span class="token number">123</span>?service=IdentityHub&amp;queries=W3sgTUVTU0FHRV8xIH0sIHsgTUVTU0FHRV9OIH1d..
 </code></pre>
-<pre class="language-json"><code class="language-json"><span class="token punctuation">{</span>
-  <span class="token property">"credentialStatus"</span><span class="token operator">:</span> <span class="token punctuation">{</span>
-    <span class="token property">"id"</span><span class="token operator">:</span> <span class="token string">"Qmdfr32sdf32546..."</span><span class="token punctuation">,</span>
-    <span class="token property">"type"</span><span class="token operator">:</span> <span class="token string">"StatusList2021"</span><span class="token punctuation">,</span>
-    <span class="token property">"statusListIndex"</span><span class="token operator">:</span> <span class="token string">"94567"</span><span class="token punctuation">,</span>
-    <span class="token property">"statusListCredential"</span><span class="token operator">:</span> 'did<span class="token operator">:</span>ion<span class="token operator">:</span><span class="token number">123</span>?service=IdentityHub&amp;relativeRef=?messages=<span class="token punctuation">[</span><span class="token punctuation">{</span> type<span class="token operator">:</span> <span class="token string">"CollectionsQuery"</span><span class="token punctuation">,</span> statement<span class="token operator">:</span> <span class="token punctuation">{</span> id<span class="token operator">:</span> <span class="token string">"Qmdfr32sdf32546..."</span> <span class="token punctuation">}</span><span class="token punctuation">}</span><span class="token punctuation">]</span>'
-  <span class="token punctuation">}</span>
+<p>The *<em>queries</em> parameter value is neither JSON stringified nor Base64Url encoded, but should be when using Identity Hub URLs in practice</p>
+<pre class="language-json"><code class="language-json">did<span class="token operator">:</span>example<span class="token operator">:</span><span class="token number">123</span>?service=IdentityHub&amp;queries=<span class="token punctuation">[</span><span class="token punctuation">{</span> <span class="token property">"method"</span><span class="token operator">:</span> <span class="token string">"CollectionsQuery"</span><span class="token punctuation">,</span> <span class="token property">"schema"</span><span class="token operator">:</span> <span class="token string">"https://schema.org/SocialMediaPosting"</span> <span class="token punctuation">}</span><span class="token punctuation">]</span>
+</code></pre>
+<pre class="language-json"><code class="language-json">did<span class="token operator">:</span>example<span class="token operator">:</span><span class="token number">123</span>?service=IdentityHub&amp;queries=W3sgTUVTU0FHRV8xIH0sIHsgTUVTU0FHRV9OIH1d...
+</code></pre>
+<p><strong>Resolve DID to locate the Identity Hub URIs:</strong></p>
+<pre class="language-json"><code class="language-json">did<span class="token operator">:</span>example<span class="token operator">:</span><span class="token number">123</span> --> resolve to Identity Hub endpoint(s) --> https<span class="token operator">:</span><span class="token comment">//hub.example.com/</span>
+</code></pre>
+<p>Below is a non-normative example of a DID Document that includes a serviceEndpoint:</p>
+<pre class="language-json"><code class="language-json"><span class="token property">"service"</span><span class="token operator">:</span> <span class="token punctuation">[</span>
+        <span class="token property">"id"</span><span class="token operator">:</span> <span class="token string">"#hub"</span><span class="token punctuation">,</span>
+        <span class="token property">"type"</span><span class="token operator">:</span> <span class="token string">"IdentityHub"</span><span class="token punctuation">,</span>
+        <span class="token property">"serviceEndpoint"</span><span class="token operator">:</span> <span class="token punctuation">{</span>
+          <span class="token property">"instances"</span><span class="token operator">:</span> <span class="token punctuation">[</span>
+            <span class="token string">"https://beta.hub.msidentity.com/v1.0/a492cff2-d733-4057-95a5-a71fc3695bc8"</span>  <span class="token punctuation">]</span><span class="token punctuation">,</span>
+          <span class="token property">"origins"</span><span class="token operator">:</span> <span class="token punctuation">[</span><span class="token punctuation">]</span>
+        <span class="token punctuation">}</span>
+      <span class="token punctuation">}</span>
+    <span class="token punctuation">]</span><span class="token punctuation">,</span>
+</code></pre>
+<p>Using the “CollectionsQuery” method and the message descriptor as “objectId”, encodedlist can be queried. “objectId” is the “id” field in credentialstatus.</p>
+<p>Below is a non-normative example of credentialStatus property defined in VC:</p>
+<pre class="language-json"><code class="language-json"><span class="token property">"credentialStatus"</span><span class="token operator">:</span> <span class="token punctuation">{</span>	
+  <span class="token property">"id"</span><span class="token operator">:</span> <span class="token string">"Qmdfr32sdf32546..."</span><span class="token punctuation">,</span>
+  <span class="token property">"type"</span><span class="token operator">:</span> <span class="token string">"StatusList2021"</span><span class="token punctuation">,</span>
+ <span class="token property">"statusPurpose"</span><span class="token operator">:</span> <span class="token string">"revocation"</span><span class="token punctuation">,</span>
+  <span class="token property">"statusListIndex"</span><span class="token operator">:</span> <span class="token string">"94567"</span><span class="token punctuation">,</span>
+  <span class="token property">"statusListCredential"</span><span class="token operator">:</span> 'did<span class="token operator">:</span>ion<span class="token operator">:</span><span class="token number">123</span>?service=IdentityHub&amp;queries=W3sibWV0aG9kIjoiQ29sbGVjdGlvbnNRdWVyeSIsI…..'
 <span class="token punctuation">}</span>
 </code></pre>
+<p><strong>Construct the Request Object:</strong></p>
+<ul>
+<li>Create a JSON object for the request.</li>
+<li>The Request Object MUST include a id property, and its value MUST be an [RFC4122] UUID Version 4 string to identify the request.</li>
+<li>The Request Object MUST include a target property, and its value MUST be the Decentralized Identifier base URI of the DID-relative URL.</li>
+<li>The Request Object MUST include a messages property, and its value MUST be an array composed of Message objects that are generated by parsing the DID-relative URL’s queries parameter value as a JSON array and performing the following steps for each entry.:
+<ul>
+<li>Construct a Message object.</li>
+<li>Set the descriptor property of the Message object to the entry, ensuring it is a valid Message Descriptor object.</li>
+<li>Augment the Message object with any signing and authorization values required, as described in the Messages section.</li>
+<li>Append the object to the Request Object’s messages array.</li>
+</ul>
+</li>
+</ul>
+<p><em><strong>HTTP POST example:</strong></em></p>
+<pre class="language-json"><code class="language-json">POST https<span class="token operator">:</span><span class="token comment">//hub.example.com/</span>
+
+BODY <span class="token punctuation">{</span>
+  <span class="token property">"requestId"</span><span class="token operator">:</span> <span class="token string">"c5784162-84af-4aab-aff5-f1f8438dfc3d"</span><span class="token punctuation">,</span>
+  <span class="token property">"target"</span><span class="token operator">:</span> <span class="token string">"did:example:123"</span><span class="token punctuation">,</span>
+  <span class="token property">"messages"</span><span class="token operator">:</span> <span class="token punctuation">[</span>
+    <span class="token punctuation">{</span>
+      <span class="token property">"descriptor"</span><span class="token operator">:</span> <span class="token punctuation">{</span>
+        <span class="token property">"method"</span><span class="token operator">:</span> <span class="token string">"CollectionsQuery"</span><span class="token punctuation">,</span>
+        <span class="token property">"objectId"</span><span class="token operator">:</span> <span class="token string">"b6464162-84af-4aab-aff5-f1f8438dfc1e"</span>
+      <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span><span class="token punctuation">,</span>
+    <span class="token punctuation">{</span>...<span class="token punctuation">}</span>
+  <span class="token punctuation">]</span>
+<span class="token punctuation">}</span>
+</code></pre>
+<h4 id="https-url-structure"><a class="toc-anchor" href="#https-url-structure" >§</a> HTTPS URL Structure</h4>
+<p>An Issuer of a VC may issue VCs with HTTPS URL defined in credentialStatus for statusListCredential. Below is a non-normative example of credentialStatus property defined in VC:</p>
+<pre class="language-json"><code class="language-json"><span class="token property">"credentialStatus"</span><span class="token operator">:</span>
+<span class="token punctuation">{</span>
+    <span class="token property">"id"</span><span class="token operator">:</span> <span class="token string">" https://example.com/credentials/status/3#234243"</span><span class="token punctuation">,</span>
+    <span class="token property">"type"</span><span class="token operator">:</span> <span class="token string">" RevocationList2021Status"</span><span class="token punctuation">,</span>
+    <span class="token property">"statusListIndex"</span><span class="token operator">:</span> <span class="token string">"234243"</span><span class="token punctuation">,</span>
+    <span class="token property">"statusListCredential"</span><span class="token operator">:</span> <span class="token string">" https://example.com/credentials/status/3"</span>
+  <span class="token punctuation">}</span>
+</code></pre>
+<h4 id="statuslist2021credential"><a class="toc-anchor" href="#statuslist2021credential" >§</a> StatusList2021Credential</h4>
+<p>When a status list is published, the result is a verifiable credential that encapsulates the status list.</p>
+<p>Example StatusList2021Credential from the spec <a class="term-reference" href="#term:status-list-2021">Status List 2021</a></p>
+<pre class="language-json"><code class="language-json"><span class="token punctuation">{</span>
+  <span class="token property">"@context"</span><span class="token operator">:</span> <span class="token punctuation">[</span>
+    <span class="token string">"https://www.w3.org/2018/credentials/v1"</span><span class="token punctuation">,</span>
+    <span class="token string">"https://w3id.org/vc/status-list/2021/v1"</span>
+  <span class="token punctuation">]</span><span class="token punctuation">,</span>
+  <span class="token property">"id"</span><span class="token operator">:</span> <span class="token string">"https://example.com/credentials/status/3"</span><span class="token punctuation">,</span>
+  <span class="token property">"type"</span><span class="token operator">:</span> <span class="token punctuation">[</span><span class="token string">"VerifiableCredential"</span><span class="token punctuation">,</span> <span class="token string">"StatusList2021Credential"</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
+  <span class="token property">"issuer"</span><span class="token operator">:</span> <span class="token string">"did:example:12345"</span><span class="token punctuation">,</span>
+  <span class="token property">"issued"</span><span class="token operator">:</span> <span class="token string">"2021-04-05T14:27:40Z"</span><span class="token punctuation">,</span>
+  <span class="token property">"credentialSubject"</span><span class="token operator">:</span> <span class="token punctuation">{</span>
+    <span class="token property">"id"</span><span class="token operator">:</span> <span class="token string">"https://example.com/status/3#list"</span><span class="token punctuation">,</span>
+    <span class="token property">"type"</span><span class="token operator">:</span> <span class="token string">"StatusList2021"</span><span class="token punctuation">,</span>
+    <span class="token property">"statusPurpose"</span><span class="token operator">:</span> <span class="token string">"revocation"</span><span class="token punctuation">,</span>
+    <span class="token property">"encodedList"</span><span class="token operator">:</span> <span class="token string">"H4sIAAAAAAAAA-3BMQEAAADCoPVPbQwfoAAAAAAAAAAAAAAAAAAAAIC3AYbSVKsAQAAA"</span>
+  <span class="token punctuation">}</span><span class="token punctuation">,</span>
+  <span class="token property">"proof"</span><span class="token operator">:</span> <span class="token punctuation">{</span> ... <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+</code></pre>
+<p>The <strong>encodedList property</strong> of the credential subject MUST be the GZIP-compressed [RFC1952], base-64url encoded [RFC4648] bitstring values for the associated range of verifiable credential status values. The uncompressed bitstring MUST be at least 16KB in size and the bitarray uses little endian ordering.</p>
+<p>VC Status check step follows the “Validate Algorithm” steps as outlined in section 3.2 in the <a class="term-reference" href="#term:status-list-2021">Status List 2021</a> specification.</p>
 <h3 id="cryptographic-signature"><a class="toc-anchor" href="#cryptographic-signature" >§</a> Cryptographic Signature</h3>
 <p>While ION supports any public key JWK representation in a DID Document, implementors of this document MUST support JWT signature verification with the following Key Types and must support JWT signing with at least one.</p>
 <table>
@@ -940,7 +1023,9 @@ For reference and more information on LD signature suites see the <a path-0="w3c
 </li>
 <li><a href="#revocation" >Revocation</a>
 <ul>
-<li><a href="#credentialstatus" >credentialStatus</a></li>
+<li><a href="#did-relative-url-structure" >DID-Relative URL Structure</a></li>
+<li><a href="#https-url-structure" >HTTPS URL Structure</a></li>
+<li><a href="#statuslist2021credential" >StatusList2021Credential</a></li>
 </ul>
 </li>
 <li><a href="#cryptographic-signature" >Cryptographic Signature</a></li>
