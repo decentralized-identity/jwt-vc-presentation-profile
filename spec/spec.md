@@ -565,11 +565,16 @@ While ION supports any public key JWK representation in a DID Document, implemen
 Note: This profile leverages JWT for signature generation and verification only. There is a rich offering of Linked Data Cryptographic Suites which are not covered by this iteration of the profile.
 For reference and more information on LD signature suites see the [Linked Data Cryptographic Suite Registry](https://w3c-ccg.github.io/ld-cryptosuite-registry/).
 
-## Credential Schema
+## Credential type `VerifiedEmployee`
 
-Below is a non-normative example of a `credentialSubject` schema for a credential type `WorkplaceCredential`. It is RECOMMENDED to be used with a Workplace Credential Use-Case defined below.
+Below is a description of a `credentialSubject` for a credential type `VerifiedEmployee`. It is RECOMMENDED to be used with a Workplace Credential Use-Case defined below. However the usage of this credential type is OPTIONAL and is not required to be compliant with this profile.
 
-REQUIRED claim is only `displayName`. All other claims are OPTIONAL and might be omitted.
+- `displayName` REQUIRED. String. The name displayed for the user. This is usually the combination of the user's first name and last name. Maximum length is 256 characters.
+- `givenName` OPTIONAL. String. The given name (first name) of the user. Maximum length is 64 characters.
+- `surname`  OPTIONAL. String. The user's surname (family name or last name). Maximum length is 64 characters.
+- `jobTitle` OPTIONAL. String. The user's job title. Maximum length is 128 characters.
+- `preferredLanguage` OPTIONAL. String. The preferred language for the user. Should follow ISO 639-1 Code, for example en-US.
+- `photo`  OPTIONAL. The user's profile photo. The data is binary and not encoded in base64.
 
 ```json
 [[insert: ./spec/assets/workplace_credential_vc.json]]
