@@ -756,15 +756,15 @@ Below is a non-normative example of a DID Document that includes a serviceEndpoi
 </table>
 <p>Note: This profile leverages JWT for signature generation and verification only. There is a rich offering of Linked Data Cryptographic Suites which are not covered by this iteration of the profile.
 For reference and more information on LD signature suites see the <a path-0="w3c-ccg.github.io"path-1="ld-cryptosuite-registry"path-2=""href="https://w3c-ccg.github.io/ld-cryptosuite-registry/" >Linked Data Cryptographic Suite Registry</a>.</p>
-<h2 id="credential-type-wokrplacecredential"><a class="toc-anchor" href="#credential-type-wokrplacecredential" >§</a> Credential type <code>WokrplaceCredential</code></h2>
-<p>Below is a description of a <code>credentialSubject</code> for a credential type <code>WorkplaceCredential</code>. It is RECOMMENDED to be used with a Workplace Credential Use-Case defined below. However the usage of this credential type is OPTIONAL and is not required to be compliant with this profile.</p>
+<h2 id="credential-type-verifiedemployee"><a class="toc-anchor" href="#credential-type-verifiedemployee" >§</a> Credential type <code>VerifiedEmployee</code></h2>
+<p>Below is a description of a <code>credentialSubject</code> for a credential type <code>VerifiedEmployee</code>. It is RECOMMENDED to be used with a Workplace Credential Use-Case defined below. However the usage of this credential type is OPTIONAL and is not required to be compliant with this profile.</p>
 <ul>
 <li><code>displayName</code> REQUIRED. String. The name displayed for the user. This is usually the combination of the user’s first name and last name. Maximum length is 256 characters.</li>
 <li><code>givenName</code> OPTIONAL. String. The given name (first name) of the user. Maximum length is 64 characters.</li>
 <li><code>surname</code>  OPTIONAL. String. The user’s surname (family name or last name). Maximum length is 64 characters.</li>
 <li><code>jobTitle</code> OPTIONAL. String. The user’s job title. Maximum length is 128 characters.</li>
 <li><code>preferredLanguage</code> OPTIONAL. String. The preferred language for the user. Should follow ISO 639-1 Code, for example en-US.</li>
-<li><code>photo</code>  OPTIONAL. The user’s profile photo. Should be encoded in base64.</li>
+<li><code>photo</code>  OPTIONAL. The user’s profile photo. The data is binary and not encoded in base64.</li>
 </ul>
 <pre class="language-json"><code class="language-json"><span class="token property">"vc"</span><span class="token operator">:</span> <span class="token punctuation">{</span>
     <span class="token property">"@context"</span><span class="token operator">:</span> <span class="token punctuation">[</span>
@@ -772,7 +772,7 @@ For reference and more information on LD signature suites see the <a path-0="w3c
     <span class="token punctuation">]</span><span class="token punctuation">,</span>
     <span class="token property">"type"</span><span class="token operator">:</span> <span class="token punctuation">[</span>
       <span class="token string">"VerifiableCredential"</span><span class="token punctuation">,</span>
-      <span class="token string">"WorkplaceCredential"</span>
+      <span class="token string">"VerifiedEmployee"</span>
     <span class="token punctuation">]</span><span class="token punctuation">,</span>
     <span class="token property">"credentialSubject"</span><span class="token operator">:</span> <span class="token punctuation">{</span>
       <span class="token property">"displayName"</span><span class="token operator">:</span> <span class="token string">"$.displayName"</span><span class="token punctuation">,</span>
@@ -780,7 +780,7 @@ For reference and more information on LD signature suites see the <a path-0="w3c
       <span class="token property">"jobTitle"</span><span class="token operator">:</span> <span class="token string">"$.jobTitle"</span><span class="token punctuation">,</span>
       <span class="token property">"surname"</span><span class="token operator">:</span> <span class="token string">"$.surname"</span><span class="token punctuation">,</span>
       <span class="token property">"preferredLanguage"</span><span class="token operator">:</span> <span class="token string">"$.preferredLanguage"</span><span class="token punctuation">,</span>
-      <span class="token string">"mail: "</span>$.mail"<span class="token punctuation">,</span>
+      <span class="token property">"mail"</span><span class="token operator">:</span> <span class="token string">"$.mail"</span><span class="token punctuation">,</span>
       <span class="token property">"photo"</span><span class="token operator">:</span> <span class="token string">"data:image/jpeg;base64,ewrsfirGWRPrewFEW4..."</span>
     <span class="token punctuation">}</span>
   <span class="token punctuation">}</span>
@@ -931,7 +931,7 @@ For reference and more information on LD signature suites see the <a path-0="w3c
 <li><a href="#cryptographic-signature" >Cryptographic Signature</a></li>
 </ul>
 </li>
-<li><a href="#credential-type-wokrplacecredential" >Credential type <code>WokrplaceCredential</code></a></li>
+<li><a href="#credential-type-verifiedemployee" >Credential type <code>VerifiedEmployee</code></a></li>
 <li><a href="#use-cases" >Use-Cases</a>
 <ul>
 <li><a href="#workplace-credential" >Workplace Credential</a></li>
