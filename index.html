@@ -203,13 +203,14 @@ sequenceDiagram
 <li>To bind an owner of a DID to a controller of a certain origin, a Well Known DID Configuration MUST be used as defined in <a class="term-reference" href="#term:well-known-did">Well Known DID</a>.</li>
 <li>For Revocation of VCs, Status List 2021 as defined in <a class="term-reference" href="#term:status-list-2021">Status List 2021</a> MUST be discovered using either DID Relative URLs stored in an HTTPS URL or ID Hub be used in combination with Identity Hubs as defined in <span id="term:identity-hub-(0.0.1-predraft)">Identity Hub (0.0.1 Predraft)</span> (Decentralized Web Node v0.0.1 predraft).</li>
 </ul>
-<p>It is important to note that Cross-device SIOP is susceptible to a session phishing attack, where an attacker relays the request from a good Verifier/RP to a victim and is able to sign in as a victim. Implementers MUST implement mitigations most suitable to the use-case. For more details and concrete mitigations, see section 15 Security Considerations in <a class="term-reference" href="#term:siopv2-id1">SIOPv2 ID1</a>.</p>
 <p>This profile uses certain versions of specifications that have not yet reached final status: For more details see Normative References section.</p>
 <ul>
 <li>First Implementer’s Draft of Self-Issued OpenID Provider v2 specification</li>
 <li>First Implementer’s Draft of OpenID for Verifiable Prensetations specification</li>
 <li>ID Hub specification published as a v0.0.1 predraft of <a path-0="identity.foundation"path-1="decentralized-web-node"path-2="spec"path-3=""href="https://identity.foundation/decentralized-web-node/spec/" >Decentralized Web Node</a>. We will continue to use the term ID Hub rather than Decentralized Web Node to avoid confusion.</li>
 </ul>
+<h4 id="security-considerations"><a class="toc-anchor" href="#security-considerations" >§</a> Security Considerations</h4>
+<p>It is important to note that Cross-device SIOP is susceptible to a session phishing attack, where an attacker relays the request from a good Verifier/RP to a victim and is able to sign in as a victim. Implementers MUST implement mitigations most suitable to the use-case. For more details and concrete mitigations, see section 15 Security Considerations in <a class="term-reference" href="#term:siopv2-id1">SIOPv2 ID1</a>.</p>
 <h3 id="jwt-vcs"><a class="toc-anchor" href="#jwt-vcs" >§</a> JWT VCs</h3>
 <h4 id="using-jwt-claims-instead-of-their-counterparts-in-the-data-model-specification"><a class="toc-anchor" href="#using-jwt-claims-instead-of-their-counterparts-in-the-data-model-specification" >§</a> Using JWT claims instead of their counterparts in the data model specification</h4>
 <p>Section 6.3.1 of <a class="term-reference" href="#term:vc-data-model-v1.1">VC Data Model v1.1</a> provides two options for how to encode properties defined in VC Data Model v1.1 as a JWT:</p>
@@ -921,7 +922,11 @@ For reference and more information on LD signature suites see the <a path-0="w3c
 <li><a href="#profile" >Profile</a>
 <ul>
 <li><a href="#the-protocol-flow" >The Protocol Flow</a></li>
-<li><a href="#overview-of-the-open-standards-requirements" >Overview of the Open Standards Requirements</a></li>
+<li><a href="#overview-of-the-open-standards-requirements" >Overview of the Open Standards Requirements</a>
+<ul>
+<li><a href="#security-considerations" >Security Considerations</a></li>
+</ul>
+</li>
 <li><a href="#jwt-vcs" >JWT VCs</a>
 <ul>
 <li><a href="#using-jwt-claims-instead-of-their-counterparts-in-the-data-model-specification" >Using JWT claims instead of their counterparts in the data model specification</a></li>
