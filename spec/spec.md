@@ -29,11 +29,15 @@ Participate:
 
 ## Abstract
 
-The JWT VC Presentation Profile defines a set of specifications to enable the interoperable presentation of Verifiable Credentials between Wallets and Verifiers/RPs.
+The JWT VC Presentation Profile defines a set of requirements against existing specifications to enable the interoperable presentation of [[ref:Verifiable Credentials]] (VCs) between [[ref: Wallets]] and [[ref: Verifiers]].
+
+This document is not a specification, but a **profile**. It outlines existing specifications required for implementations to interoperate among each other. It also clarifies mandatory to implement features for the optionalities mentioned in the referenced specifications.
+
+The profile uses OpenID for Verifiable Presentations ([[ref: OpenID4VP ID1]]) as the base protocol for the request and verification of JWT VCs encapsulated in [[ref:Verifiable Presentations]]. A full list of the open standards used in this profile can be found in [Overview of the Open Standards Requirements](#overview-of-the-open-standards-requirements).
 
 ### Audience
 
-Who is the audience for this document.
+The audience of the document includes verifiable credential implementers and/or enthusiasts. The first few sections give an overview of the problem area and profile requirements for JWT VC interoperability. Subsequent sections are detailed and technical, describing the protocol flow and request-responses.
 
 ## Status of This Document
 
@@ -119,14 +123,14 @@ This section consolidates in one place common terms used across open standards t
 [[def:Self Issued OpenID Provider (SIOP), Self Issued OpenID Provider, SIOP]]  
 ~ An OpenID Provider (OP) used by an [[ref:End User]] to prove control over a cryptographically verifiable identifier such as a [[ref:DID]].
 
-[[def:Verifiable Credential (VC), Verifiable Credential, VC]]
+[[def:Verifiable Credential, VC, Verifiable Credentials]]
 ~ A set of one or more [[ref:Claims]] made by an issuer that is tamper-evident and has authorship that can be cryptographically
   verified.
 
-[[def:Verifiable Presentation (VP), Verifiable Presentation, VP]] 
+[[def:Verifiable Presentation (VP), Verifiable Presentation, VP, Verifiable Presentations]] 
 ~ A [[ref:Presentation]] that is tamper-evident and has authorship that can be cryptographically verified
 
-[[def:Verifier]]
+[[def:Verifier, Verifiers]]
 ~ An entity that receives one or more verifiable credential inside a verifiable presentation for processing. Synonymous
   with the term [[ref: Relying Party (RP)]]
 
@@ -134,7 +138,7 @@ This section consolidates in one place common terms used across open standards t
 ~ The process in which a [[ref:Verifier]] validates that the verifiable credential inside a verifiable presentation is authentic
   and a timely statement of the issuer or presenter
 
-[[def:Wallet]]
+[[def:Wallet, Wallets]]
 ~ An entity that receives, stores, presents, and manages credentials and key material of the End User. Acts as a [[ref:Self Issued OpenID Provider (SIOP)]]
 
 ## Profile
@@ -192,6 +196,9 @@ sequenceDiagram
 - For transportation of VCs, First Implementer's Draft of OpenID for Verifiable Presentations MUST be used as defined in [[ref: OpenID4VP ID1]].
 - As the query language, [[ref: Presentation Exchange v1.0.0]] MUST be used and conform to the syntax defined in [[ref: OpenID4VP ID1]].
 - Decentralized Identifiers (DIDs), as defined in [[ref: DID Core]], MUST be used as identifiers of the entities. Implementations MUST support did:web and did:ion as a mandatory DID method as defined in [[ref: did-web]] and [[ref: did-ion]].
+- DID Documents MUST use either `JsonWebKey2020` or `EcdsaSecp256k1VerificationKey2019` as the type for Verification Material intended for use in the profile. ([[ref: DID Core]] section 5.2.1)
+- Verification Material intended for use in the profile MUST use `publicKeyJwk` ([[ref: DID Core]] section 5.2.1).  The keys MUST be secp256k1 or Ed25519, see the _Cryptographic Signature_ section.
+- DID Documents may contain Verification Material not intended for use with this profile of any Verification Material Type and any key format or algorithm.
 - To bind an owner of a DID to a controller of a certain origin, a Well Known DID Configuration MUST be used as defined in [[ref: Well Known DID]].
 - For Revocation of VCs, Status List 2021 as defined in [[ref: Status List 2021]] MUST be discovered using either DID Relative URLs stored in an HTTPS URL or ID Hub be used in combination with Identity Hubs as defined in [[def: Identity Hub (0.0.1 Predraft)]] (Decentralized Web Node v0.0.1 predraft).
 
@@ -202,6 +209,30 @@ This profile uses certain versions of specifications that have not yet reached f
   - First Implementer's Draft of Self-Issued OpenID Provider v2 specification
   - First Implementer's Draft of OpenID for Verifiable Prensetations specification
   - ID Hub specification published as a v0.0.1 predraft of [Decentralized Web Node](https://identity.foundation/decentralized-web-node/spec/). We will continue to use the term ID Hub rather than Decentralized Web Node to avoid confusion.
+
+### JWT VCs
+
+#### Using JWT claims instead of their counterparts in the data model specification
+
+Section 6.3.1 of [[ref: VC Data Model v1.1]] provides two options for how to encode properties defined in VC Data Model v1.1 as a JWT:
+  1. Use registered JWT claims instead of respective counterparts defined in a VC Data Model v1.1.
+  2. Use JWT claims in addition to VC Data Model v1.1 counterparts
+
+For the purpose of this profile, registered JWT claims `exp`, `iss`, `nbf`, `jti`, `sub` and `aud` MUST be used in a JWT VC instead of their respective counterparts defined in VC Data Model v1.1.
+
+#### Base64url Encoding of a JWT encoded VC included in a VP
+
+Verifiable Credentials included in a JWT-encoded Verifiable Presentation MUST be Base64url encoded. 
+
+Base64url encoding is defined as a base64 encoding using the URL and filename safe character set defined in Section 5 of RFC4648, with all trailing '=' characters omitted (as permitted by Section 3.2 of RFC4648) and without the inclusion of any line breaks, whitespace, or other additional characters. Note that the base64url encoding of the empty octet sequence is the empty string. (See Appendix C of RFC7515 for notes on implementing base64url encoding without padding.)
+
+#### `exp` JWT claim
+
+`exp` JWT claim in JWT encoded VC or VP MUST be used to set the value of the "expirationDate" of the VC or VP, and not of the credentialSubject.
+
+#### `nbf` JWT claim
+
+[[ref: VC Data Model v1.1]] specifies that "issuanceDate" property MUST be represented as an `nbf` JWT claim, and not `iat` JWT claim. This might sound couterintuitive, but the implementers of this profile MUST follow this guidance.
 
 ### Authorization Request
 
@@ -261,7 +292,7 @@ The Self-Issued OP request object obtained via request_uri MUST include the foll
 * `response_mode`
   * REQUIRED. MUST be `post`. Self-Issued OP Response will be sent as an HTTP POST request.
 * `client_id`
-  * REQUIRED. MUST be a DID of a Verifier/RP. MUST use DID method ION.
+  * REQUIRED. MUST be a DID of a Verifier/RP.
 * `redirect_uri`
   * REQUIRED. URI where the response will be sent.
 * `nonce`
@@ -282,13 +313,13 @@ The Verifier/RP MUST use static Self-Issued OP metadata as defined in section 6.
 
 The Self-Issued OP request MUST be signed. Decentralized Identifier resolution as defined in section 10.2.2.2. of [[ref: SIOPv2 ID1]] MUST be used as the Verifier/RP Registration Metadata Resolution Method.
 
-The RP MUST support Subject Syntax Type `did:ion` as specified in section 9.2.3. in [[ref: SIOPv2 ID1]]. RP's `client_id` MUST be expressed as using a `did:ion` URI, and the public key used to sign the request MUST be obtained from the `verificationMethod` property of a DID Document. The public key used to sign the request in question MUST be identified by the `kid` in the header of the signed request.
+The RP MUST support Subject Syntax Type as specified in section 9.2.3 and include the DID methods required by this profile. in [[ref: SIOPv2 ID1]]. RP's `client_id` MUST be expressed using a DID method URI (of a DID method supported by this profile), and the public key used to sign the request MUST be obtained from the `verificationMethod` property of a DID Document. The public key used to sign the request in question MUST be identified by the `kid` in the header of the signed request.
 
 All RP metadata other than the public key MUST be obtained from the `registration` parameter as defined in section 6.3.1. of [[ref: SIOPv2 ID1]].
 
 The following are Verifier/RP Registration Metadata parameters and values:
 * `subject_syntax_types_supported`
-  * REQUIRED. MUST include `did:ion`. Defined in [[ref: SIOPv2 ID1]].
+  * REQUIRED. MUST include the DID methods required by this profile (`did:ion`, `did:web`). Defined in [[ref: SIOPv2 ID1]].
 * `vp_formats`
   * REQUIRED. MUST include `jwt_vp` and `jwt_vc`, and support signature algorithms `ES256K` and `EdDSA`. Defined in [[ref: OpenID4VP ID1]].
 * `client_name`
@@ -304,6 +335,7 @@ Below is a normative example of claims included in the `registration` parameter:
 ```json
 {
   "subject_syntax_types_supported": [
+    "did:web",
     "did:ion"
   ],
   "vp_formats": {
@@ -331,6 +363,8 @@ Other Registration parameters defined in [[ref: OIDC Registration]] can be used.
 ##### Linked Domain Verification
 
 To strengthen trust between the Verifier/RP and End-user, a Verifier/RP's DID must be bound to its website. This proves the Verifier/RP controls both the DID and the origin and allows the End-user to verify this relationship. To bind an owner of a DID to a controller of a certain origin, Well Known DID Configuration MUST be used as defined in [[ref: Well Known DID]].
+
+Validation of Domain Linkage Credentials by the wallet MUST follow the steps given in the [[ref: Well Known DID]] specification. To check validity of the Domain Linkage Credential, expiration property MUST be taken into account. Additional checks, e.g. of revocation, are not required by this profile. Since the Verifier/RP manages Domain Linkage Credentials and directly updates the DID Configuration Resource, the usage of a credentialStatus property for revocation in a Domain Linkage Credential typically is of little use. 
 
 When creating a Verifier/RP's DID, the domain linked to that DID MUST be included in a `serviceEndpoint` property of the DID Document as shown in a non-normative response below:
 
@@ -465,7 +499,7 @@ Below is a non-normative example of a decoded VC in a JSON format, signed as a J
 
 ### Decentralized Identifiers
 
-This profile utilizes Decentralized Identifiers (DIDs) as a cryptographically verifiable identifier of the Verifier/RP and Self-Issued OP and that resolve to cryptographic key material. Implementations of this profile MUST support DID Method ION.
+This profile utilizes Decentralized Identifiers (DIDs) as a cryptographically verifiable identifier of the Verifier/RP and Self-Issued OP and that resolve to cryptographic key material.
 
 ION DIDs can operate in both long-form and short-form. Implementations of this profile MUST be able to consume both long-form and short-form DIDs regardless of whether they are anchored.
 
