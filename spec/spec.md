@@ -511,7 +511,8 @@ To Validate the VP Token received, the Verifier MUST do the following:
 
 1. The signature on the VP Token MUST be validated. Validation is performed against the key obtained from a DID Document. DID Document MUST be obtained by resolving a Decentralized Identifier included in the `sub` claim using DID Resolution.
 2. Using the descriptor map defined the the ID Token, the Verifier MUST obtain the VPs and validate their integrity, authenticity, and holder binding. Inputs should be evaluated using the mechanisms outlined in Section 4.3 of [[ref: Presentation Exchange v1.0.0]].
-3. The Verifier MUST check the revocation status of the VCs embedded in the VPs by discovering the relevant Status List using either DID Relative URLs stored in an HTTPS URL or ID Hubs.
+3. The revocation status of the VCs embedded in the VPs MUST match those requested in the Presentation Definition of the Authorization Request. The Verifier MUST check the expected status by discovering the relevant Status List using either DID Relative URLs stored in an HTTPS URL or ID Hubs.
+
 4. The integrity of the Issuer of the VC should be checked to confirm that the Issuer controls the DID and its origin. To do so, obtain the Well Known DID Configuration of the Issuer by resolving its DID and then its Linked Domain.
 
 ### Decentralized Identifiers
