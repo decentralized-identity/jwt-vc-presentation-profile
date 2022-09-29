@@ -176,7 +176,7 @@ sequenceDiagram
 
 Upon receiving the Request Object, the Wallet will identify VCs that satisfy the Presentation Definition and encapsulate them in a Verifiable Presentation (VP). The Wallet will complete the SIOP or Authorization Response by sending an ID Token and a VP Token to the Verifier's `redirect_uri`.
 
-Upon receiving the ID Token and VP Token, Verifier performs necessary checks such as DID resolution, signature validation, Linked Domain validation, revocation checks, etc. and sends an acknowledgement of receipt back to the Wallet. The flow of the Wallet presenting VCs to the Verifier is now complete.
+Upon receiving the ID Token and VP Token, Verifier performs necessary checks as described in the section [[ref:Authentication Response Validation]] and sends an acknowledgement of receipt back to the Wallet as a 200 HTTP response status code. The flow of the Wallet presenting VCs to the Verifier is now complete.
 
 ```mermaid
 sequenceDiagram
@@ -451,15 +451,6 @@ This profile currently assumes that ID Token and a single VP passed as a VP Toke
 
 Note that a Holder DID signing the ID Token in its `sub` claim is user's identifier within the RP/Verifier, while a Holder DID signing a VP in its `iss` claim is user's identifier within the Issuer, and the two do not have the same connotation.
 
-#### ID Token Validation
-
-ID Token validation rules defined in section 10 of [[ref: SIOPv2 ID1]] MUST be followed. The ID Token MUST be signed by the End-User's DID.
-
-- `iss` claim MUST be `https://self-issued.me/v2/openid-vc`.
-- Signature on the ID Token MUST be validated.
-  - Validation is performed against the key obtained from a DID Document. DID Document MUST be obtained by resolving a Decentralized Identifier included in the `sub` claim using DID Resolution.
-- `sub` claim MUST equal the `id` property in the DID Document.
-
 #### ID Token example
 
 Below is a non-normative example of an ID Token:
@@ -498,6 +489,30 @@ Below is a non-normative example of a decoded VC in a JSON format, signed as a J
 [[insert: ./spec/assets/sample_vc_1.json]]
 ```
 :::
+
+#### [[def:Authentication Response Validation]]
+
+The following checks MUST be made by the Verifier upon receiving the Authorization Response:
+
+##### ID Token Validation
+
+To validate the ID Token received, the Verifier MUST do the following:
+
+1. The Verifier MUST validate ID Token according to the rules defined in section 12.1 of [[ref: SIOPv2 ID1]].
+2. The ID Token MUST be signed by the End-User's DID:
+3. `iss` claim MUST be `https://self-issued.me/v2/openid-vc`.
+4. The signature on the ID Token MUST be validated. Validation is performed against the key obtained from a DID Document. DID Document MUST be obtained by resolving a Decentralized Identifier included in the `sub` claim using DID Resolution.
+5. `sub` claim MUST equal the `id` property in the DID Document.
+6. The `_vp_token` claim MUST be present and contain a presentation_submission with a valid descriptor map.
+
+##### VP Token Validation
+
+To Validate the VP Token received, the Verifier MUST do the following:
+
+1. The signature on the VP Token MUST be validated. Validation is performed against the key obtained from a DID Document. DID Document MUST be obtained by resolving a Decentralized Identifier included in the `sub` claim using DID Resolution.
+2. Using the descriptor map defined the the ID Token, the Verifier MUST obtain the VPs and validate their integrity, authenticity, and holder binding. Inputs should be evaluated using the mechanisms outlined in Section 4.3 of [[ref: Presentation Exchange v1.0.0]].
+3. The Verifier MUST check the revocation status of the VCs embedded in the VPs by discovering the relevant Status List using either DID Relative URLs stored in an HTTPS URL or ID Hubs.
+4. The integrity of the Issuer of the VC should be checked to confirm that the Issuer controls the DID and its origin. To do so, obtain the Well Known DID Configuration of the Issuer by resolving its DID and then its Linked Domain.
 
 ### Decentralized Identifiers
 
