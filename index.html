@@ -247,7 +247,7 @@ sequenceDiagram
 <p>Below is a non-normative example of a Self-Issued OP URI which will be encoded into a QR code:</p>
 <pre class="language-uri"><code class="language-uri"><span class="token scheme">openid-vc<span class="token scheme-delimiter">:</span></span><span class="token authority"><span class="token authority-delimiter">//</span></span><span class="token query"><span class="token query-delimiter">?</span><span class="token pair"><span class="token key">request_uri</span>=<span class="token value">https://someverifierdomain.com/v1.0/verifiablecredentials/request/a0eed079-672f-4055-a4f5-e0f5d76ecdea</span></span></span>
 </code></pre>
-<div id="todo-44" class="notice todo"><a class="notice-link" href="#todo-44">TODO</a><p>Need to add QR Code above</p>
+<div id="todo-1" class="notice todo"><a class="notice-link" href="#todo-1">TODO</a><p>Need to add QR Code above</p>
 </div>
 <h4 id="self-issued-op-request-object"><a class="toc-anchor" href="#self-issued-op-request-object" >§</a> Self-Issued OP Request Object</h4>
 <p>Upon receipt of the Request, the Holder Wallet MUST send an HTTP GET request to the <code>request_uri</code> to retrieve the referenced Request Object, unless it is already cached, and parse it to recreate the Request parameters.</p>
@@ -402,7 +402,7 @@ sequenceDiagram
 </li>
 </ul>
 <p>Below is a normative example of claims included in the <code>registration</code> parameter:</p>
-<div id="example-87" class="notice example"><a class="notice-link" href="#example-87">EXAMPLE</a><pre class="language-json"><code class="language-json"><span class="token punctuation">{</span>
+<div id="example-1" class="notice example"><a class="notice-link" href="#example-1">EXAMPLE</a><pre class="language-json"><code class="language-json"><span class="token punctuation">{</span>
   <span class="token property">"subject_syntax_types_supported"</span><span class="token operator">:</span> <span class="token punctuation">[</span>
     <span class="token string">"did:web"</span><span class="token punctuation">,</span>
     <span class="token string">"did:ion"</span>
@@ -431,7 +431,7 @@ sequenceDiagram
 <p>To strengthen trust between the Verifier/RP and End-user, a Verifier/RP’s DID must be bound to its website. This proves the Verifier/RP controls both the DID and the origin and allows the End-user to verify this relationship. To bind an owner of a DID to a controller of a certain origin, Well Known DID Configuration MUST be used as defined in <a class="term-reference" href="#term:well-known-did">Well Known DID</a>.</p>
 <p>Validation of Domain Linkage Credentials by the wallet MUST follow the steps given in the <a class="term-reference" href="#term:well-known-did">Well Known DID</a> specification. To check validity of the Domain Linkage Credential, expiration property MUST be taken into account. Additional checks, e.g. of revocation, are not required by this profile. Since the Verifier/RP manages Domain Linkage Credentials and directly updates the DID Configuration Resource, the usage of a credentialStatus property for revocation in a Domain Linkage Credential typically is of little use.</p>
 <p>When creating a Verifier/RP’s DID, the domain linked to that DID MUST be included in a <code>serviceEndpoint</code> property of the DID Document as shown in a non-normative response below:</p>
-<div id="example-88" class="notice example"><a class="notice-link" href="#example-88">EXAMPLE</a><pre class="language-json"><code class="language-json"><span class="token punctuation">{</span>
+<div id="example-2" class="notice example"><a class="notice-link" href="#example-2">EXAMPLE</a><pre class="language-json"><code class="language-json"><span class="token punctuation">{</span>
   <span class="token property">"service"</span><span class="token operator">:</span> <span class="token punctuation">[</span>
     <span class="token punctuation">{</span>
       <span class="token property">"id"</span><span class="token operator">:</span> <span class="token string">"#domain-1"</span><span class="token punctuation">,</span>
@@ -829,7 +829,7 @@ For reference and more information on LD signature suites see the <a path-0="w3c
 <p><img src="./spec/assets/workplacecredential_storyboard.png" alt="WorkplaceCredential Storyboard"></p>
 <h2 id="examples"><a class="toc-anchor" href="#examples" >§</a> Examples</h2>
 <h3 id="identities"><a class="toc-anchor" href="#identities" >§</a> Identities</h3>
-<p>The Private Key JWK and DID (long-form <code>did:ion</code>) of the Verifier, Wallet (Holder) and Credential Issuer are included below to verify the signatures of example JWTs.</p>
+<p>The Private Key JWK and DID (long-form <code>did:ion</code>) of the Verifier, Wallet (Holder) and Credential Issuer are included below to verify the signatures of example JWTs. These identities have been generated only as examples - they are not anchored and are not “real.”</p>
 <h4 id="verifier"><a class="toc-anchor" href="#verifier" >§</a> Verifier</h4>
 <tab-panels selected-index="0">
   <nav>

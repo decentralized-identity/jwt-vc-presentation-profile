@@ -640,7 +640,7 @@ Below is a storyboard that explains one concrete scenario using a workplace cred
 
 ### Identities
 
-The Private Key JWK and DID (long-form `did:ion`) of the Verifier, Wallet (Holder) and Credential Issuer are included below to verify the signatures of example JWTs.
+The Private Key JWK and DID (long-form `did:ion`) of the Verifier, Wallet (Holder) and Credential Issuer are included below to verify the signatures of example JWTs. These identities have been generated only as examples - they are not anchored and are not "real."
 
 #### Verifier
 
