@@ -638,16 +638,20 @@ Below is a storyboard that explains one concrete scenario using a workplace cred
 
 ## Examples
 
+The examples are designed to enable you to test portions of the protocol flow with your own implementations.
+
 ### Identities
 
-The Private Key JWK and DID (long-form `did:ion`) of the Verifier, Wallet (Holder) and Credential Issuer are included below to verify the signatures of example JWTs. These identities have been generated only as examples - they are not anchored and are not "real."
+The Private Key JWK and DID (long-form `did:ion`) of the Verifier, Wallet (Holder) and Credential Issuer are included below to generate/verify signatures.
+
+These identities have been generated only as examples - they are not anchored and do not contain a Linked Domain.
 
 #### Verifier
 
 <tab-panels selected-index="0">
   <nav>
     <button type="button">Private Key JWK</button>
-    <button type="button">Long-Form DID</button>
+    <button type="button">DID</button>
   </nav>
   <section>
 
@@ -678,7 +682,7 @@ The Private Key JWK and DID (long-form `did:ion`) of the Verifier, Wallet (Holde
 <tab-panels selected-index="0">
   <nav>
     <button type="button">Private Key JWK</button>
-    <button type="button">Long-Form DID</button>
+    <button type="button">DID</button>
   </nav>
   <section>
 
@@ -709,7 +713,7 @@ The Private Key JWK and DID (long-form `did:ion`) of the Verifier, Wallet (Holde
 <tab-panels selected-index="0">
   <nav>
     <button type="button">Private Key JWK</button>
-    <button type="button">Long-Form DID</button>
+    <button type="button">DID</button>
   </nav>
   <section>
 
@@ -749,6 +753,7 @@ openid-vc://?request_uri=https://example/service/api/v1/presentation-request/800
 ```
 
 ### Request Object
+
 The Wallet uses the request_uri to obtain the Request Object. The JWS is signed by the Verifier.
 
 <tab-panels selected-index="0">
@@ -814,13 +819,12 @@ The Wallet uses the request_uri to obtain the Request Object. The JWS is signed 
     }.
     [signature]
   ```
-  
   </section>
 </tab-panels>
 
 ### Authorization Response
 
-The Wallet sends the Authorization Response to the Verifier. The JWS is signed by the Wallet.
+The Wallet sends the Authorization Response back to the Verifier. The JWS is signed by the Wallet.
 
 <tab-panels selected-index="0">
   <nav>
@@ -901,6 +905,8 @@ The Wallet sends the Authorization Response to the Verifier. The JWS is signed b
 
 #### JWT-VC
 The JWT-VC within the VP Token of the Authorization Response is signed by the Credential Issuer.
+
+Note: The example VC does not contain a resolvable status list.
 
 <tab-panels selected-index="0">
   <nav>

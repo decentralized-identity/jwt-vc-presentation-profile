@@ -828,13 +828,15 @@ For reference and more information on LD signature suites see the <a path-0="w3c
 </ul>
 <p><img src="./spec/assets/workplacecredential_storyboard.png" alt="WorkplaceCredential Storyboard"></p>
 <h2 id="examples"><a class="toc-anchor" href="#examples" >§</a> Examples</h2>
+<p>The examples are designed to enable you to test portions of the protocol flow with your own implementations.</p>
 <h3 id="identities"><a class="toc-anchor" href="#identities" >§</a> Identities</h3>
-<p>The Private Key JWK and DID (long-form <code>did:ion</code>) of the Verifier, Wallet (Holder) and Credential Issuer are included below to verify the signatures of example JWTs. These identities have been generated only as examples - they are not anchored and are not “real.”</p>
+<p>The Private Key JWK and DID (long-form <code>did:ion</code>) of the Verifier, Wallet (Holder) and Credential Issuer are included below to generate/verify signatures.</p>
+<p>These identities have been generated only as examples - they are not anchored and do not contain a Linked Domain.</p>
 <h4 id="verifier"><a class="toc-anchor" href="#verifier" >§</a> Verifier</h4>
 <tab-panels selected-index="0">
   <nav>
     <button type="button">Private Key JWK</button>
-    <button type="button">Long-Form DID</button>
+    <button type="button">DID</button>
   </nav>
   <section>
 <pre class="language-json"><code class="language-json"><span class="token punctuation">{</span>
@@ -859,7 +861,7 @@ For reference and more information on LD signature suites see the <a path-0="w3c
 <tab-panels selected-index="0">
   <nav>
     <button type="button">Private Key JWK</button>
-    <button type="button">Long-Form DID</button>
+    <button type="button">DID</button>
   </nav>
   <section>
 <pre class="language-json"><code class="language-json"><span class="token punctuation">{</span>
@@ -884,7 +886,7 @@ For reference and more information on LD signature suites see the <a path-0="w3c
 <tab-panels selected-index="0">
   <nav>
     <button type="button">Private Key JWK</button>
-    <button type="button">Long-Form DID</button>
+    <button type="button">DID</button>
   </nav>
   <section>
 <pre class="language-json"><code class="language-json"><span class="token punctuation">{</span>
@@ -976,7 +978,7 @@ For reference and more information on LD signature suites see the <a path-0="w3c
   </section>
 </tab-panels>
 <h3 id="authorization-response-2"><a class="toc-anchor" href="#authorization-response-2" >§</a> Authorization Response</h3>
-<p>The Wallet sends the Authorization Response to the Verifier. The JWS is signed by the Wallet.</p>
+<p>The Wallet sends the Authorization Response back to the Verifier. The JWS is signed by the Wallet.</p>
 <tab-panels selected-index="0">
   <nav>
     <button type="button">Authorization Response</button>
@@ -1048,6 +1050,7 @@ For reference and more information on LD signature suites see the <a path-0="w3c
 </tab-panels>
 <h4 id="jwt-vc"><a class="toc-anchor" href="#jwt-vc" >§</a> JWT-VC</h4>
 <p>The JWT-VC within the VP Token of the Authorization Response is signed by the Credential Issuer.</p>
+<p>Note: The example VC does not contain a resolvable status list.</p>
 <tab-panels selected-index="0">
   <nav>
     <button type="button">JWT-VC</button>
