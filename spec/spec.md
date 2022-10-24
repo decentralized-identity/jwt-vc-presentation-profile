@@ -496,7 +496,7 @@ The following checks MUST be made by the Verifier upon receiving the Authorizati
 
 ##### ID Token Validation
 
-To validate the ID Token received, the Verifier MUST do the following:
+To validate the received ID Token, the Verifier MUST do the following:
 
 1. The Verifier MUST validate ID Token according to the rules defined in section 12.1 of [[ref: SIOPv2 ID1]].
 2. The ID Token MUST be signed by the End-User's DID:
