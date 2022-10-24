@@ -496,7 +496,7 @@ sequenceDiagram
 <p>This profile currently assumes that ID Token and a single VP passed as a VP Token are signed by the same Holder DID.</p>
 <p>Note that a Holder DID signing the ID Token in its <code>sub</code> claim is user’s identifier within the RP/Verifier, while a Holder DID signing a VP in its <code>iss</code> claim is user’s identifier within the Issuer, and the two do not have the same connotation.</p>
 <h4 id="span-idtermvalidation-of-authorization-responsevalidation-of-authorization-responsespan"><a class="toc-anchor" href="#span-idtermvalidation-of-authorization-responsevalidation-of-authorization-responsespan" >§</a> <span id="term:validation-of-authorization-response">Validation of Authorization Response</span></h4>
-<p>The following checks MUST be made by the Verifier upon receiving the Authorization Response:</p>
+<p>The following checks MUST be made by the Verifier upon receiving the Authorization Response. Verifiers MAY perform any additional checks according to their trust framework/policies.</p>
 <h5 id="id-token-validation"><a class="toc-anchor" href="#id-token-validation" >§</a> ID Token Validation</h5>
 <p>To validate the received ID Token, the Verifier MUST do the following:</p>
 <ol>

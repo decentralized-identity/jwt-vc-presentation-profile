@@ -453,7 +453,7 @@ Note that a Holder DID signing the ID Token in its `sub` claim is user's identif
 
 #### [[def:Validation of Authorization Response]]
 
-The following checks MUST be made by the Verifier upon receiving the Authorization Response:
+The following checks MUST be made by the Verifier upon receiving the Authorization Response. Verifiers MAY perform any additional checks according to their trust framework/policies.
 
 ##### ID Token Validation
 
