@@ -638,13 +638,15 @@ Below is a storyboard that explains one concrete scenario using a workplace cred
 
 ## Examples
 
-The examples are designed to enable you to test portions of the protocol flow with your own implementations.
+The examples which follow are non-normative.
+
+Each example is consistent with the other examples in the section, but will not match any externally run system and should not be considered as supported or endorsed identity.
 
 ### Identities
 
 The Private Key JWK and DID (long-form `did:ion`) of the Verifier, Wallet (Holder) and Credential Issuer are included below to generate/verify signatures.
 
-These identities have been generated only as examples - they are not anchored and do not contain a Linked Domain.
+These identities have been generated only as examples - they are not endorsed or anchored and do not contain a Linked Domain.
 
 #### Verifier
 
