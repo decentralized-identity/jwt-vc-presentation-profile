@@ -176,7 +176,7 @@ sequenceDiagram
 
 Upon receiving the Request Object, the Wallet will identify VCs that satisfy the Presentation Definition and encapsulate them in a Verifiable Presentation (VP). The Wallet will complete the SIOP or Authorization Response by sending an ID Token and a VP Token to the Verifier's `redirect_uri`.
 
-Upon receiving the ID Token and VP Token, Verifier performs necessary checks as described in the section [[ref:Authentication Response Validation]] and sends an acknowledgement of receipt back to the Wallet as a 200 HTTP response status code. The flow of the Wallet presenting VCs to the Verifier is now complete.
+Upon receiving the ID Token and VP Token, Verifier performs necessary checks as described in the section [[ref:Authorization Response Validation]] and sends an acknowledgement of receipt back to the Wallet as a 200 HTTP response status code. The flow of the Wallet presenting VCs to the Verifier is now complete.
 
 ```mermaid
 sequenceDiagram
@@ -490,7 +490,7 @@ Below is a non-normative example of a decoded VC in a JSON format, signed as a J
 ```
 :::
 
-#### [[def:Authentication Response Validation]]
+#### [[def:Authorization Response Validation]]
 
 The following checks MUST be made by the Verifier upon receiving the Authorization Response:
 
