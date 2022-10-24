@@ -499,7 +499,7 @@ The following checks MUST be made by the Verifier upon receiving the Authorizati
 To validate the received ID Token, the Verifier MUST do the following:
 
 1. The Verifier MUST validate ID Token according to the rules defined in section 12.1 of [[ref: SIOPv2 ID1]].
-2. The ID Token MUST be signed by the End-User's DID:
+2. The ID Token MUST be signed by the End-User's DID.
 3. `iss` claim MUST be `https://self-issued.me/v2/openid-vc`.
 4. The signature on the ID Token MUST be validated. Validation is performed against the key obtained from a DID Document. DID Document MUST be obtained by resolving a Decentralized Identifier included in the `sub` claim using DID Resolution.
 5. `sub` claim MUST equal the `id` property in the DID Document.
