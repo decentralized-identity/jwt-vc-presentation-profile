@@ -601,6 +601,7 @@ While ION supports any public key JWK representation in a DID Document, implemen
 |P-384 (secp384r1)|ES384|M|C*|
 
 `C*` Conditional: MUST support at least one.
+`M` Must: MUST support.
 
 Note: This profile leverages JWT for signature generation and verification only. There is a rich offering of Linked Data Cryptographic Suites which are not covered by this iteration of the profile.
 For reference and more information on LD signature suites see the [Linked Data Cryptographic Suite Registry](https://w3c-ccg.github.io/ld-cryptosuite-registry/).
