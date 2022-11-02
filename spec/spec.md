@@ -591,7 +591,7 @@ Below is a non-normative example of a DID Document that includes a serviceEndpoi
 
 ### Cryptographic Signature
 
-While ION supports any public key JWK representation in a DID Document, implementors of this document MUST support JWT signature verification with the following Key Types and must support JWT signing with at least one.
+Verifiers and wallets compliant with this profile MUST support JWT signature verification of the Key Types as defined in the table below:
 
 |Key Type|JWT Algorithm|Support to validate the signature by the Verifier and the Wallet|Support to sign by the Wallet|
 |--------|-------------|-------------|-------------|
