@@ -593,10 +593,15 @@ Below is a non-normative example of a DID Document that includes a serviceEndpoi
 
 While ION supports any public key JWK representation in a DID Document, implementors of this document MUST support JWT signature verification with the following Key Types and must support JWT signing with at least one.
 
-|Key Type|JWT Algorithm|
-|--------|-------------|
-|secp256k1|ES256K|
-|Ed25519|EdDSA|
+|Key Type|JWT Algorithm|Support to validate the signature by the Verifier and the Wallet|Support to sign by the Wallet|
+|--------|-------------|-------------|-------------|
+|secp256k1|ES256K|M|C*|
+|Ed25519|EdDSA|M|C*|
+|P-256 (secp256r1)|ES256|M|C*|
+|P-384 (secp384r1)|ES384|M|C*|
+
+`C*` Conditional: MUST support at least one.
+`M` Must: MUST support.
 
 Note: This profile leverages JWT for signature generation and verification only. There is a rich offering of Linked Data Cryptographic Suites which are not covered by this iteration of the profile.
 For reference and more information on LD signature suites see the [Linked Data Cryptographic Suite Registry](https://w3c-ccg.github.io/ld-cryptosuite-registry/).
