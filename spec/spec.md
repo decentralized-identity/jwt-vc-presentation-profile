@@ -457,15 +457,14 @@ The following checks MUST be made by the Verifier upon receiving the Authorizati
 
 ##### ID Token Validation
 
-To validate the received ID Token, the Verifier MUST do the following:
 
-1. The Verifier MUST validate ID Token according to the rules defined in section 12.1 of [[ref: SIOPv2 ID1]].
-2. The ID Token MUST be signed by the End-User's DID.
-3. `iss` claim MUST be `https://self-issued.me/v2/openid-vc`.
-4. The signature on the ID Token MUST be validated. Validation is performed against the key obtained from a DID Document. DID Document MUST be obtained by resolving a Decentralized Identifier included in the `sub` claim using DID Resolution. If a DID Doc contains multiple keys, kid in the header is used to identify which key to use.
-5. The DID in the `kid` and `sub` claim MUST match.
-6. `sub` claim MUST equal the `id` property in the DID Document.
-7. The `_vp_token` claim MUST be present and contain a presentation_submission with a valid descriptor map.
+Verifiers MUST go through (at least) the following steps and validate ID Token according to the rules defined in section 12.1 of [[ref: SIOPv2 ID1]] before trusting/using any of the contents of an ID Token:
+
+1. Ensure that `iss` claim is `https://self-issued.me/v2/openid-vc`.
+2. Validate the signature on the ID Token. Validation is performed against the key obtained from a DID Document. DID Document MUST be obtained by resolving a Decentralized Identifier included in the `sub` claim using DID Resolution. If a DID Doc contains multiple keys, kid in the header is used to identify which key to use.
+3. Check that the DID in the `kid` and `sub` claims exactly match.
+4. Check that `sub` claim equal the `id` property in the DID Document.
+5. Check that the `_vp_token` claim is present and contains a `presentation_submission` with a valid descriptor map.
 
 ##### VP Token Validation
 
