@@ -468,13 +468,13 @@ Verifiers MUST go through (at least) the following steps and validate ID Token a
 
 ##### VP Token Validation
 
-To Validate the VP Token received, the Verifier MUST do the following:
+Verifiers MUST go through (at least) the following steps before trusting/using any of the contents of a VP Token:
 
-1. The signature on the VP Token MUST be validated. Validation is performed against the key obtained from a DID Document. DID Document MUST be obtained by resolving a Decentralized Identifier included in the `sub` claim using DID Resolution. If a DID Doc contains multiple keys, kid in the header is used to identify which key to use.
-2. The DID in the `kid` and `sub` claim MUST match.
-3. Using the descriptor map obtained from the ID Token, the Verifier MUST determine the number of VPs returned in the VP Token and identify the in which VP requested VC(s) are included.
-4. Using the presentation definition from the Authorization Request, the Verifier must confirm that the VC meets all requested criteria using the mechanisms outlined in Section 4.3 of [[ref: Presentation Exchange v1.0.0]].
-5. The signature on the VCs embedded in the VPs must be validated.
+1. Validate the signature on the VP Token. Validation is performed against the key obtained from a DID Document. DID Document MUST be obtained by resolving a Decentralized Identifier included in the `sub` claim using DID Resolution. If a DID Doc contains multiple keys, kid in the header is used to identify which key to use.
+2. Check that the DID value in the `kid` and `sub` claims match.
+3. Determine the number of VPs returned in the VP Token and identify in which VP requested VC(s) are included, using the descriptor map obtained from the ID Token.
+4. Confirm that the VC meets all requested criteria using the mechanisms outlined in Section 4.3 of [[ref: Presentation Exchange v1.0.0]], using the presentation definition from the Authorization Request.
+5. Validate signature(s) on each VC(s).
 6. It is highly recommened that the Verifier permforms Linked Domain Verification of the Issuer's DID as defined in [[ref: Linked Domain Verification]].
 
 #### ID Token example
