@@ -638,11 +638,26 @@ Below is a storyboard that explains one concrete scenario using a workplace cred
 
 ## Examples
 
-The examples which follow are non-normative.
+Examples are listed inline in above sections as well as in complete form within [[ref:Test Vectors]].
 
-Each example is consistent with the other examples in the section, but will not match any externally run system and should not be considered as supported or endorsed identity.
+## Implementations
 
-### Identities
+- Microsoft
+- Workday
+- Mattr
+- Ping Identity
+
+## Testing
+
+Implementations may test conformance of the wallets to this profile using this [verification website](https://vcinteroptesting.azurewebsites.net/verifier).
+
+## Test Vectors
+
+The test vectors which follow are non-normative.
+
+Each payload is consistent with the others in the section, but will not match any externally run system and should not be considered as supported or endorsed identity.
+
+### Identifiers
 
 The Private Key JWK and DID (long-form `did:ion`) of the Verifier, Wallet (Holder) and Credential Issuer are included below to generate/verify signatures.
 
@@ -959,21 +974,6 @@ Note: The example VC does not contain a resolvable status list.
   ```
   </section>
 </tab-panels>
-
-## Implementations
-
-- Microsoft
-- Workday
-- Mattr
-- Ping Identity
-
-## Testing
-
-Implementations may test conformance of the wallets to this profile using this [verification website](https://vcinteroptesting.azurewebsites.net/verifier).
-
-### Test Vectors
-
-Embedded or referenced test vectors.
 
 ## References
 

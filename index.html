@@ -828,9 +828,20 @@ For reference and more information on LD signature suites see the <a path-0="w3c
 </ul>
 <p><img src="./spec/assets/workplacecredential_storyboard.png" alt="WorkplaceCredential Storyboard"></p>
 <h2 id="examples"><a class="toc-anchor" href="#examples" >§</a> Examples</h2>
-<p>The examples which follow are non-normative.</p>
-<p>Each example is consistent with the other examples in the section, but will not match any externally run system and should not be considered as supported or endorsed identity.</p>
-<h3 id="identities"><a class="toc-anchor" href="#identities" >§</a> Identities</h3>
+<p>Examples are listed inline in above sections as well as in complete form within <a class="term-reference" href="#term:test-vectors">Test Vectors</a>.</p>
+<h2 id="implementations"><a class="toc-anchor" href="#implementations" >§</a> Implementations</h2>
+<ul>
+<li>Microsoft</li>
+<li>Workday</li>
+<li>Mattr</li>
+<li>Ping Identity</li>
+</ul>
+<h2 id="testing"><a class="toc-anchor" href="#testing" >§</a> Testing</h2>
+<p>Implementations may test conformance of the wallets to this profile using this <a path-0="vcinteroptesting.azurewebsites.net"path-1="verifier"href="https://vcinteroptesting.azurewebsites.net/verifier" >verification website</a>.</p>
+<h2 id="test-vectors"><a class="toc-anchor" href="#test-vectors" >§</a> Test Vectors</h2>
+<p>The test vectors which follow are non-normative.</p>
+<p>Each payload is consistent with the others in the section, but will not match any externally run system and should not be considered as supported or endorsed identity.</p>
+<h3 id="identifiers"><a class="toc-anchor" href="#identifiers" >§</a> Identifiers</h3>
 <p>The Private Key JWK and DID (long-form <code>did:ion</code>) of the Verifier, Wallet (Holder) and Credential Issuer are included below to generate/verify signatures.</p>
 <p>These identities have been generated only as examples - they are not endorsed or anchored and do not contain a Linked Domain.</p>
 <h4 id="verifier"><a class="toc-anchor" href="#verifier" >§</a> Verifier</h4>
@@ -1097,17 +1108,6 @@ For reference and more information on LD signature suites see the <a path-0="w3c
 </code></pre>
   </section>
 </tab-panels>
-<h2 id="implementations"><a class="toc-anchor" href="#implementations" >§</a> Implementations</h2>
-<ul>
-<li>Microsoft</li>
-<li>Workday</li>
-<li>Mattr</li>
-<li>Ping Identity</li>
-</ul>
-<h2 id="testing"><a class="toc-anchor" href="#testing" >§</a> Testing</h2>
-<p>Implementations may test conformance of the wallets to this profile using this <a path-0="vcinteroptesting.azurewebsites.net"path-1="verifier"href="https://vcinteroptesting.azurewebsites.net/verifier" >verification website</a>.</p>
-<h3 id="test-vectors"><a class="toc-anchor" href="#test-vectors" >§</a> Test Vectors</h3>
-<p>Embedded or referenced test vectors.</p>
 <h2 id="references"><a class="toc-anchor" href="#references" >§</a> References</h2>
 <h3 id="normative-references"><a class="toc-anchor" href="#normative-references" >§</a> Normative References</h3>
 <dl>
@@ -1240,9 +1240,12 @@ For reference and more information on LD signature suites see the <a path-0="w3c
 <li><a href="#workplace-credential" >Workplace Credential</a></li>
 </ul>
 </li>
-<li><a href="#examples" >Examples</a>
+<li><a href="#examples" >Examples</a></li>
+<li><a href="#implementations" >Implementations</a></li>
+<li><a href="#testing" >Testing</a></li>
+<li><a href="#test-vectors" >Test Vectors</a>
 <ul>
-<li><a href="#identities" >Identities</a>
+<li><a href="#identifiers" >Identifiers</a>
 <ul>
 <li><a href="#verifier" >Verifier</a></li>
 <li><a href="#wallet-holder" >Wallet (Holder)</a></li>
@@ -1257,12 +1260,6 @@ For reference and more information on LD signature suites see the <a path-0="w3c
 <li><a href="#jwt-vc" >JWT-VC</a></li>
 </ul>
 </li>
-</ul>
-</li>
-<li><a href="#implementations" >Implementations</a></li>
-<li><a href="#testing" >Testing</a>
-<ul>
-<li><a href="#test-vectors" >Test Vectors</a></li>
 </ul>
 </li>
 <li><a href="#references" >References</a>
