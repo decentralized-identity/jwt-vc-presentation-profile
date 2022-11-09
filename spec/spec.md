@@ -461,21 +461,23 @@ The following checks MUST be made by the Verifier upon receiving the Authorizati
 Verifiers MUST go through (at least) the following steps and validate ID Token according to the rules defined in section 12.1 of [[ref: SIOPv2 ID1]] before trusting/using any of the contents of an ID Token:
 
 1. Ensure that `iss` claim is `https://self-issued.me/v2/openid-vc`.
-2. Validate the signature on the ID Token. Validation is performed against the key obtained from a DID Document. DID Document MUST be obtained by resolving a Decentralized Identifier included in the `sub` claim using DID Resolution. If a DID Doc contains multiple keys, kid in the header is used to identify which key to use.
-3. Check that the DID in the `kid` and `sub` claims exactly match.
-4. Check that `sub` claim equal the `id` property in the DID Document.
+2. Check that the DID value in the `kid` and `sub` claims exactly match.
+3. Validate the signature on the ID Token. Validation is performed against the key obtained from a DID Document. DID Document MUST be obtained by resolving a Decentralized Identifier included in the `sub` claim using DID Resolution. If a DID Doc contains multiple keys, kid in the header is used to identify which key to use.
+4. Check that `sub` claim equal the value of the `id` property in the DID Document obtained in step 3.
 5. Check that the `_vp_token` claim is present and contains a `presentation_submission` with a valid descriptor map.
 
 ##### VP Token Validation
 
 Verifiers MUST go through (at least) the following steps before trusting/using any of the contents of a VP Token:
 
-1. Validate the signature on the VP Token. Validation is performed against the key obtained from a DID Document. DID Document MUST be obtained by resolving a Decentralized Identifier included in the `sub` claim using DID Resolution. If a DID Doc contains multiple keys, kid in the header is used to identify which key to use.
-2. Check that the DID value in the `kid` and `sub` claims match.
-3. Determine the number of VPs returned in the VP Token and identify in which VP requested VC(s) are included, using the descriptor map obtained from the ID Token.
+1. Determine the number of VPs returned in the VP Token and identify in which VP requested VC(s) are included, using the descriptor map obtained from the ID Token.
+2. Check that the DID value in the `kid` and `iss` claims match in each of the VP(s).
+3. Validate the signature of each of the VP(s) passed in the VP Token. Validation is performed against the key obtained from a DID Document. DID Document MUST be obtained by resolving a Decentralized Identifier included in the `iss` claim using DID Resolution. If a DID Doc contains multiple keys, kid in the header is used to identify which key to use.
 4. Confirm that the VC meets all requested criteria using the mechanisms outlined in Section 4.3 of [[ref: Presentation Exchange v1.0.0]], using the presentation definition from the Authorization Request.
-5. Validate signature(s) on each VC(s).
-6. It is highly recommened that the Verifier permforms Linked Domain Verification of the Issuer's DID as defined in [[ref: Linked Domain Verification]].
+5. Validate signature(s) on each VC(s). Validation is performed against the key obtained from a DID Document. DID Document MUST be obtained by resolving a Decentralized Identifier included in the `iss` claim using DID Resolution. If a DID Doc contains multiple keys, kid in the header is used to identify which key to use.
+6. Check that the DID value in the `kid` and `iss` claims match in each of the VC(s).
+7. Check that the DID value in the `iss` Claim of a VP exactly match with the `sub` Claim in the VC(s). (Holder Binding)
+8. It is highly recommended that the Verifier performs Linked Domain Verification of the Issuer's DID as defined in [[ref: Linked Domain Verification]].
 
 #### ID Token example
 
