@@ -474,8 +474,8 @@ Verifiers MUST go through (at least) the following steps before trusting/using a
 2. Check that the DID value in the `kid` and `iss` claims match in each of the VP(s).
 3. Validate the signature of each of the VP(s) passed in the VP Token. Validation is performed against the key obtained from a DID Document. DID Document MUST be obtained by resolving a Decentralized Identifier included in the `iss` claim using DID Resolution. If a DID Doc contains multiple keys, kid in the header is used to identify which key to use.
 4. Confirm that the VC meets all requested criteria using the mechanisms outlined in Section 4.3 of [[ref: Presentation Exchange v1.0.0]], using the presentation definition from the Authorization Request.
-5. Validate signature(s) on each VC(s). Validation is performed against the key obtained from a DID Document. DID Document MUST be obtained by resolving a Decentralized Identifier included in the `iss` claim using DID Resolution. If a DID Doc contains multiple keys, kid in the header is used to identify which key to use.
-6. Check that the DID value in the `kid` and `iss` claims match in each of the VC(s).
+5. Check that the DID value in the `kid` and `iss` claims match in each of the VC(s).
+6. Validate signature(s) on each VC(s). Validation is performed against the key obtained from a DID Document. DID Document MUST be obtained by resolving a Decentralized Identifier included in the `iss` claim using DID Resolution. If a DID Doc contains multiple keys, kid in the header is used to identify which key to use.
 7. Check that the DID value in the `iss` Claim of a VP exactly match with the `sub` Claim in the VC(s). (Holder Binding)
 8. It is highly recommended that the Verifier performs Linked Domain Verification of the Issuer's DID as defined in [[ref: Linked Domain Verification]].
 
