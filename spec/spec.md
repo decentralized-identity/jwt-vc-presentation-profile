@@ -236,6 +236,12 @@ Base64url encoding is defined as a base64 encoding using the URL and filename sa
 
 [[ref: VC Data Model v1.1]] specifies that "issuanceDate" property MUST be represented as an `nbf` JWT claim, and not `iat` JWT claim. This might sound couterintuitive, but the implementers of this profile MUST follow this guidance.
 
+#### `kid` JWT header
+
+The `kid` MAY be an absolute URI. In this case, the `kid` MUST be a URI that is prefixed by the issuer URI contained within `iss`.
+
+The `kid` MAY be a relative URI. In this case, the `kid` is treated as being relative to the issuer URI contained within `iss`.
+
 ### Authorization Request
 
 [[ref: SIOPv2 ID1]] MUST be used for key management and authentication, [[ref: OpenID4VP ID1]] MUST be used to transport Verifiable Credentials, and [[ref: Presentation Exchange]] MUST be used as a query language as defined in [[ref: OpenID4VP ID1]].
