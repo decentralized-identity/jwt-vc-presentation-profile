@@ -477,8 +477,7 @@ Verifiers MUST go through (at least) the following steps before trusting/using a
 5. Check that the DID value in the `kid` and `iss` claims match in each of the VC(s).
 6. Validate signature(s) on each VC(s). Validation is performed against the key obtained from a DID Document. DID Document MUST be obtained by resolving a Decentralized Identifier included in the `iss` claim using DID Resolution. If a DID Doc contains multiple keys, kid in the header is used to identify which key to use.
 7. Check that the DID value in the `iss` Claim of a VP exactly match with the `sub` Claim in the VC(s). (Holder Binding)
-8. It is highly recommended that the Verifier performs Linked Domain Verification of the Issuer's DID using the mechanism defined in [[ref: Linked Domain Verification]].
-9. It is highly recommended that the Verifier checks the status of the VC(s) using the mechanism defined in [[ref: Revocation]].
+8. Perform the checks required by the Verifier's policy, based on the set of trust requirements such as trust frameworks it belongs to. The checks can include Linked Domain verification of the Credential Issuer's DID using the mechanism defined in [[ref: Linked Domain Verification]] and Credential status validation of the VC(s) using the mechanism defined in [[ref: Revocation]].
 
 #### ID Token example
 
