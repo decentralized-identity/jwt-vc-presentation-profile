@@ -176,7 +176,7 @@ sequenceDiagram
 
 Upon receiving the Request Object, the Wallet will identify VCs that satisfy the Presentation Definition and encapsulate them in a Verifiable Presentation (VP). The Wallet will complete the SIOP or Authorization Response by sending an ID Token and a VP Token to the Verifier's `redirect_uri`.
 
-Upon receiving the ID Token and VP Token, Verifier performs necessary checks such as DID resolution, signature validation, Linked Domain validation, revocation checks, etc. and sends an acknowledgement of receipt back to the Wallet. The flow of the Wallet presenting VCs to the Verifier is now complete.
+Upon receiving the ID Token and VP Token, Verifier performs necessary checks as described in the section [[ref:Validation of Authorization Response]] and sends an acknowledgement of receipt back to the Wallet as a 200 HTTP response status code. The flow of the Wallet presenting VCs to the Verifier is now complete.
 
 ```mermaid
 sequenceDiagram
@@ -434,7 +434,7 @@ Authorization Response is sent as an HTTPS POST request to the RP's endpoint ind
 
 Note that when this response_mode is used, the user will finish the transaction on the device with a Self-Issued OP, which is a different device than on which the user initiated a request. It is up to the implementations to enable further user interaction with the Verifier/RP on the device used to initiate the request.
 
-### Structure of Authentication Response
+### Structure of Authorization Response
 
 Since requested VCs are returned in a VP Token, two artifacts MUST be returned:
 
@@ -451,14 +451,33 @@ This profile currently assumes that ID Token and a single VP passed as a VP Toke
 
 Note that a Holder DID signing the ID Token in its `sub` claim is user's identifier within the RP/Verifier, while a Holder DID signing a VP in its `iss` claim is user's identifier within the Issuer, and the two do not have the same connotation.
 
-#### ID Token Validation
+#### [[def:Validation of Authorization Response]]
 
-ID Token validation rules defined in section 10 of [[ref: SIOPv2 ID1]] MUST be followed. The ID Token MUST be signed by the End-User's DID.
+The following checks MUST be made by the Verifier upon receiving the Authorization Response. Verifiers MAY perform any additional checks according to their trust framework/policies.
 
-- `iss` claim MUST be `https://self-issued.me/v2/openid-vc`.
-- Signature on the ID Token MUST be validated.
-  - Validation is performed against the key obtained from a DID Document. DID Document MUST be obtained by resolving a Decentralized Identifier included in the `sub` claim using DID Resolution.
-- `sub` claim MUST equal the `id` property in the DID Document.
+##### ID Token Validation
+
+
+Verifiers MUST go through (at least) the following steps and validate ID Token according to the rules defined in section 12.1 of [[ref: SIOPv2 ID1]] before trusting/using any of the contents of an ID Token:
+
+1. Ensure that `iss` claim is `https://self-issued.me/v2/openid-vc`.
+2. Check that the DID value in the `kid` and `sub` claims exactly match.
+3. Validate the signature on the ID Token. Validation is performed against the key obtained from a DID Document. DID Document MUST be obtained by resolving a Decentralized Identifier included in the `sub` claim using DID Resolution. If a DID Doc contains multiple keys, kid in the header is used to identify which key to use.
+4. Check that `sub` claim equal the value of the `id` property in the DID Document obtained in step 3.
+5. Check that the `_vp_token` claim is present and contains a `presentation_submission` with a valid descriptor map.
+
+##### VP Token Validation
+
+Verifiers MUST go through (at least) the following steps before trusting/using any of the contents of a VP Token:
+
+1. Determine the number of VPs returned in the VP Token and identify in which VP requested VC(s) are included, using the descriptor map obtained from the ID Token.
+2. Check that the DID value in the `kid` and `iss` claims match in each of the VP(s).
+3. Validate the signature of each of the VP(s) passed in the VP Token. Validation is performed against the key obtained from a DID Document. DID Document MUST be obtained by resolving a Decentralized Identifier included in the `iss` claim using DID Resolution. If a DID Doc contains multiple keys, kid in the header is used to identify which key to use.
+4. Confirm that the VC meets all requested criteria using the mechanisms outlined in Section 4.3 of [[ref: Presentation Exchange v1.0.0]], using the presentation definition from the Authorization Request, i.e. credential format, type, JSON schema, etc.
+5. Check that the DID value in the `kid` and `iss` claims match in each of the VC(s).
+6. Validate signature(s) on each VC(s). Validation is performed against the key obtained from a DID Document. DID Document MUST be obtained by resolving a Decentralized Identifier included in the `iss` claim using DID Resolution. If a DID Doc contains multiple keys, kid in the header is used to identify which key to use.
+7. Check that the DID value in the `iss` Claim of a VP exactly match with the `sub` Claim in the VC(s). (Holder Binding)
+8. Perform the checks required by the Verifier's policy, based on the set of trust requirements such as trust frameworks it belongs to. The checks can include Linked Domain verification of the Credential Issuer's DID using the mechanism defined in [[ref: Linked Domain Verification]] and Credential status validation of the VC(s) using the mechanism defined in [[ref: Revocation]].
 
 #### ID Token example
 
