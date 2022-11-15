@@ -226,6 +226,15 @@ sequenceDiagram
 <p><code>exp</code> JWT claim in JWT encoded VC or VP MUST be used to set the value of the “expirationDate” of the VC or VP, and not of the credentialSubject.</p>
 <h4 id="nbf-jwt-claim"><a class="toc-anchor" href="#nbf-jwt-claim" >§</a> <code>nbf</code> JWT claim</h4>
 <p><a class="term-reference" href="#term:vc-data-model-v1.1">VC Data Model v1.1</a> specifies that “issuanceDate” property MUST be represented as an <code>nbf</code> JWT claim, and not <code>iat</code> JWT claim. This might sound couterintuitive, but the implementers of this profile MUST follow this guidance.</p>
+<h4 id="kid-jwt-header"><a class="toc-anchor" href="#kid-jwt-header" >§</a> <code>kid</code> JWT header</h4>
+<p>When absolute DID URL is used as a <code>kid</code>, DID value in a <code>kid</code> without a DID fragment MUST exactly match a DID included in a <code>iss</code> if it is a VC or a VP and <code>sub</code> if it is an ID Token.</p>
+<p>DID fragment in a <code>kid</code> identifies which key material in a DID Document to use to validate the signature on a VC/VP/ID Token.</p>
+<div id="note-1" class="notice note"><a class="notice-link" href="#note-1">NOTE</a><p>VCs issued with this profile currently use an absolute DID URL.
+However, the requirement to use relative over absolute DID URLs within the <code>kid</code> header is currently under discussion due to better security features.</p>
+<p>Future versions of the specifications or profile may update this guidance and requirements for the <code>kid</code> header.
+Due to this discussion (and the potential for transition), implementors are advised to consider accepting both absolute and relative DID URLs.</p>
+<p>When relative DID URL is used as a <code>kid</code>, <code>kid</code> only contains a DID fragment of a DID included in a <code>iss</code> if it is a VC or a VP and <code>sub</code> if it is an ID Token.</p>
+</div>
 <h3 id="authorization-request"><a class="toc-anchor" href="#authorization-request" >§</a> Authorization Request</h3>
 <p><a class="term-reference" href="#term:siopv2-id1">SIOPv2 ID1</a> MUST be used for key management and authentication, <a class="term-reference" href="#term:openid4vp-id1">OpenID4VP ID1</a> MUST be used to transport Verifiable Credentials, and <a class="term-reference" href="#term:presentation-exchange">Presentation Exchange</a> MUST be used as a query language as defined in <a class="term-reference" href="#term:openid4vp-id1">OpenID4VP ID1</a>.</p>
 <h4 id="invoking-self-issued-op"><a class="toc-anchor" href="#invoking-self-issued-op" >§</a> Invoking Self-Issued OP</h4>
@@ -498,25 +507,25 @@ sequenceDiagram
 <h4 id="span-idtermvalidation-of-authorization-responsevalidation-of-authorization-responsespan"><a class="toc-anchor" href="#span-idtermvalidation-of-authorization-responsevalidation-of-authorization-responsespan" >§</a> <span id="term:validation-of-authorization-response">Validation of Authorization Response</span></h4>
 <p>The following checks MUST be made by the Verifier upon receiving the Authorization Response. Verifiers MAY perform any additional checks according to their trust framework/policies.</p>
 <h5 id="id-token-validation"><a class="toc-anchor" href="#id-token-validation" >§</a> ID Token Validation</h5>
-<p>To validate the received ID Token, the Verifier MUST do the following:</p>
+<p>Verifiers MUST go through (at least) the following steps and validate ID Token according to the rules defined in section 12.1 of <a class="term-reference" href="#term:siopv2-id1">SIOPv2 ID1</a> before trusting/using any of the contents of an ID Token:</p>
 <ol>
-<li>The Verifier MUST validate ID Token according to the rules defined in section 12.1 of <a class="term-reference" href="#term:siopv2-id1">SIOPv2 ID1</a>.</li>
-<li>The ID Token MUST be signed by the End-User’s DID.</li>
-<li><code>iss</code> claim MUST be <code>https://self-issued.me/v2/openid-vc</code>.</li>
-<li>The signature on the ID Token MUST be validated. Validation is performed against the key obtained from a DID Document. DID Document MUST be obtained by resolving a Decentralized Identifier included in the <code>sub</code> claim using DID Resolution. If a DID Doc contains multiple keys, kid in the header is used to identify which key to use.</li>
-<li>The DID in the <code>kid</code> and <code>sub</code> claim MUST match.</li>
-<li><code>sub</code> claim MUST equal the <code>id</code> property in the DID Document.</li>
-<li>The <code>_vp_token</code> claim MUST be present and contain a presentation_submission with a valid descriptor map.</li>
+<li>Ensure that <code>iss</code> claim is <code>https://self-issued.me/v2/openid-vc</code>.</li>
+<li>Check that the DID value in the <code>kid</code> and <code>sub</code> claims exactly match.</li>
+<li>Validate the signature on the ID Token. Validation is performed against the key obtained from a DID Document. DID Document MUST be obtained by resolving a Decentralized Identifier included in the <code>sub</code> claim using DID Resolution. If a DID Doc contains multiple keys, kid in the header is used to identify which key to use.</li>
+<li>Check that <code>sub</code> claim equal the value of the <code>id</code> property in the DID Document obtained in step 3.</li>
+<li>Check that the <code>_vp_token</code> claim is present and contains a <code>presentation_submission</code> with a valid descriptor map.</li>
 </ol>
 <h5 id="vp-token-validation"><a class="toc-anchor" href="#vp-token-validation" >§</a> VP Token Validation</h5>
-<p>To Validate the VP Token received, the Verifier MUST do the following:</p>
+<p>Verifiers MUST go through (at least) the following steps before trusting/using any of the contents of a VP Token:</p>
 <ol>
-<li>The signature on the VP Token MUST be validated. Validation is performed against the key obtained from a DID Document. DID Document MUST be obtained by resolving a Decentralized Identifier included in the <code>sub</code> claim using DID Resolution. If a DID Doc contains multiple keys, kid in the header is used to identify which key to use.</li>
-<li>The DID in the <code>kid</code> and <code>sub</code> claim MUST match.</li>
-<li>Using the descriptor map obtained from the ID Token, the Verifier MUST determine the number of VPs returned in the VP Token and identify the in which VP requested VC(s) are included.</li>
-<li>Using the presentation definition from the Authorization Request, the Verifier must confirm that the VC meets all requested criteria using the mechanisms outlined in Section 4.3 of <a class="term-reference" href="#term:presentation-exchange-v1.0.0">Presentation Exchange v1.0.0</a>.</li>
-<li>The signature on the VCs embedded in the VPs must be validated.</li>
-<li>It is highly recommened that the Verifier permforms Linked Domain Verification of the Issuer’s DID as defined in <a class="term-reference" href="#term:linked-domain-verification">Linked Domain Verification</a>.</li>
+<li>Determine the number of VPs returned in the VP Token and identify in which VP requested VC(s) are included, using the descriptor map obtained from the ID Token.</li>
+<li>Check that the DID value in the <code>kid</code> and <code>iss</code> claims match in each of the VP(s).</li>
+<li>Validate the signature of each of the VP(s) passed in the VP Token. Validation is performed against the key obtained from a DID Document. DID Document MUST be obtained by resolving a Decentralized Identifier included in the <code>iss</code> claim using DID Resolution. If a DID Doc contains multiple keys, kid in the header is used to identify which key to use.</li>
+<li>Confirm that the VC meets all requested criteria using the mechanisms outlined in Section 4.3 of <a class="term-reference" href="#term:presentation-exchange-v1.0.0">Presentation Exchange v1.0.0</a>, using the presentation definition from the Authorization Request, i.e. credential format, type, JSON schema, etc.</li>
+<li>Check that the DID value in the <code>kid</code> and <code>iss</code> claims match in each of the VC(s).</li>
+<li>Validate signature(s) on each VC(s). Validation is performed against the key obtained from a DID Document. DID Document MUST be obtained by resolving a Decentralized Identifier included in the <code>iss</code> claim using DID Resolution. If a DID Doc contains multiple keys, kid in the header is used to identify which key to use.</li>
+<li>Check that the DID value in the <code>iss</code> Claim of a VP exactly match with the <code>sub</code> Claim in the VC(s). (Holder Binding)</li>
+<li>Perform the checks required by the Verifier’s policy, based on the set of trust requirements such as trust frameworks it belongs to. The checks can include Linked Domain verification of the Credential Issuer’s DID using the mechanism defined in <a class="term-reference" href="#term:linked-domain-verification">Linked Domain Verification</a> and Credential status validation of the VC(s) using the mechanism defined in <a class="term-reference" href="#term:revocation">Revocation</a>.</li>
 </ol>
 <h4 id="id-token-example"><a class="toc-anchor" href="#id-token-example" >§</a> ID Token example</h4>
 <p>Below is a non-normative example of an ID Token:</p>
@@ -770,25 +779,45 @@ Below is a non-normative example of a DID Document that includes a serviceEndpoi
 <span class="token punctuation">}</span>
 </code></pre>
 <h3 id="cryptographic-signature"><a class="toc-anchor" href="#cryptographic-signature" >§</a> Cryptographic Signature</h3>
-<p>While ION supports any public key JWK representation in a DID Document, implementors of this document MUST support JWT signature verification with the following Key Types and must support JWT signing with at least one.</p>
+<p>Verifiers and wallets compliant with this profile MUST support JWT signature verification of the Key Types as defined in the table below:</p>
 <table>
 <thead>
 <tr>
 <th>Key Type</th>
 <th>JWT Algorithm</th>
+<th>Support to validate the signature by the Verifier and the Wallet</th>
+<th>Support to sign by the Wallet</th>
 </tr>
 </thead>
 <tbody>
 <tr>
 <td>secp256k1</td>
 <td>ES256K</td>
+<td>M</td>
+<td>C*</td>
 </tr>
 <tr>
 <td>Ed25519</td>
 <td>EdDSA</td>
+<td>M</td>
+<td>C*</td>
+</tr>
+<tr>
+<td>P-256 (secp256r1)</td>
+<td>ES256</td>
+<td>M</td>
+<td>C*</td>
+</tr>
+<tr>
+<td>P-384 (secp384r1)</td>
+<td>ES384</td>
+<td>M</td>
+<td>C*</td>
 </tr>
 </tbody>
 </table>
+<p><code>C*</code> Conditional: MUST support at least one.
+<code>M</code> Must: MUST support.</p>
 <p>Note: This profile leverages JWT for signature generation and verification only. There is a rich offering of Linked Data Cryptographic Suites which are not covered by this iteration of the profile.
 For reference and more information on LD signature suites see the <a path-0="w3c-ccg.github.io"path-1="ld-cryptosuite-registry"path-2=""href="https://w3c-ccg.github.io/ld-cryptosuite-registry/" >Linked Data Cryptographic Suite Registry</a>.</p>
 <h2 id="credential-type-verifiedemployee"><a class="toc-anchor" href="#credential-type-verifiedemployee" >§</a> Credential type <code>VerifiedEmployee</code></h2>
@@ -1213,6 +1242,7 @@ For reference and more information on LD signature suites see the <a path-0="w3c
 <li><a href="#base64url-encoding-of-a-jwt-encoded-vc-included-in-a-vp" >Base64url Encoding of a JWT encoded VC included in a VP</a></li>
 <li><a href="#exp-jwt-claim" ><code>exp</code> JWT claim</a></li>
 <li><a href="#nbf-jwt-claim" ><code>nbf</code> JWT claim</a></li>
+<li><a href="#kid-jwt-header" ><code>kid</code> JWT header</a></li>
 </ul>
 </li>
 <li><a href="#authorization-request" >Authorization Request</a>
