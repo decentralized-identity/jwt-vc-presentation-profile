@@ -237,19 +237,19 @@ Base64url encoding is defined as a base64 encoding using the URL and filename sa
 [[ref: VC Data Model v1.1]] specifies that "issuanceDate" property MUST be represented as an `nbf` JWT claim, and not `iat` JWT claim. This might sound couterintuitive, but the implementers of this profile MUST follow this guidance.
 
 #### `kid` JWT header
+When absolute DID URL is used as a `kid`, DID value in a `kid` without a DID fragment MUST exactly match a DID included in a `iss` if it is a VC or a VP and `sub` if it is an ID Token.
+
+DID fragment in a `kid` identifies which key material in a DID Document to use to validate the signature on a VC/VP/ID Token. 
 
 ::: note
-  The requirement to use absolute or relative URIs within the `kid` header is currently under debate.
-  VCs issued with this profile currently use an absolute URI.
+VCs issued with this profile currently use an absolute DID URL.
+However, the requirement to use relative over absolute DID URLs within the `kid` header is currently under discussion due to better security features.
 
-  Future versions of the specifications or profile may update this guidance and requirements for the `kid` header.
-  Due to this debate (and the potential for transition), implementors are advised to consider accepting both absolute and relative URIs.
+Future versions of the specifications or profile may update this guidance and requirements for the `kid` header. 
+Due to this discussion (and the potential for transition), implementors are advised to consider accepting both absolute and relative DID URLs.
 
-  In this case of a relative `kid` URI, the `kid` is treated as being relative to the issuer URI contained within `iss`.
+When relative DID URL is used as a `kid`, `kid` only contains a DID fragment of a DID included in a `iss` if it is a VC or a VP and `sub` if it is an ID Token. 
 :::
-
-In the case of an absolute `kid` URI, the `kid` MUST be a URI that is prefixed by the issuer URI contained within `iss`.
-
 
 ### Authorization Request
 
