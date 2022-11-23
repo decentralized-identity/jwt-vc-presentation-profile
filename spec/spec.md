@@ -275,14 +275,13 @@ The Self-Issued OP request URI MUST include the following parameter:
 * `request_uri`
   * REQUIRED. URL where Request Object value can be retrieved from, as specified in section 6.2 of [[ref: OIDC]].
 
-Below is a non-normative example of a Self-Issued OP URI which will be encoded into a QR code:
+Below is a non-normative example of a Self-Issued OP URI and a QR Code which contains the encoded URI:
 
 ```uri
 openid-vc://?request_uri=https://someverifierdomain.com/v1.0/verifiablecredentials/request/a0eed079-672f-4055-a4f5-e0f5d76ecdea
 ```
-::: todo
-Need to add QR Code above
-:::
+
+![Sample QR Code](./spec/assets/sample_qrcode.png)
 
 #### Self-Issued OP Request Object
 

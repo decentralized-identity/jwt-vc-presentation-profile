@@ -253,11 +253,10 @@ Due to this discussion (and the potential for transition), implementors are advi
 </ul>
 </li>
 </ul>
-<p>Below is a non-normative example of a Self-Issued OP URI which will be encoded into a QR code:</p>
+<p>Below is a non-normative example of a Self-Issued OP URI and a QR Code which contains the encoded URI:</p>
 <pre class="language-uri"><code class="language-uri"><span class="token scheme">openid-vc<span class="token scheme-delimiter">:</span></span><span class="token authority"><span class="token authority-delimiter">//</span></span><span class="token query"><span class="token query-delimiter">?</span><span class="token pair"><span class="token key">request_uri</span>=<span class="token value">https://someverifierdomain.com/v1.0/verifiablecredentials/request/a0eed079-672f-4055-a4f5-e0f5d76ecdea</span></span></span>
 </code></pre>
-<div id="todo-1" class="notice todo"><a class="notice-link" href="#todo-1">TODO</a><p>Need to add QR Code above</p>
-</div>
+<p><img src="./spec/assets/sample_qrcode.png" alt="Sample QR Code"></p>
 <h4 id="self-issued-op-request-object"><a class="toc-anchor" href="#self-issued-op-request-object" >§</a> Self-Issued OP Request Object</h4>
 <p>Upon receipt of the Request, the Holder Wallet MUST send an HTTP GET request to the <code>request_uri</code> to retrieve the referenced Request Object, unless it is already cached, and parse it to recreate the Request parameters.</p>
 <p>The response body to that request must be an encoded JWT. The media type must be <code>application/jwt</code></p>
