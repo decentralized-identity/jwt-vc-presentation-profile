@@ -6,6 +6,9 @@ JWT VC Presentation Profile
 **Latest Draft:**
 [https://identity.foundation/jwt-vc-presentation-profile](https://identity.foundation/jwt-vc-presentation-profile)
 
+**Pre Release Versions:**
+[v0.1.0](https://identity.foundation/jwt-vc-presentation-profile/spec/v0.1.0)
+
 Editors:
 ~ [Daniel McGrogan](www.linkedin.com/in/dtmcgrogan) (Workday)
 ~ [Kristina Yasuda](https://www.linkedin.com/in/kristina-yasuda-6263b5a2) (Microsoft)
