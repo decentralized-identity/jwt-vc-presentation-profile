@@ -281,7 +281,7 @@ Below is a non-normative example of a Self-Issued OP URI and a QR Code which con
 openid-vc://?request_uri=https://someverifierdomain.com/v1.0/verifiablecredentials/request/a0eed079-672f-4055-a4f5-e0f5d76ecdea
 ```
 
-![Sample QR Code](./spec/assets/sample_qrcode.png)
+![Sample QR Code](./spec/assets/v0.1.0/sample_qrcode.png)
 
 #### Self-Issued OP Request Object
 
@@ -293,7 +293,7 @@ Below is a non-normative unencoded example of a retrieved Request Object:
 
 ::: example Non-Normative Request Object
 ```json
-[[insert: ./spec/assets/3_siopv2_request.json]]
+[[insert: ./spec/assets/v0.1.0/3_siopv2_request.json]]
 ```
 :::
 
@@ -321,7 +321,7 @@ The Verifier/RP MUST use static Self-Issued OP metadata as defined in section 6.
 
 ::: example SIOP Metatdata
 ```json
-[[insert: ./spec/assets/1_siop_metadata.json]]
+[[insert: ./spec/assets/v0.1.0/1_siop_metadata.json]]
 ```
 :::
 
@@ -403,7 +403,7 @@ Below is a non-normative example of a Domain Linkage Credential that is hosted a
 
 ::: example Domain Linkage Credential
 ```json
-[[insert: ./spec/assets/2_domain_linkage_credential.json]]
+[[insert: ./spec/assets/v0.1.0/2_domain_linkage_credential.json]]
 ```
 :::
 
@@ -498,7 +498,7 @@ Verifiers MUST go through (at least) the following steps before trusting/using a
 Below is a non-normative example of an ID Token:
 ::: example ID Token
 ```json
-[[insert: ./spec/assets/4_id_token.json]]
+[[insert: ./spec/assets/v0.1.0/4_id_token.json]]
 ```
 :::
 
@@ -507,28 +507,28 @@ Below is a non-normative example of an ID Token:
 Below is a non-normative example of a Base64URL encoded VP Token:
 ::: example  Base64URL Encoded VP Token
 ```json
-[[insert: ./spec/assets/encoded_vptoken_jwt.json]]
+[[insert: ./spec/assets/v0.1.0/encoded_vptoken_jwt.json]]
 ```
 :::
 
 Below is a non-normative example of a decoded VP Token:
 ::: example  Decoded VP Token
 ```json
-[[insert: ./spec/assets/6_decoded_vp_token.json]]
+[[insert: ./spec/assets/v0.1.0/6_decoded_vp_token.json]]
 ```
 :::
 
 Below is a non-normative example of a Base64URL encoded VC. Note that the VC MUST be obtained from `path_nested` in `presentation_submission` of the ID Token.
 ::: example  VC JWT
 ```json
-[[insert: ./spec/assets/vc_jwt.json]]
+[[insert: ./spec/assets/v0.1.0/vc_jwt.json]]
 ```
 :::
 
 Below is a non-normative example of a decoded VC in a JSON format, signed as a JWT:
 ::: example  Decoded VC
 ```json
-[[insert: ./spec/assets/sample_vc_1.json]]
+[[insert: ./spec/assets/v0.1.0/sample_vc_1.json]]
 ```
 :::
 
@@ -552,7 +552,7 @@ did:ion:EiDC8qe_kwtm02IVoVZ8epcGi90XnL1NYI6baJIwHVBgrg
 Below is a non-normative example of a DID Document obtained by resolving a short-form DID using an ION Node:
 ::: example  Resolved SFD
 ```json
-[[insert: ./spec/assets/resolved_short_form_did.json]]
+[[insert: ./spec/assets/v0.1.0/resolved_short_form_did.json]]
 ```
 :::
 
@@ -565,14 +565,14 @@ Long-form DIDs have the entire DID Document encapsulated into the DID itself. Th
 Below is a non-normative example of a long-form DID:
 ::: example  LFD
 ```json
-[[insert: ./spec/assets/raw_longform_did.json]]
+[[insert: ./spec/assets/v0.1.0/raw_longform_did.json]]
 ```
 :::
 
 Below is a non-normative example of a DID Document obtained by resolving a long-form DID using an ION Node:
 ::: example  Resolved LFD
 ```json
-[[insert: ./spec/assets/resolved_long_form_did.json]]
+[[insert: ./spec/assets/v0.1.0/resolved_long_form_did.json]]
 ```
 :::
 
@@ -651,7 +651,7 @@ Below is a description of a `credentialSubject` for a credential type `VerifiedE
 - `photo`  OPTIONAL. The user's profile photo. The data is binary and not encoded in base64.
 
 ```json
-[[insert: ./spec/assets/workplace_credential_vc.json]]
+[[insert: ./spec/assets/v0.1.0/workplace_credential_vc.json]]
 ```
 
 ## Use-Cases
@@ -672,7 +672,7 @@ Below is a storyboard that explains one concrete scenario using a workplace cred
 - Issuer service takes the claim from idtoken and presents Alice a  Verifiable Credential that she can accept and store in her wallet app.
 - Alice can review the credential information and can also review the  activity report for this credential.
 
-![WorkplaceCredential Storyboard](./spec/assets/workplacecredential_storyboard.png)
+![WorkplaceCredential Storyboard](./spec/assets/v0.1.0/workplacecredential_storyboard.png)
 
 ## Examples
 
@@ -797,7 +797,7 @@ These identities have been generated only as examples - they are not endorsed or
 ### QR Code
 
 The QR Code is displayed on the Verifier's Website and contains the encoded Self-Issued OP URI.
-![QR Code](./spec/assets/qrcode.png)
+![QR Code](./spec/assets/v0.1.0/qrcode.png)
 
 ### Self Issued OP Request URI
 
