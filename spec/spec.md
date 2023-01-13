@@ -47,7 +47,7 @@ The status of the JWT VC Presentation Profile v1.0.0 is a PRE-DRAFT specificatio
 
 ### Description
 
-The [[ref: VC Data Model v1.1]] defines the data model of Verifiable Credentials (VCs) but does not prescribe standards for transport protocol, key management, authentication, query language, etc. As a result, implementers must decide which standards to use for their presentations without a guarantee that others will support the same set of standards.
+The [[ref: VC Data Model v1.1]] defines the data model of Verifiable Credentials (VCs) but does not prescribe standards for transport protocol, key management, authentication, query language, etc. As a result, implementers MUST decide which standards to use for their presentations without a guarantee that others will support the same set of standards.
 
 This document aims to provide a path to interoperability by standardizing the set of specifications that enable the presentation of JWT-VCs between implementers. Future versions of this document will include details on issuance and Wallet interoperability. Ultimately, this profile will define a standardized approach to Verifiable Credentials so that distributed developers, apps, and systems can share credentials through common means.
 
@@ -289,7 +289,7 @@ openid-vc://?request_uri=https://someverifierdomain.com/v1.0/verifiablecredentia
 
 Upon receipt of the Request, the Holder Wallet MUST send an HTTP GET request to the `request_uri` to retrieve the referenced Request Object, unless it is already cached, and parse it to recreate the Request parameters.
 
-The response body to that HTTP GET request must be an encoded JWT. The media type must be `application/jwt`
+The response body to that HTTP GET request MUST be an encoded JWT. The media type MUST be `application/jwt`
 
 Below is a non-normative unencoded example of a retrieved Request Object:
 
@@ -380,7 +380,7 @@ Other Registration parameters defined in [[ref: OIDC Registration]] can be used.
 
 ##### Linked Domain Verification
 
-To strengthen trust between the Verifier/RP and End-user, a Verifier/RP's DID must be bound to its website. This proves the Verifier/RP controls both the DID and the origin and allows the End-user to verify this relationship. To bind an owner of a DID to a controller of a certain origin, Well Known DID Configuration MUST be used as defined in [[ref: Well Known DID]].
+To strengthen trust between the Verifier/RP and End-user, a Verifier/RP's DID MUST be bound to its website. This proves the Verifier/RP controls both the DID and the origin and allows the End-user to verify this relationship. To bind an owner of a DID to a controller of a certain origin, Well Known DID Configuration MUST be used as defined in [[ref: Well Known DID]].
 
 Validation of Domain Linkage Credentials by the Wallet MUST follow the steps given in the [[ref: Well Known DID]] specification. To check validity of the Domain Linkage Credential, expiration property MUST be taken into account. Additional checks, e.g. of revocation, are not required by this profile. Since the Verifier/RP manages Domain Linkage Credentials and directly updates the DID Configuration Resource, the usage of a credentialStatus property for revocation in a Domain Linkage Credential typically is of little use. 
 
