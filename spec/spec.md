@@ -71,17 +71,12 @@ Supporting an additional response mode when Self-Issued OP is on the same device
 #### Out of Scope
 The following items are out of scope for the current version of this document:
 - Issuance of VCs
-- Advanced concepts in the [[ref: VC Data Model v1.1]]:
-    - `credentialSchema` (`credentialType` is used instead)
-    - `refreshService`
-    - `termsOfUse`
-    - `evidence`
-    - Selective disclosure and unlinkability
-    - Zero-Knowledge Proofs
-    - Disputes
+- Advanced concepts in the [[ref: VC Data Model v1.1]]: `credentialSchema` (`credentialType` is used instead), `refreshService`, `termsOfUse`, `evidence`, and Disputes.
+- Selective disclosure and unlinkability
+- Zero-Knowledge Proofs
 - Non-native Self-Issued OPs like web applications, PWAs, etc.
 
-Note: Although selective disclosure and unlinkability are out of scope of this document, future versions will include JSON Web Proofs ([[ref:JWP]]) and JSON Web Algorithms ([[ref:JWA]]) once they get ratified in IETF.
+Note: Although selective disclosure and unlinkability are out of scope of this document, future versions will include JSON Web Proofs ([[ref: JWP]]) and JSON Web Algorithms ([[ref: JWA]]) once they get ratified in IETF.
 
 ## Structure of this Document
 
@@ -89,65 +84,61 @@ A description to the reader on how the document is structured.
 
 ## Terminology
 
-This section consolidates in one place common terms used across open standards that this profile consists of. For the details of these, as well as other useful terms, see text within each of the specification listed in [[ref:References]].
+This section consolidates in one place common terms used across open standards that this profile consists of. For the details of these, as well as other useful terms, see text within each of the specification listed in [[ref: References]].
 
-[[def:Authorization Request]]
-~ OAuth 2.0 Authorization Request extended by [[ref:OIDC]] and [[ref:OpenID4VP]]
+[[def: Authorization Request]]
+~ OAuth 2.0 Authorization Request extended by [[ref: OpenID4VP]] and Self-Issued OP Request as defined in [[ref: SIOPv2]].
 
-[[def:Authorization Response]]
-~ OAuth 2.0 Authorization Response extended by [[ref:OIDC]] and [[ref:OpenID4VP]]
+[[def: Authorization Response]]
+~ OAuth 2.0 Authorization Response extended by [[ref: OpenID4VP]] and Self-Issued OP Response as defined in [[ref: SIOPv2]].
 
-[[def:Claim, Claims]]
-~ An assertion made about the subject of a credential
+[[def: Claim, Claims]]
+~ An assertion made about the subject of a credential by the Issuer.
 
-[[def:Decentralized Identifier, DID]]
-~ An identifier with its core ability being enabling Clients to obtain key material and other metadata by reference
+[[def: Decentralized Identifier, DID]]
+~ An identifier with its core ability being enabling Clients to obtain key material and other metadata by reference, defined in [[ref: DID Core]]. 
 
-[[def:End User]]
-~ Participant
+[[def: End User]]
+~ Participant.
 
-[[def:Holder]]
-~ An entity that possesses or holds Verifiable Credentials and can generate Verifiable Presentations from them as defined in [[ref: VC Data Model]].
+[[def: Holder]]
+~ An entity that possesses or holds Verifiable Credentials and can generate Verifiable Presentations from them as defined in [[ref: VC Data Model v1.1]].
 
 [[def: OpenID Provider (OP), OpenID Provider, OP]]
-~ OAuth 2.0 Authentication Server implementing [[ref:OIDC]] and [[ref:OpenID4VP]]
+~ OAuth 2.0 Authentication Server implementing [[ref:OIDC]] and [[ref:OpenID4VP]].
 
 [[def: Presentation]] 
-~ Data derived from one or more Verifiable Credentials, issued by one or more issuers, that is shared with a verifier
+~ Data derived from one or more Verifiable Credentials, issued by one or more issuers, that is shared with a Verifier.
 
 [[def: Relying Party (RP), Relying Party, RP]]
-~ OAuth 2.0 Client application using [[ref:OIDC]] and [[ref:OpenID4VP]] in [[ref:SIOPv2]]. Synonymous with term
-  [[ref:Verifier]] in [[ref: VC Data Model]]
+~ OAuth 2.0 Client application using [[ref:OIDC]] and [[ref:OpenID4VP]] in [[ref:SIOPv2]]. Synonymous with term [[ref:Verifier]] in [[ref: VC Data Model v1.1]].
 
-[[def:Request Object]]
-~ JWT that contains a set of Authorization Request parameters as its [[ref:Claims]]
+[[def: Request Object]]
+~ JWT that contains a set of Authorization Request parameters as its [[ref:Claims]].
   
-[[def:Self Issued OpenID Provider (SIOP), Self Issued OpenID Provider, SIOP]]  
+[[def: Self Issued OpenID Provider (SIOP), Self Issued OpenID Provider, SIOP]]  
 ~ An OpenID Provider (OP) used by an [[ref:End User]] to prove control over a cryptographically verifiable identifier such as a [[ref:DID]].
 
-[[def:Verifiable Credential, VC, Verifiable Credentials]]
-~ A set of one or more [[ref:Claims]] made by an issuer that is tamper-evident and has authorship that can be cryptographically
-  verified.
+[[def: Verifiable Credential, VC, Verifiable Credentials]]
+~ A set of one or more [[ref:Claims]] made by an issuer that is tamper-evident and has authorship that can be cryptographically verified.
 
-[[def:Verifiable Presentation (VP), Verifiable Presentation, VP, Verifiable Presentations]] 
-~ A [[ref:Presentation]] that is tamper-evident and has authorship that can be cryptographically verified
+[[def: Verifiable Presentation (VP), Verifiable Presentation, VP, Verifiable Presentations]] 
+~ A [[ref:Presentation]] that is tamper-evident and has authorship that can be cryptographically verified.
 
-[[def:Verifier, Verifiers]]
-~ An entity that receives one or more Verifiable Credential inside a Verifiable Presentation for processing. Synonymous
-  with the term [[ref: Relying Party (RP)]]
+[[def: Verifier, Verifiers]]
+~ An entity that receives one or more Verifiable Credential inside a Verifiable Presentation for processing. Synonymous with the term [[ref: Relying Party (RP)]].
 
 [[def:Verification]]
-~ The process in which a [[ref:Verifier]] validates that the Verifiable Credential inside a Verifiable Presentation is authentic
-  and a timely statement of the issuer or presenter
+~ The process in which a [[ref:Verifier]] validates that the Verifiable Credential inside a Verifiable Presentation is authentic and a timely statement of the issuer or presenter.
 
 [[def:Wallet, Wallets]]
-~ An entity that receives, stores, presents, and manages credentials and key material of the End User. Acts as a [[ref:Self Issued OpenID Provider (SIOP)]]
+~ An entity that receives, stores, presents, and manages credentials and key material of the End User. Acts as a [[ref:Self Issued OpenID Provider (SIOP)]].
 
 ## Profile
 
 ### The Protocol Flow
 
-This section briefly describes the end to end verification flow. Concepts and terms mentioned here will be described in more detail in subsequent sections of this document.
+This section briefly describes the end to end flow. Concepts and terms mentioned here will be described in more detail in subsequent sections of this document.
 
 The flow begins as the Verifier generates a QR Code that contains a `request_uri` parameter which allows Self-Issued OP (SIOP) Request to be passed by reference. Verifier displays this QR code on their Verifier Website to initiate the exchange.
 
@@ -399,7 +390,7 @@ When creating a Verifier/RP's DID, the domain linked to that DID MUST be include
 }
 ```
 :::
-Prior to a presentation request, the Verifier/RP MUST create a Domain Linkage Credential in a JSON Web Token format. It MUST be included on the website via '/.well-known/did-configuration.json'.
+Prior to generating an Authorization Request, the Verifier/RP MUST create a Domain Linkage Credential in a JSON Web Token format. It MUST be included on the website via '/.well-known/did-configuration.json'.
 
 Below is a non-normative example of a Domain Linkage Credential that is hosted at `https://www.vcsatoshi.com/.well-known/did-configuration.json`:
 
@@ -489,7 +480,7 @@ Verifiers MUST go through (at least) the following steps before trusting/using a
 1. Determine the number of VPs returned in the VP Token and identify in which VP requested VC(s) are included, using the descriptor map obtained from the ID Token.
 2. Check that the DID value in the `kid` and `iss` claims match in each of the VP(s).
 3. Validate the signature of each of the VP(s) passed in the VP Token. Validation is performed against the key obtained from a DID Document. DID Document MUST be obtained by resolving a Decentralized Identifier included in the `iss` claim using DID Resolution. If a DID Doc contains multiple keys, kid in the header is used to identify which key to use.
-4. Confirm that the VC meets all requested criteria using the mechanisms outlined in Section 4.3 of [[ref: Presentation Exchange v1.0.0]], using the presentation definition from the Authorization Request, i.e. credential format, type, JSON schema, etc.
+4. Confirm that the VC meets all requested criteria using the mechanisms outlined in Section 4.3 of [[ref: Presentation Exchange v1.0.0]], using the Presentation Definition from the Authorization Request, i.e. credential format, type, JSON schema, etc.
 5. Check that the DID value in the `kid` and `iss` claims match in each of the VC(s).
 6. Validate signature(s) on each VC(s). Validation is performed against the key obtained from a DID Document. DID Document MUST be obtained by resolving a Decentralized Identifier included in the `iss` claim using DID Resolution. If a DID Doc contains multiple keys, kid in the header is used to identify which key to use.
 7. Check that the DID value in the `iss` Claim of a VP exactly match with the `sub` Claim in the VC(s). (Holder Binding)
@@ -667,11 +658,11 @@ Workplace credential refers to a use case scenario for Verifiable Credential, wh
 - Allow access to applications on the Internet – e.g. Verified Employee at Woodgrove, unlocking a travel discount with an airline.
 
 Below is a storyboard that explains one concrete scenario using a workplace credential.
-- Alice Smith is a user at Woodgrove and her employer has issued her a  workplace credential.
-- Alice gets a notification email stating that she could get a workplace  credential but launching the issuer portal interface.
-- Alice uses her smartphone’s camera app or Authenticator app (Wallet app)  to scan the QR Code shown on the portal.
-- Alice is presented with an idtoken flow journey. She presents her  corporate username and password credentials to complete the idtoken flow.
-- Issuer service takes the claim from idtoken and presents Alice a  Verifiable Credential that she can accept and store in her Wallet app.
+- Alice Smith is a user at Woodgrove and her employer has issued her a workplace credential.
+- Alice gets a notification email stating that she could get a workplace credential but launching the issuer portal interface.
+- Alice uses her smartphone’s camera app or Authenticator app (Wallet app) to scan the QR Code shown on the portal.
+- Alice is presented with an idtoken flow journey. She presents her corporate username and password credentials to complete the idtoken flow.
+- Issuer service takes the claims from ID Token and presents Alice a Verifiable Credential that she can accept and store in her Wallet app.
 - Alice can review the credential information and can also review the  activity report for this credential.
 
 ![WorkplaceCredential Storyboard](./spec/assets/workplacecredential_storyboard.png)
