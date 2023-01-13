@@ -19,6 +19,8 @@ Contributors:
 ~ Daniel Godbout (Microsoft)
 ~ Rohit Gulati (Microsoft)
 ~ Eric Kuhn (Kraken)
+~ Jeremie Grant (Ping Identity)
+~ Oliver Terbu (Spruce)
 
 Participate:
 ~ [GitHub repo](https://github.com/decentralized-identity/jwt-vc-presentation-profile)
@@ -33,11 +35,11 @@ The JWT VC Presentation Profile defines a set of requirements against existing s
 
 This document is not a specification, but a **profile**. It outlines existing specifications required for implementations to interoperate among each other. It also clarifies mandatory to implement features for the optionalities mentioned in the referenced specifications.
 
-The profile uses OpenID for Verifiable Presentations ([[ref: OpenID4VP ID1]]) as the base protocol for the request and verification of JWT VCs encapsulated in [[ref:Verifiable Presentations]]. A full list of the open standards used in this profile can be found in [Overview of the Open Standards Requirements](#overview-of-the-open-standards-requirements).
+The profile uses OpenID for Verifiable Presentations ([[ref: OpenID4VP ID1]]) as the base protocol to request presentation of JWT VCs encapsulated in [[ref:Verifiable Presentations]] ([[ref: VC Data Model v1.1]]). A full list of the open standards used in this profile can be found in [Overview of the Open Standards Requirements](#overview-of-the-open-standards-requirements).
 
 ### Audience
 
-The audience of the document includes verifiable credential implementers and/or enthusiasts. The first few sections give an overview of the problem area and profile requirements for JWT VC interoperability. Subsequent sections are detailed and technical, describing the protocol flow and request-responses.
+The audience of the document includes Verifiable Credential implementers and/or enthusiasts. The first few sections give an overview of the problem area and profile requirements for JWT VC interoperability. Subsequent sections are detailed and technical, describing the protocol flow and request-responses.
 
 ## Status of This Document
 
@@ -47,7 +49,7 @@ The status of the JWT VC Presentation Profile v1.0.0 is a PRE-DRAFT specificatio
 
 The [[ref: VC Data Model v1.1]] defines the data model of Verifiable Credentials (VCs) but does not prescribe standards for transport protocol, key management, authentication, query language, etc. As a result, implementers must decide which standards to use for their presentations without a guarantee that others will support the same set of standards.
 
-This document aims to provide a path to interoperability by standardizing the set of specifications that enable the presentation of JWT-VCs between implementers. Future versions of this document will include details on issuance and wallet interoperability. Ultimately, this profile will define a standardized approach to Verifiable Credentials so that distributed developers, apps, and systems can share credentials through common means.
+This document aims to provide a path to interoperability by standardizing the set of specifications that enable the presentation of JWT-VCs between implementers. Future versions of this document will include details on issuance and Wallet interoperability. Ultimately, this profile will define a standardized approach to Verifiable Credentials so that distributed developers, apps, and systems can share credentials through common means.
 
 
 ### Scope
@@ -105,20 +107,20 @@ This section consolidates in one place common terms used across open standards t
 ~ Participant
 
 [[def:Holder]]
-~ An entity that possesses or holds verifiable credentials and can generate verifiable presentations from them as defined in [[ref: VC Data Model]].
+~ An entity that possesses or holds Verifiable Credentials and can generate Verifiable Presentations from them as defined in [[ref: VC Data Model]].
 
 [[def: OpenID Provider (OP), OpenID Provider, OP]]
 ~ OAuth 2.0 Authentication Server implementing [[ref:OIDC]] and [[ref:OpenID4VP]]
 
 [[def: Presentation]] 
-~ Data derived from one or more verifiable credentials, issued by one or more issuers, that is shared with a verifier
+~ Data derived from one or more Verifiable Credentials, issued by one or more issuers, that is shared with a verifier
 
 [[def: Relying Party (RP), Relying Party, RP]]
 ~ OAuth 2.0 Client application using [[ref:OIDC]] and [[ref:OpenID4VP]] in [[ref:SIOPv2]]. Synonymous with term
   [[ref:Verifier]] in [[ref: VC Data Model]]
 
 [[def:Request Object]]
-~ JWT that contains a set of request parameters as its [[ref:Claims]]
+~ JWT that contains a set of Authorization Request parameters as its [[ref:Claims]]
   
 [[def:Self Issued OpenID Provider (SIOP), Self Issued OpenID Provider, SIOP]]  
 ~ An OpenID Provider (OP) used by an [[ref:End User]] to prove control over a cryptographically verifiable identifier such as a [[ref:DID]].
@@ -131,11 +133,11 @@ This section consolidates in one place common terms used across open standards t
 ~ A [[ref:Presentation]] that is tamper-evident and has authorship that can be cryptographically verified
 
 [[def:Verifier, Verifiers]]
-~ An entity that receives one or more verifiable credential inside a verifiable presentation for processing. Synonymous
+~ An entity that receives one or more Verifiable Credential inside a Verifiable Presentation for processing. Synonymous
   with the term [[ref: Relying Party (RP)]]
 
 [[def:Verification]]
-~ The process in which a [[ref:Verifier]] validates that the verifiable credential inside a verifiable presentation is authentic
+~ The process in which a [[ref:Verifier]] validates that the Verifiable Credential inside a Verifiable Presentation is authentic
   and a timely statement of the issuer or presenter
 
 [[def:Wallet, Wallets]]
@@ -161,7 +163,7 @@ sequenceDiagram
 
 Verifier Website presents the QR Code to the End User on their Verifier Website. The End User scans the QR Code using their Wallet. The Wallet parses the QR code to obtain the `request_uri`.
 
-The Wallet sends a GET request to the obtained `request_uri` to retrieve the Request Object. The Request Object is a signed JWT that contains a set of request parameters as defined in [[ref: SIOPv2 ID1]] and [[ref: OpenID4VP ID1]]. In particular, Wallet will determine which VCs to submit to the Verifier by processing `presentation_definition` property in the Request Object.
+The Wallet sends a GET request to the obtained `request_uri` to retrieve the Request Object. The Request Object is a signed JWT that contains a set of Authorization Request parameters as defined in [[ref: SIOPv2 ID1]] and [[ref: OpenID4VP ID1]]. In particular, Wallet will determine which VCs to submit to the Verifier by processing `presentation_definition` property in the Request Object.
 
 ```mermaid
 sequenceDiagram
@@ -210,7 +212,7 @@ This profile uses certain versions of specifications that have not yet reached f
 
 #### Security Considerations
 
-It is important to note that Cross-device SIOP is susceptible to a session phishing attack, where an attacker relays the request from a good Verifier/RP to a victim and is able to sign in as a victim. Implementers MUST implement mitigations most suitable to the use-case. For more details and concrete mitigations, see section 15 Security Considerations in [[ref: SIOPv2 ID1]].
+It is important to note that Cross-device SIOP is susceptible to a session phishing attack, where an attacker relays the Authorization Request from a good Verifier/RP to a victim and is able to sign in as a victim. Implementers MUST implement mitigations most suitable to the use-case. For more details and concrete mitigations, see section 15 Security Considerations in [[ref: SIOPv2 ID1]].
 
 ### JWT VCs
 
@@ -255,11 +257,11 @@ When relative DID URL is used as a `kid`, `kid` only contains a DID fragment of 
 
 [[ref: SIOPv2 ID1]] MUST be used for key management and authentication, [[ref: OpenID4VP ID1]] MUST be used to transport Verifiable Credentials, and [[ref: Presentation Exchange]] MUST be used as a query language as defined in [[ref: OpenID4VP ID1]].
 
-#### Invoking Self-Issued OP
+#### Invoking the Wallet
 
 Custom URL Scheme `openid-vc://` MUST be used to invoke Self-Issued OP.
 
-#### Self-Issued OP Request URI
+#### Authorization Request URI
 
 Request object shall be passed by reference, rather than by value, as defined in Section 6.2 of [[ref: OIDC]]. The Holder Wallet retrieves full Request Object value from the resource at the `request_uri`.
 
@@ -271,7 +273,7 @@ The `request_uri` parameter is a HTTP URL from where the Holder Wallet can retri
 
 The Holder Wallet will retrieve the Request Object value from the `request_uri` as defined in section 6 of [[ref: OIDC]].
 
-The Self-Issued OP request URI MUST include the following parameter:
+The Authorization Request URI MUST include the following parameter:
 * `request_uri`
   * REQUIRED. URL where Request Object value can be retrieved from, as specified in section 6.2 of [[ref: OIDC]].
 
@@ -287,7 +289,7 @@ openid-vc://?request_uri=https://someverifierdomain.com/v1.0/verifiablecredentia
 
 Upon receipt of the Request, the Holder Wallet MUST send an HTTP GET request to the `request_uri` to retrieve the referenced Request Object, unless it is already cached, and parse it to recreate the Request parameters.
 
-The response body to that request must be an encoded JWT. The media type must be `application/jwt`
+The response body to that HTTP GET request must be an encoded JWT. The media type must be `application/jwt`
 
 Below is a non-normative unencoded example of a retrieved Request Object:
 
@@ -380,7 +382,7 @@ Other Registration parameters defined in [[ref: OIDC Registration]] can be used.
 
 To strengthen trust between the Verifier/RP and End-user, a Verifier/RP's DID must be bound to its website. This proves the Verifier/RP controls both the DID and the origin and allows the End-user to verify this relationship. To bind an owner of a DID to a controller of a certain origin, Well Known DID Configuration MUST be used as defined in [[ref: Well Known DID]].
 
-Validation of Domain Linkage Credentials by the wallet MUST follow the steps given in the [[ref: Well Known DID]] specification. To check validity of the Domain Linkage Credential, expiration property MUST be taken into account. Additional checks, e.g. of revocation, are not required by this profile. Since the Verifier/RP manages Domain Linkage Credentials and directly updates the DID Configuration Resource, the usage of a credentialStatus property for revocation in a Domain Linkage Credential typically is of little use. 
+Validation of Domain Linkage Credentials by the Wallet MUST follow the steps given in the [[ref: Well Known DID]] specification. To check validity of the Domain Linkage Credential, expiration property MUST be taken into account. Additional checks, e.g. of revocation, are not required by this profile. Since the Verifier/RP manages Domain Linkage Credentials and directly updates the DID Configuration Resource, the usage of a credentialStatus property for revocation in a Domain Linkage Credential typically is of little use. 
 
 When creating a Verifier/RP's DID, the domain linked to that DID MUST be included in a `serviceEndpoint` property of the DID Document as shown in a non-normative response below:
 
@@ -624,7 +626,7 @@ Below is a non-normative example of a DID Document that includes a serviceEndpoi
 
 ### Cryptographic Signature
 
-Verifiers and wallets compliant with this profile MUST support JWT signature verification of the Key Types as defined in the table below:
+Verifiers and Wallets compliant with this profile MUST support JWT signature verification of the Key Types as defined in the table below:
 
 |Key Type|JWT Algorithm|Support to validate the signature by the Verifier and the Wallet|Support to sign by the Wallet|
 |--------|-------------|-------------|-------------|
@@ -669,7 +671,7 @@ Below is a storyboard that explains one concrete scenario using a workplace cred
 - Alice gets a notification email stating that she could get a workplace  credential but launching the issuer portal interface.
 - Alice uses her smartphone’s camera app or Authenticator app (Wallet app)  to scan the QR Code shown on the portal.
 - Alice is presented with an idtoken flow journey. She presents her  corporate username and password credentials to complete the idtoken flow.
-- Issuer service takes the claim from idtoken and presents Alice a  Verifiable Credential that she can accept and store in her wallet app.
+- Issuer service takes the claim from idtoken and presents Alice a  Verifiable Credential that she can accept and store in her Wallet app.
 - Alice can review the credential information and can also review the  activity report for this credential.
 
 ![WorkplaceCredential Storyboard](./spec/assets/workplacecredential_storyboard.png)
@@ -687,7 +689,7 @@ Examples are listed inline in above sections as well as in complete form within 
 
 ## Testing
 
-Implementations may test conformance of the wallets to this profile using this [verification website](https://vcinteroptesting.azurewebsites.net/verifier).
+Implementations may test conformance of the Wallets to this profile using this [verification website](https://vcinteroptesting.azurewebsites.net/verifier).
 
 ## Test Vectors
 
