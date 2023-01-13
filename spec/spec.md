@@ -95,14 +95,11 @@ This section consolidates in one place common terms used across open standards t
 [[def:Authorization Response]]
 ~ OAuth 2.0 Authorization Response extended by [[ref:OIDC]] and [[ref:OpenID4VP]]
 
-[[def:Claim, Claims]]
-~ An assertion made about the subject of a credential
-
 [[def:Decentralized Identifier, DID]]
 ~ An identifier with its core ability being enabling Clients to obtain key material and other metadata by reference
 
 [[def:End User]]
-~ Participant
+~ Human Participant.
 
 [[def:Holder]]
 ~ An entity that possesses or holds verifiable credentials and can generate verifiable presentations from them as defined in [[ref: VC Data Model]].
@@ -134,9 +131,8 @@ This section consolidates in one place common terms used across open standards t
 ~ An entity that receives one or more verifiable credential inside a verifiable presentation for processing. Synonymous
   with the term [[ref: Relying Party (RP)]]
 
-[[def:Verification]]
-~ The process in which a [[ref:Verifier]] validates that the verifiable credential inside a verifiable presentation is authentic
-  and a timely statement of the issuer or presenter
+[[def: Issuer, Issuers]]
+~ An entity that issues Verifiable Credentials.
 
 [[def:Wallet, Wallets]]
 ~ An entity that receives, stores, presents, and manages credentials and key material of the End User. Acts as a [[ref:Self Issued OpenID Provider (SIOP)]]
