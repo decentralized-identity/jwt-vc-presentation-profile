@@ -580,8 +580,8 @@ Below is a non-normative example of a DID Document obtained by resolving a long-
 
 The following two serviceEndpoints MUST be supported in the DID Document, but only one is required.
 
-1. LinkedDomain vis [[ref: Well Known DID]] spec
-1. [[ref: Identity Hub (0.0.1 Predraft)]]
+1. LinkedDomain as defined in [[ref: Well Known DID]]
+1. IdentityHub as defined in [[ref: Identity Hub (0.0.1 Predraft)]]
 
 ### Revocation
 
@@ -589,13 +589,14 @@ StatusList2021 MUST be used for revocation of VCs, as defined in [[ref: Status L
 
 #### credentialStatus
 
-The issued VC MAY include a `credentialStatus` property
+The issued VC MAY include a `credentialStatus` property.
 
-When `credentialStatus` is deinfed it MUST use StatusList2021 , as defined in section 5.1 of [[ref: Status List 2021]].
+When `credentialStatus` is deinfed, it MUST use StatusList2021 , as defined in section 5.1 of [[ref: Status List 2021]].
 
 StatusList2021 MUST be discovered using either DID Relative URLs stored in an ID Hub or HTTPS URL. 
 
-An Issuer of a VC MAY have an ID Hub serviceEndpoint in the Issuer's DID Document. ID Hubs are the single endpoint to look up objects associated with a DID, as defined in [Identity-Hub].
+An Issuer of a VC MAY have an ID Hub serviceEndpoint in the Issuer's DID Document. ID Hubs are the single endpoint to look up objects associated with a DID, defined in [[ref: Identity Hub (0.0.1 Predraft)]].
+
 Below is a non-normative example of a DID Document that includes a serviceEndpoint:
 
 ```json
@@ -676,7 +677,7 @@ Below is a storyboard that explains one concrete scenario using a workplace cred
 
 ## Examples
 
-Examples are listed inline in above sections as well as in complete form within [[ref:Test Vectors]].
+Examples are listed inline in above sections as well as in complete form within [Test Vectors](#test-vectors).
 
 ## Implementations
 
