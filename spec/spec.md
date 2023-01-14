@@ -682,12 +682,17 @@ Examples are listed inline in above sections as well as in complete form within 
 
 - Microsoft
 - Workday
-- Mattr
 - Ping Identity
+- Gen Digital
+- Spruce Systems Inc.
+- Auth0Lab
 
 ## Testing
 
-Implementations may test conformance of the wallets to this profile using this [verification website](https://vcinteroptesting.azurewebsites.net/verifier).
+Implementations may test conformance of the wallets to this profile using the following verification websites:
+
+- https://vcinteroptesting.azurewebsites.net/verifier
+- https://verifiablecredentials.dev/presentation
 
 ## Test Vectors
 
