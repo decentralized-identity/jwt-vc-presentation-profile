@@ -29,7 +29,7 @@ Participate:
 
 ## Abstract
 
-The JWT VC Presentation Profile defines a set of requirements against existing specifications to enable the interoperable presentation of [[ref:Verifiable Credentials]] (VCs) between [[ref: Wallets]] and [[ref: Verifiers]].
+The JWT VC Presentation Profile defines a set of requirements against existing specifications to enable the interoperable presentation of [[ref:Verifiable Credentials]] (VCs) between ref: Wallets and ref: Verifiers.
 
 This document is not a specification, but a **profile**. It outlines existing specifications required for implementations to interoperate among each other. It also clarifies mandatory to implement features for the optionalities mentioned in the referenced specifications.
 
@@ -95,47 +95,46 @@ This section consolidates in one place common terms used across open standards t
 [[def:Authorization Response]]
 ~ OAuth 2.0 Authorization Response extended by [[ref:OIDC]] and [[ref:OpenID4VP]]
 
-[[def:Decentralized Identifier, DID]]
+[[def:Decentralized Identifier (DID)]]
 ~ An identifier with its core ability being enabling Clients to obtain key material and other metadata by reference
 
 [[def:End User]]
 ~ Human Participant.
 
-[[def:Holder]]
+[[def: Holder]]
 ~ An entity that possesses or holds verifiable credentials and can generate verifiable presentations from them as defined in [[ref: VC Data Model]].
 
-[[def: OpenID Provider (OP), OpenID Provider, OP]]
+[[def: OpenID Provider (OP)]]
 ~ OAuth 2.0 Authentication Server implementing [[ref:OIDC]] and [[ref:OpenID4VP]]
 
 [[def: Presentation]] 
 ~ Data derived from one or more verifiable credentials, issued by one or more issuers, that is shared with a verifier
 
-[[def: Relying Party (RP), Relying Party, RP]]
+[[def: Relying Party (RP)]]
 ~ OAuth 2.0 Client application using [[ref:OIDC]] and [[ref:OpenID4VP]] in [[ref:SIOPv2]]. Synonymous with term
   [[ref:Verifier]] in [[ref: VC Data Model]]
 
 [[def:Request Object]]
 ~ JWT that contains a set of request parameters as its [[ref:Claims]]
   
-[[def:Self Issued OpenID Provider (SIOP), Self Issued OpenID Provider, SIOP]]  
-~ An OpenID Provider (OP) used by an [[ref:End User]] to prove control over a cryptographically verifiable identifier such as a [[ref:DID]].
+[[def:Self Issued OpenID Provider (Self-Issued OP)]]  
+~ An OpenID Provider (OP) used by an [[ref:End User]] to prove control over a cryptographically verifiable identifier such as a DID.
 
-[[def:Verifiable Credential, VC, Verifiable Credentials]]
+[[def: Verifiable Credential (VC)]]
 ~ A set of one or more [[ref:Claims]] made by an issuer that is tamper-evident and has authorship that can be cryptographically
   verified.
 
-[[def:Verifiable Presentation (VP), Verifiable Presentation, VP, Verifiable Presentations]] 
+[[def: Verifiable Presentation (VP)]] 
 ~ A [[ref:Presentation]] that is tamper-evident and has authorship that can be cryptographically verified
 
-[[def:Verifier, Verifiers]]
-~ An entity that receives one or more verifiable credential inside a verifiable presentation for processing. Synonymous
-  with the term [[ref: Relying Party (RP)]]
+[[def: Verifier]]
+~ An entity that receives one or more Verifiable Credential inside a Verifiable Presentation for processing. During presentation of Credentials, Verifier acts as an OAuth 2.0 Client towards the Wallet that is acting as an OAuth 2.0 Authorization Server. The Verifier is a specific case of OAuth 2.0 Client, just like Relying Party (RP) in [@OpenID.Core].
 
-[[def: Issuer, Issuers]]
+[[def: Issuer]]
 ~ An entity that issues Verifiable Credentials.
 
-[[def:Wallet, Wallets]]
-~ An entity that receives, stores, presents, and manages credentials and key material of the End User. Acts as a [[ref:Self Issued OpenID Provider (SIOP)]]
+[[def: Wallet]]
+~ An entity that receives, stores, presents, and manages credentials and key material of the End User. During presentation of VP(s) using [[ref: OpenID4VP]], the Wallet acts as an OAuth 2.0 Authorization Server towards the Verifier that is acting as an OAuth 2.0 Client. During user authentication using [[ref: SIOPv2]], the Wallet acts as a Self Issued OpenID Provider towards the Verifier that is a specific case of the Relying Party in [[ref: OpenID Connect Core]]. 
 
 ## Profile
 
