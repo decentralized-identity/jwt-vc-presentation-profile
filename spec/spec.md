@@ -29,11 +29,11 @@ Participate:
 
 ## Abstract
 
-The JWT VC Presentation Profile defines a set of requirements against existing specifications to enable the interoperable presentation of [[ref:Verifiable Credentials]] (VCs) between [[ref: Wallets]] and [[ref: Verifiers]].
+The JWT VC Presentation Profile defines a set of requirements against existing specifications to enable the interoperable presentation of Verifiable Credentials (VCs) between Wallets and Verifiers.
 
 This document is not a specification, but a **profile**. It outlines existing specifications required for implementations to interoperate among each other. It also clarifies mandatory to implement features for the optionalities mentioned in the referenced specifications.
 
-The profile uses OpenID for Verifiable Presentations ([[ref: OpenID4VP ID1]]) as the base protocol for the request and verification of JWT VCs encapsulated in [[ref:Verifiable Presentations]]. A full list of the open standards used in this profile can be found in [Overview of the Open Standards Requirements](#overview-of-the-open-standards-requirements).
+The profile uses OpenID for Verifiable Presentations ([[ref: OpenID4VP ID1]]) as the base protocol for the request and verification of JWT VCs as Verifiable Presentations. A full list of the open standards used in this profile can be found in [Overview of the Open Standards Requirements](#overview-of-the-open-standards-requirements).
 
 ### Audience
 
@@ -45,7 +45,7 @@ The status of the JWT VC Presentation Profile v1.0.0 is a PRE-DRAFT specificatio
 
 ### Description
 
-The [[ref: VC Data Model v1.1]] defines the data model of Verifiable Credentials (VCs) but does not prescribe standards for transport protocol, key management, authentication, query language, etc. As a result, implementers must decide which standards to use for their presentations without a guarantee that others will support the same set of standards.
+The [[ref: VC Data Model v1.1]] specification defines the data model of Verifiable Credentials (VCs) but does not prescribe standards for transport protocol, key management, authentication, query language, etc. As a result, implementers must decide which standards to use for their presentations without a guarantee that others will support the same set of standards.
 
 This document aims to provide a path to interoperability by standardizing the set of specifications that enable the presentation of JWT-VCs between implementers. Future versions of this document will include details on issuance and wallet interoperability. Ultimately, this profile will define a standardized approach to Verifiable Credentials so that distributed developers, apps, and systems can share credentials through common means.
 
@@ -90,10 +90,10 @@ A description to the reader on how the document is structured.
 This section consolidates in one place common terms used across open standards that this profile consists of. For the details of these, as well as other useful terms, see text within each of the specification listed in [[ref:References]].
 
 [[def:Authorization Request]]
-~ OAuth 2.0 Authorization Request extended by [[ref:OIDC]] and [[ref:OpenID4VP]]
+~ OAuth 2.0 Authorization Request extended by [[ref: OpenID Connect Core]] and [[ref:OpenID4VP]]
 
 [[def:Authorization Response]]
-~ OAuth 2.0 Authorization Response extended by [[ref:OIDC]] and [[ref:OpenID4VP]]
+~ OAuth 2.0 Authorization Response extended by [[ref: OpenID Connect Core]] and [[ref:OpenID4VP]]
 
 [[def:Claim, Claims]]
 ~ An assertion made about the subject of a credential
@@ -108,34 +108,34 @@ This section consolidates in one place common terms used across open standards t
 ~ An entity that possesses or holds verifiable credentials and can generate verifiable presentations from them as defined in [[ref: VC Data Model]].
 
 [[def: OpenID Provider (OP), OpenID Provider, OP]]
-~ OAuth 2.0 Authentication Server implementing [[ref:OIDC]] and [[ref:OpenID4VP]]
+~ OAuth 2.0 Authentication Server implementing [[ref: OpenID Connect Core]] and [[ref:OpenID4VP]]
 
 [[def: Presentation]] 
 ~ Data derived from one or more verifiable credentials, issued by one or more issuers, that is shared with a verifier
 
 [[def: Relying Party (RP), Relying Party, RP]]
-~ OAuth 2.0 Client application using [[ref:OIDC]] and [[ref:OpenID4VP]] in [[ref:SIOPv2]]. Synonymous with term
-  [[ref:Verifier]] in [[ref: VC Data Model]]
+~ OAuth 2.0 Client application using [[ref: OpenID Connect Core]] and [[ref:OpenID4VP]] in [[ref:SIOPv2]]. Synonymous with term
+  Verifier in [[ref: VC Data Model]]
 
 [[def:Request Object]]
-~ JWT that contains a set of request parameters as its [[ref:Claims]]
+~ JWT that contains a set of request parameters as its Claims
   
 [[def:Self Issued OpenID Provider (SIOP), Self Issued OpenID Provider, SIOP]]  
-~ An OpenID Provider (OP) used by an [[ref:End User]] to prove control over a cryptographically verifiable identifier such as a [[ref:DID]].
+~ An OpenID Provider (OP) used by an End User to prove control over a cryptographically verifiable identifier such as a DID.
 
 [[def:Verifiable Credential, VC, Verifiable Credentials]]
-~ A set of one or more [[ref:Claims]] made by an issuer that is tamper-evident and has authorship that can be cryptographically
+~ A set of one or more Claims made by an issuer that is tamper-evident and has authorship that can be cryptographically
   verified.
 
 [[def:Verifiable Presentation (VP), Verifiable Presentation, VP, Verifiable Presentations]] 
-~ A [[ref:Presentation]] that is tamper-evident and has authorship that can be cryptographically verified
+~ A Presentation that is tamper-evident and has authorship that can be cryptographically verified
 
 [[def:Verifier, Verifiers]]
 ~ An entity that receives one or more verifiable credential inside a verifiable presentation for processing. Synonymous
-  with the term [[ref: Relying Party (RP)]]
+  with the term Relying Party (RP)
 
 [[def:Verification]]
-~ The process in which a [[ref:Verifier]] validates that the verifiable credential inside a verifiable presentation is authentic
+~ The process in which a Verifier validates that the verifiable credential inside a verifiable presentation is authentic
   and a timely statement of the issuer or presenter
 
 [[def:Wallet, Wallets]]
@@ -200,13 +200,13 @@ sequenceDiagram
 - Verification Material intended for use in the profile MUST use `publicKeyJwk` ([[ref: DID Core]] section 5.2.1).  The keys MUST be secp256k1 or Ed25519, see the _Cryptographic Signature_ section.
 - DID Documents may contain Verification Material not intended for use with this profile of any Verification Material Type and any key format or algorithm.
 - To bind an owner of a DID to a controller of a certain origin, a Well Known DID Configuration MUST be used as defined in [[ref: Well Known DID]].
-- For Revocation of VCs, Status List 2021 as defined in [[ref: Status List 2021]] MUST be discovered using either DID Relative URLs stored in an HTTPS URL or ID Hub be used in combination with Identity Hubs as defined in [[def: Identity Hub (0.0.1 Predraft)]] (Decentralized Web Node v0.0.1 predraft).
+- For Revocation of VCs, Status List 2021 as defined in [[ref: Status List 2021]] MUST be discovered using either DID Relative URLs stored in an HTTPS URL or ID Hub be used in combination with Identity Hubs as defined in [[ref: Identity Hub (0.0.1 Predraft)]].
 
 This profile uses certain versions of specifications that have not yet reached final status: For more details see Normative References section.
 
   - First Implementer's Draft of Self-Issued OpenID Provider v2 specification
   - First Implementer's Draft of OpenID for Verifiable Prensetations specification
-  - ID Hub specification published as a v0.0.1 predraft of [Decentralized Web Node](https://identity.foundation/decentralized-web-node/spec/). We will continue to use the term ID Hub rather than Decentralized Web Node to avoid confusion.
+  - ID Hub specification published as a v0.0.1 predraft of [[ref: Decentralized Web Node]]. We will continue to use the term ID Hub rather than Decentralized Web Node to avoid confusion.
 
 #### Security Considerations
 
@@ -253,7 +253,7 @@ When relative DID URL is used as a `kid`, `kid` only contains a DID fragment of 
 
 ### Authorization Request
 
-[[ref: SIOPv2 ID1]] MUST be used for key management and authentication, [[ref: OpenID4VP ID1]] MUST be used to transport Verifiable Credentials, and [[ref: Presentation Exchange]] MUST be used as a query language as defined in [[ref: OpenID4VP ID1]].
+[[ref: SIOPv2 ID1]] MUST be used for key management and authentication, [[ref: OpenID4VP ID1]] MUST be used to transport Verifiable Credentials, and [[ref: Presentation Exchange v1.0.0]] MUST be used as a query language as defined in [[ref: OpenID4VP ID1]].
 
 #### Invoking Self-Issued OP
 
@@ -261,7 +261,7 @@ Custom URL Scheme `openid-vc://` MUST be used to invoke Self-Issued OP.
 
 #### Self-Issued OP Request URI
 
-Request object shall be passed by reference, rather than by value, as defined in Section 6.2 of [[ref: OIDC]]. The Holder Wallet retrieves full Request Object value from the resource at the `request_uri`.
+Request object shall be passed by reference, rather than by value, as defined in Section 6.2 of [[ref: OpenID Connect Core]]. The Holder Wallet retrieves full Request Object value from the resource at the `request_uri`.
 
 There are multiple ways for a Verifier/RP to communicate `request_uri` to the Self-Issued OP. `request_uri` can be obtained from a QR code when Self-Issued OP is on a different device than the one on which the user interaction is occurring. It can also be obtained from a deep link when Self-Issued OP is on the same device as the one on which the user interaction is occurring.
 
@@ -269,11 +269,11 @@ The Self-Issued OP Request URI has an `openid` scheme.
 
 The `request_uri` parameter is a HTTP URL from where the Holder Wallet can retrieve a full Request Object.
 
-The Holder Wallet will retrieve the Request Object value from the `request_uri` as defined in section 6 of [[ref: OIDC]].
+The Holder Wallet will retrieve the Request Object value from the `request_uri` as defined in section 6 of [[ref: OpenID Connect Core]].
 
 The Self-Issued OP request URI MUST include the following parameter:
 * `request_uri`
-  * REQUIRED. URL where Request Object value can be retrieved from, as specified in section 6.2 of [[ref: OIDC]].
+  * REQUIRED. URL where Request Object value can be retrieved from, as specified in section 6.2 of [[ref: OpenID Connect Core]].
 
 Below is a non-normative example of a Self-Issued OP URI and a QR Code which contains the encoded URI:
 
@@ -312,7 +312,7 @@ The Self-Issued OP request object obtained via request_uri MUST include the foll
 * `redirect_uri`
   * REQUIRED. URI where the response will be sent.
 * `nonce`
-  * REQUIRED. String value used to associate a Client session with an ID Token, and to mitigate replay attacks, as specified in section 3.1.2.1. of [[ref: OIDC]].
+  * REQUIRED. String value used to associate a Client session with an ID Token, and to mitigate replay attacks, as specified in section 3.1.2.1. of [[ref: OpenID Connect Core]].
 
 
 ##### Self-Issued OP Discovery
@@ -409,7 +409,7 @@ Below is a non-normative example of a Domain Linkage Credential that is hosted a
 
 ##### Requesting Verifiable Credentials
 
-A Specific VC type MUST be requested using [[ref: Presentation Exchange]] syntax in the Self-Issued OP request as defined in section 8 of [[ref: OpenID4VP ID1]]. `presentation_definition` property defined in [[ref: Presentation Exchange]] MUST be included in a `vp_token` property as defined in [[ref: OpenID4VP ID1]], which MUST be included in a `claims` parameter defined in [[ref: OIDC]].
+A Specific VC type MUST be requested using [[ref: Presentation Exchange v1.0.0]] syntax in the Self-Issued OP request as defined in section 8 of [[ref: OpenID4VP ID1]]. `presentation_definition` property defined in [[ref: Presentation Exchange v1.0.0]] MUST be included in a `vp_token` property as defined in [[ref: OpenID4VP ID1]], which MUST be included in a `claims` parameter defined in [[ref: OpenID Connect Core]].
 
 Below is a non-normative example of a `claims` parameter:
 ```json
@@ -438,7 +438,7 @@ Below is a non-normative example of a `claims` parameter:
 
 ### End-user Consent
 
-When the Self-Issued OP displays the consent screen to the user, it is RECOMMENDED to display the domain name obtained using [Linked Domains](#linked-domain-verification). Displaying details of the consent using registration parameters such as `client_name`, `logo_uri`, and `client_purpose` defined in [Registration Metadata](#verifierrp-registration-metadata) is OPTIONAL.
+When the Self-Issued OP displays the consent screen to the user, it is RECOMMENDED to display the domain name obtained using as defined in [Linked Domain Verification](#linked-domain-verification). Displaying details of the consent using registration parameters such as `client_name`, `logo_uri`, and `client_purpose` defined in [Registration Metadata](#verifierrp-registration-metadata) is OPTIONAL.
 
 Note that displaying the domain name of the Verifier/RP helps the End-users to identify malicious Verifiers/RPs who has copied registration parameters of good Verifiers/OP and are impersonating them.
 
@@ -491,7 +491,7 @@ Verifiers MUST go through (at least) the following steps before trusting/using a
 5. Check that the DID value in the `kid` and `iss` claims match in each of the VC(s).
 6. Validate signature(s) on each VC(s). Validation is performed against the key obtained from a DID Document. DID Document MUST be obtained by resolving a Decentralized Identifier included in the `iss` claim using DID Resolution. If a DID Doc contains multiple keys, kid in the header is used to identify which key to use.
 7. Check that the DID value in the `iss` Claim of a VP exactly match with the `sub` Claim in the VC(s). (Holder Binding)
-8. Perform the checks required by the Verifier's policy, based on the set of trust requirements such as trust frameworks it belongs to. The checks can include Linked Domain verification of the Credential Issuer's DID using the mechanism defined in [[ref: Linked Domain Verification]] and Credential status validation of the VC(s) using the mechanism defined in [[ref: Revocation]].
+8. Perform the checks required by the Verifier's policy, based on the set of trust requirements such as trust frameworks it belongs to. The checks can include Linked Domain verification of the Credential Issuer's DID using the mechanism defined in [Linked Domain Verification](#linked-domain-verification) and Credential status validation of the VC(s) using the mechanism defined in [Revocation](#revocation).
 
 #### ID Token example
 
@@ -580,8 +580,8 @@ Below is a non-normative example of a DID Document obtained by resolving a long-
 
 The following two serviceEndpoints MUST be supported in the DID Document, but only one is required.
 
-1. LinkedDomain vis [[ref: Well Known DID]] spec
-1. [[def: Identity Hub (0.0.1 Predraft)]] (Decentralized Web Node v0.0.1 predraft))
+1. LinkedDomain as defined in [[ref: Well Known DID]]
+1. IdentityHub as defined in [[ref: Identity Hub (0.0.1 Predraft)]]
 
 ### Revocation
 
@@ -589,13 +589,14 @@ StatusList2021 MUST be used for revocation of VCs, as defined in [[ref: Status L
 
 #### credentialStatus
 
-The issued VC MAY include a `credentialStatus` property
+The issued VC MAY include a `credentialStatus` property.
 
-When `credentialStatus` is deinfed it MUST use StatusList2021 , as defined in section 5.1 of [[ref: Status List 2021]].
+When `credentialStatus` is deinfed, it MUST use StatusList2021 , as defined in section 5.1 of [[ref: Status List 2021]].
 
 StatusList2021 MUST be discovered using either DID Relative URLs stored in an ID Hub or HTTPS URL. 
 
-An Issuer of a VC MAY have an ID Hub serviceEndpoint in the Issuer's DID Document. ID Hubs are the single endpoint to look up objects associated with a DID, as defined in [Identity-Hub].
+An Issuer of a VC MAY have an ID Hub serviceEndpoint in the Issuer's DID Document. ID Hubs are the single endpoint to look up objects associated with a DID, defined in [[ref: Identity Hub (0.0.1 Predraft)]].
+
 Below is a non-normative example of a DID Document that includes a serviceEndpoint:
 
 ```json
@@ -676,7 +677,7 @@ Below is a storyboard that explains one concrete scenario using a workplace cred
 
 ## Examples
 
-Examples are listed inline in above sections as well as in complete form within [[ref:Test Vectors]].
+Examples are listed inline in above sections as well as in complete form within [Test Vectors](#test-vectors).
 
 ## Implementations
 
@@ -1017,7 +1018,7 @@ Note: The example VC does not contain a resolvable status list.
 
 ### Normative References
 
-[[def: OIDC]]
+[[def: OpenID Connect Core]]
 ~ [Open ID Connect](https://openid.net/specs/openid-connect-core-1_0.html). Nat Sakimura, John Bradley, Michael B. Jones, Breno de Medeiros, Chuck Mortimore. 2014.11. Status: Approved Specification.
 
 [[def: DID Core]]
@@ -1062,4 +1063,7 @@ Note: The example VC does not contain a resolvable status list.
 ~ [JSON Web Proof](https://github.com/json-web-proofs/json-web-proofs/blob/main/draft-jmiller-json-web-proof.md). Jeremie Miller, David Waite, Michael B. Jones. Status: Internet-Draft.
 
 [[def: JPA]]
-~ [JSON Proof Algorithms](https://github.com/json-web-proofs/json-web-proofs/blob/main/draft-jmiller-json-proof-algorithms.md) Jeremie Miller, Michael B. Jones. Status: Internet-Draft.
+~ [JSON Proof Algorithms](https://github.com/json-web-proofs/json-web-proofs/blob/main/draft-jmiller-json-proof-algorithms.md). Jeremie Miller, Michael B. Jones. Status: Internet-Draft.
+
+[[def: Decentralized Web Node]]
+~ [Decentralized Web Node](https://identity.foundation/decentralized-web-node/spec/). Daniel Buchner, Tobias Looker. Status: Draft.
