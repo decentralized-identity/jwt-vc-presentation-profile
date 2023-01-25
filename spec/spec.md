@@ -19,7 +19,7 @@ Contributors:
 ~ Daniel Godbout (Microsoft)
 ~ Rohit Gulati (Microsoft)
 ~ Eric Kuhn (Kraken)
-~ Jeremie Grant (Ping Identity)
+~ Jeremie Miller (Ping Identity)
 ~ Oliver Terbu (Spruce)
 
 Participate:
@@ -35,7 +35,7 @@ The JWT VC Presentation Profile defines a set of requirements against existing s
 
 This document is not a specification, but a **profile**. It outlines existing specifications required for implementations to interoperate among each other. It also clarifies mandatory to implement features for the optionalities mentioned in the referenced specifications.
 
-The profile uses OpenID for Verifiable Presentations ([[ref: OpenID4VP ID1]]) as the base protocol to request presentation of JWT VCs encapsulated in [[ref:Verifiable Presentations]] ([[ref: VC Data Model v1.1]]). A full list of the open standards used in this profile can be found in [Overview of the Open Standards Requirements](#overview-of-the-open-standards-requirements).
+The profile uses OpenID for Verifiable Presentations ([[ref: OpenID4VP ID1]]) as the base protocol for the presentation of JWT VCs encapsulated in [[ref:Verifiable Presentations]] ([[ref: VC Data Model v1.1]]). A full list of the open standards used in this profile can be found in [Overview of the Open Standards Requirements](#overview-of-the-open-standards-requirements).
 
 ### Audience
 
