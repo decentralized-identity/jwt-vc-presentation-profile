@@ -19,7 +19,7 @@ Contributors:
 ~ Daniel Godbout (Microsoft)
 ~ Rohit Gulati (Microsoft)
 ~ Eric Kuhn (Kraken)
-~ Jeremie Grant (Ping Identity)
+~ Jeremie Miller (Ping Identity)
 ~ Oliver Terbu (Spruce)
 
 Participate:
