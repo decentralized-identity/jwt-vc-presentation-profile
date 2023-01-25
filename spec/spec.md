@@ -47,40 +47,39 @@ The status of the JWT VC Presentation Profile v1.0.0 is a PRE-DRAFT specificatio
 
 ### Description
 
-The [[ref: VC Data Model v1.1]] specification defines the data model of Verifiable Credentials (VCs) but does not prescribe standards for transport protocol, key management, authentication, query language, etc. As a result, implementers must decide which standards to use for their presentations without a guarantee that others will support the same set of standards.
+The [[ref: VC Data Model v1.1]] specification defines the data model of Verifiable Credentials (VCs) but does not prescribe standards for transport protocol, key management, authentication, query language, etc. As a result, if implementers decide which standards to use for their implementations on their own, there is no guarantee that other companies will also support the same set of standards.
 
-This document aims to provide a path to interoperability by standardizing the set of specifications that enable the presentation of JWT-VCs between implementers. Future versions of this document will include details on issuance and Wallet interoperability. Ultimately, this profile will define a standardized approach to Verifiable Credentials so that distributed developers, apps, and systems can share credentials through common means.
+This document aims to provide a path to interoperability by standardizing the set of specifications that enable the presentation of JWT VCs between implementers. Future versions of this document will include details on issuance and Wallet interoperability. Ultimately, this profile will define a standardized approach to Verifiable Credentials so that distributed developers, apps, and systems can share credentials through common means.
 
 
 ### Scope
 
 #### Scope
-This document is currently scoped for the presentation of VCs between the Self-Issued OP and the Verifier/RP, also known as the RP. The Self-Issued OP is a native mobile application. The following aspects of the presentation are covered:
+
+This document is currently scoped for the presentation of VCs between the Wallet and the Verifier. The Wallet is a native mobile application. The following aspects are in scope:
 
 - Data model
-- Key management
-- Transportation of VCs
-- Query language
+- Protocol to request presentation of VCs, including query language
+- User authentication layer using Self-Issued ID Token
+- Mechanism to establishing trust in the DID via Domain Linkage
 - Identifiers of the entities
 - Revocation of VCs
-
-The JWT VC Presentation Profile currently supports only one response mode, assuming that a Self-Issued OP is on a different device than the one on which the End-User has initiated a user interaction at the Verifier/RP, even if it is not.
-
-Supporting an additional response mode when Self-Issued OP is on the same device as the one on which the End-User has initiated a user interaction at the Verifier/RP might be added in the future.
+- Crypto suites
 
 #### Out of Scope
+
 The following items are out of scope for the current version of this document:
-- Issuance of VCs
+- Issuance of the VCs
 - Advanced concepts in the [[ref: VC Data Model v1.1]]: `credentialSchema` (`credentialType` is used instead), `refreshService`, `termsOfUse`, `evidence`, and Disputes.
 - Selective disclosure and unlinkability
 - Zero-Knowledge Proofs
-- Non-native Self-Issued OPs like web applications, PWAs, etc.
+- Non-native Wallets like web applications, PWAs, etc.
 
-Note: Although selective disclosure and unlinkability are out of scope of this document, future versions will include JSON Web Proofs ([[ref: JWP]]) and JSON Web Algorithms ([[ref: JWA]]) once they get ratified in IETF.
+Note: Although selective disclosure and unlinkability are out of scope of this document, future versions will consider Selective Disclosure for JWTs ([[ref: SD-JWT]]), JSON Web Proofs ([[ref: JWP]]) and JSON Web Algorithms ([[ref: JWA]]) once they mature in IETF.
 
 ## Structure of this Document
 
-A description to the reader on how the document is structured.
+First, this profile outlines open standards required to be supported. Than, it describes detailed requirements for each specification.
 
 ## Terminology
 
@@ -179,7 +178,7 @@ sequenceDiagram
   rp -->> siop: Acknowledgement
 ```
 
-### Overview of the Open Standards Requirements
+### Open Standards Requirements
 
 - VCs MUST adhere to the [[ref: VC Data Model v1.1]] and be encoded as JSON and signed as JWT as defined in 6.3.1 of [[ref: VC Data Model v1.1]]. VCs encoded as JSON-LD and signed using Linked Data Proofs are NOT supported.
 - For key management and authentication, First Implementer's Draft of Self-Issued OpenID Connect Provider v2, an extension to OpenID Connect, MUST be used as defined in [[ref: SIOPv2 ID1]].
@@ -192,13 +191,13 @@ sequenceDiagram
 - To bind an owner of a DID to a controller of a certain origin, a Well Known DID Configuration MUST be used as defined in [[ref: Well Known DID]].
 - For Revocation of VCs, Status List 2021 as defined in [[ref: Status List 2021]] MUST be discovered using either DID Relative URLs stored in an HTTPS URL or ID Hub be used in combination with Identity Hubs as defined in [[ref: Identity Hub (0.0.1 Predraft)]].
 
-This profile uses certain versions of specifications that have not yet reached final status: For more details see Normative References section.
+This profile uses certain versions of specifications that have not yet reached final status: For more details see [Normative References](#normative-references) section.
 
   - First Implementer's Draft of Self-Issued OpenID Provider v2 specification
   - First Implementer's Draft of OpenID for Verifiable Prensetations specification
-  - ID Hub specification published as a v0.0.1 predraft of [[ref: Decentralized Web Node]]. We will continue to use the term ID Hub rather than Decentralized Web Node to avoid confusion.
+  - ID Hub specification published as a v0.0.1 predraft of [[ref: Decentralized Web Node]]. Throughout the document, the term ID Hub, rather than Decentralized Web Node, will be used to avoid confusion.
 
-#### Security Considerations
+The JWT VC Presentation Profile currently only supports response mode `direct_post` defined in [[ref: OpenID4VP ID1]], sending Authorization Response as HTTP POST request.
 
 It is important to note that Cross-device SIOP is susceptible to a session phishing attack, where an attacker relays the Authorization Request from a good Verifier/RP to a victim and is able to sign in as a victim. Implementers MUST implement mitigations most suitable to the use-case. For more details and concrete mitigations, see section 15 Security Considerations in [[ref: SIOPv2 ID1]].
 
@@ -218,15 +217,15 @@ Verifiable Credentials included in a JWT-encoded Verifiable Presentation MUST be
 
 Base64url encoding is defined as a base64 encoding using the URL and filename safe character set defined in Section 5 of RFC4648, with all trailing '=' characters omitted (as permitted by Section 3.2 of RFC4648) and without the inclusion of any line breaks, whitespace, or other additional characters. Note that the base64url encoding of the empty octet sequence is the empty string. (See Appendix C of RFC7515 for notes on implementing base64url encoding without padding.)
 
-#### `exp` JWT claim
+#### `exp` JWT Claim
 
 `exp` JWT claim in JWT encoded VC or VP MUST be used to set the value of the "expirationDate" of the VC or VP, and not of the credentialSubject.
 
-#### `nbf` JWT claim
+#### `nbf` JWT Claim
 
 [[ref: VC Data Model v1.1]] specifies that "issuanceDate" property MUST be represented as an `nbf` JWT claim, and not `iat` JWT claim. This might sound couterintuitive, but the implementers of this profile MUST follow this guidance.
 
-#### `kid` JWT header
+#### `kid` JOSE header
 When absolute DID URL is used as a `kid`, DID value in a `kid` without a DID fragment MUST exactly match a DID included in a `iss` if it is a VC or a VP and `sub` if it is an ID Token.
 
 DID fragment in a `kid` identifies which key material in a DID Document to use to validate the signature on a VC/VP/ID Token. 
@@ -387,7 +386,7 @@ When creating a Verifier/RP's DID, the domain linked to that DID MUST be include
 }
 ```
 :::
-Prior to generating an Authorization Request, the Verifier/RP MUST create a Domain Linkage Credential in a JSON Web Token format. It MUST be included on the website via '/.well-known/did-configuration.json'.
+Prior to generating an Authorization Request, the Verifier/RP MUST create a Domain Linkage Credential in a JSON Web Token format. It MUST be included on the website via `/.well-known/did-configuration.json`.
 
 Below is a non-normative example of a Domain Linkage Credential that is hosted at `https://www.vcsatoshi.com/.well-known/did-configuration.json`:
 
@@ -644,6 +643,10 @@ Below is a description of a `credentialSubject` for a credential type `VerifiedE
 ```json
 [[insert: ./spec/assets/workplace_credential_vc.json]]
 ```
+
+## Security Considerations
+
+It is important to note that Cross-device SIOP is susceptible to a session phishing attack, where an attacker relays the request from a good Verifier/RP to a victim and is able to sign in as a victim. Implementers MUST implement mitigations most suitable to the use-case. For more details and concrete mitigations, see section 15 Security Considerations in [[ref: SIOPv2 ID1]].
 
 ## Use-Cases
 
@@ -949,15 +952,15 @@ The Wallet sends the Authorization Response back to the Verifier. The JWS is sig
   </section>
 </tab-panels>
 
-#### JWT-VC
-The JWT-VC within the VP Token of the Authorization Response is signed by the Credential Issuer.
+#### JWT VC
+The JWT VC within the VP Token of the Authorization Response is signed by the Credential Issuer.
 
 Note: The example VC does not contain a resolvable status list.
 
 <tab-panels selected-index="0">
   <nav>
-    <button type="button">JWT-VC</button>
-    <button type="button">Decoded JWT-VC</button>
+    <button type="button">JWT VC</button>
+    <button type="button">Decoded JWT VC</button>
   </nav>
   <section>
 
@@ -1057,3 +1060,6 @@ Note: The example VC does not contain a resolvable status list.
 
 [[def: Decentralized Web Node]]
 ~ [Decentralized Web Node](https://identity.foundation/decentralized-web-node/spec/). Daniel Buchner, Tobias Looker. Status: Draft.
+
+[[def: SD-JWT]]
+~ [Selective Disclosure for JWTs (SD-JWT)](https://datatracker.ietf.org/doc/html/draft-ietf-oauth-selective-disclosure-jwt). Daniel Fett, Kristina Yasuda, Brian Campbell. Status: Internet-Draft in Web Authorization Protocol WG
