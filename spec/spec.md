@@ -92,47 +92,44 @@ This section consolidates in one place common terms used across open standards t
 [[def:Authorization Response]]
 ~ OAuth 2.0 Authorization Response extended by [[ref: OpenID4VP]] and [[ref: SIOPv2]].
 
-[[def: Claim, Claims]]
-~ An assertion made about the subject of a credential by the Issuer.
-
 [[def: Decentralized Identifier, DID]]
 ~ An identifier with its core ability being enabling Clients to obtain key material and other metadata by reference, defined in [[ref: DID Core]]. 
-
-[[def: End User]]
-~ Participant.
 
 [[def: Holder]]
 ~ An entity that possesses or holds Verifiable Credentials and can generate Verifiable Presentations from them as defined in [[ref: VC Data Model v1.1]].
 
-[[def: OpenID Provider (OP), OpenID Provider, OP]]
-~ OAuth 2.0 Authentication Server implementing [[ref: OpenID Connect Core]] and [[ref: OpenID4VP]].
+[[def:End User]]
+~ Human Participant.
+
+[[def: OpenID Provider (OP)]]
+~ OAuth 2.0 Authentication Server implementing [[ref: OpenID Connect Core]] and [[ref: OpenID4VP]]
 
 [[def: Presentation]] 
 ~ Data derived from one or more Verifiable Credentials, issued by one or more issuers, that is shared with a Verifier.
 
-[[def: Relying Party (RP), Relying Party, RP]]
+[[def: Relying Party (RP)]]
 ~ OAuth 2.0 Client application using [[ref: OpenID Connect Core]] and [[ref: OpenID4VP]] in [[ref: SIOPv2]]. Synonymous with term Verifier.
 
 [[def:Request Object]]
 ~ JWT that contains a set of Authorization Request parameters as its Claims.
-  
-[[def:Self Issued OpenID Provider (SIOP), Self Issued OpenID Provider, SIOP]]  
+
+[[def: Self-Issued OpenID Provider (Self-Issued OP)]]  
 ~ An OpenID Provider (OP) used by an End User to prove control over a cryptographically verifiable identifier such as a DID.
 
-[[def:Verifiable Credential, VC, Verifiable Credentials]]
+[[def: Verifiable Credential (VC)]]
 ~ A set of one or more Claims made by an issuer that is tamper-evident and has authorship that can be cryptographically verified.
 
-[[def:Verifiable Presentation (VP), Verifiable Presentation, VP, Verifiable Presentations]] 
+[[def: Verifiable Presentation (VP)]] 
 ~ A Presentation that is tamper-evident and has authorship that can be cryptographically verified.
 
-[[def:Verifier, Verifiers]]
-~ An entity that receives one or more verifiable credential inside a verifiable presentation for processing. Synonymous with the term Relying Party (RP).
+[[def: Verifier]]
+~ An entity that receives one or more Verifiable Credentials inside a Verifiable Presentation for processing. During presentation of Credentials, Verifier acts as an OAuth 2.0 Client towards the Wallet that is acting as an OAuth 2.0 Authorization Server. The Verifier is a specific case of OAuth 2.0 Client, just like Relying Party (RP) in [[ref: OpenID Connect Core]].
 
-[[def:Verification]]
-~ The process in which a Verifier validates that the verifiable credential inside a verifiable presentation is authentic and a timely statement of the issuer or presenter.
+[[def: Issuer]]
+~ An entity that issues Verifiable Credentials.
 
-[[def:Wallet, Wallets]]
-~ An entity that receives, stores, presents, and manages credentials and key material of the End User. Acts as a [[ref:Self Issued OpenID Provider (SIOP)]].
+[[def: Wallet]]
+~ An entity that receives, stores, presents, and manages credentials and key material of the End User. During presentation of VP(s) using [[ref: OpenID4VP]], the Wallet acts as an OAuth 2.0 Authorization Server towards the Verifier that is acting as an OAuth 2.0 Client. During user authentication using [[ref: SIOPv2]], the Wallet acts as a Self Issued OpenID Provider towards the Verifier that is a specific case of the Relying Party in [[ref: OpenID Connect Core]]. 
 
 ## Profile
 
