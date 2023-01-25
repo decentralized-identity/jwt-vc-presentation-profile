@@ -207,7 +207,7 @@ This profile uses certain versions of specifications that have not yet reached f
   - First Implementer's Draft of OpenID for Verifiable Prensetations specification
   - ID Hub specification published as a v0.0.1 predraft of [Decentralized Web Node](https://identity.foundation/decentralized-web-node/spec/). Throughout the document, the term ID Hub, rather than Decentralized Web Node, will be used to avoid confusion.
 
-The JWT VC Presentation Profile currently only supports response mode `direct_post` defined in [[ref: OpenID4VP ID1]], sending Authorization Response as HTTP POST request, even if redirect would be possible since the End User is interacting with the Wallet and the the Verifier/RP on the same device.
+The JWT VC Presentation Profile currently only supports response mode `direct_post` defined in [[ref: OpenID4VP ID1]], sending Authorization Response as HTTP POST request.
 
 Supporting an additional response mode `fragment` and sending Authorization Response as a redirect might be added in the future.
 
