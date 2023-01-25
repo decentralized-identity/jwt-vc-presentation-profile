@@ -64,6 +64,8 @@ customElements.define("slide-panels",class extends HTMLElement{static get observ
 <dd>Daniel Godbout (Microsoft)</dd>
 <dd>Rohit Gulati (Microsoft)</dd>
 <dd>Eric Kuhn (Kraken)</dd>
+<dd>Jeremie Miller (Ping Identity)</dd>
+<dd>Oliver Terbu (Spruce)</dd>
 <dt>Participate:</dt>
 <dd><a path-0="github.com"path-1="decentralized-identity"path-2="jwt-vc-presentation-profile"href="https://github.com/decentralized-identity/jwt-vc-presentation-profile" >GitHub repo</a></dd>
 <dd><a path-0="github.com"path-1="decentralized-identity"path-2="jwt-vc-presentation-profile"path-3="issues"href="https://github.com/decentralized-identity/jwt-vc-presentation-profile/issues" >File a bug</a></dd>
@@ -71,16 +73,16 @@ customElements.define("slide-panels",class extends HTMLElement{static get observ
 </dl>
 <hr>
 <h2 id="abstract"><a class="toc-anchor" href="#abstract" >§</a> Abstract</h2>
-<p>The JWT VC Presentation Profile defines a set of requirements against existing specifications to enable the interoperable presentation of <a class="term-reference" href="#term:verifiable-credentials">Verifiable Credentials</a> (VCs) between <a class="term-reference" href="#term:wallets">Wallets</a> and <a class="term-reference" href="#term:verifiers">Verifiers</a>.</p>
+<p>The JWT VC Presentation Profile defines a set of requirements against existing specifications to enable the interoperable presentation of Verifiable Credentials (VCs) between Wallets and Verifiers.</p>
 <p>This document is not a specification, but a <strong>profile</strong>. It outlines existing specifications required for implementations to interoperate among each other. It also clarifies mandatory to implement features for the optionalities mentioned in the referenced specifications.</p>
-<p>The profile uses OpenID for Verifiable Presentations (<a class="term-reference" href="#term:openid4vp-id1">OpenID4VP ID1</a>) as the base protocol for the request and verification of JWT VCs encapsulated in <a class="term-reference" href="#term:verifiable-presentations">Verifiable Presentations</a>. A full list of the open standards used in this profile can be found in <a href="#overview-of-the-open-standards-requirements" >Overview of the Open Standards Requirements</a>.</p>
+<p>The profile uses OpenID for Verifiable Presentations (<a class="term-reference" href="#term:openid4vp-id1">OpenID4VP ID1</a>) as the base protocol for the request and verification of W3C JWT VCs as W3C Verifiable Presentations (<a class="term-reference" href="#term:vc-data-model-v1.1">VC Data Model v1.1</a>). A full list of the open standards used in this profile can be found in <a href="#overview-of-the-open-standards-requirements" >Overview of the Open Standards Requirements</a>.</p>
 <h3 id="audience"><a class="toc-anchor" href="#audience" >§</a> Audience</h3>
-<p>The audience of the document includes verifiable credential implementers and/or enthusiasts. The first few sections give an overview of the problem area and profile requirements for JWT VC interoperability. Subsequent sections are detailed and technical, describing the protocol flow and request-responses.</p>
+<p>The audience of the document includes Verifiable Credential implementers and/or enthusiasts. The first few sections give an overview of the problem area and profile requirements for JWT VC interoperability. Subsequent sections are detailed and technical, describing the protocol flow and request-responses.</p>
 <h2 id="status-of-this-document"><a class="toc-anchor" href="#status-of-this-document" >§</a> Status of This Document</h2>
 <p>The status of the JWT VC Presentation Profile v1.0.0 is a PRE-DRAFT specification under development within the Decentralized Identity Foundation (DIF).</p>
 <h3 id="description"><a class="toc-anchor" href="#description" >§</a> Description</h3>
-<p>The <a class="term-reference" href="#term:vc-data-model-v1.1">VC Data Model v1.1</a> defines the data model of Verifiable Credentials (VCs) but does not prescribe standards for transport protocol, key management, authentication, query language, etc. As a result, implementers must decide which standards to use for their presentations without a guarantee that others will support the same set of standards.</p>
-<p>This document aims to provide a path to interoperability by standardizing the set of specifications that enable the presentation of JWT-VCs between implementers. Future versions of this document will include details on issuance and wallet interoperability. Ultimately, this profile will define a standardized approach to Verifiable Credentials so that distributed developers, apps, and systems can share credentials through common means.</p>
+<p>The <a class="term-reference" href="#term:vc-data-model-v1.1">VC Data Model v1.1</a> specification defines the data model of Verifiable Credentials (VCs) but does not prescribe standards for transport protocol, key management, authentication, query language, etc. As a result, implementers must decide which standards to use for their presentations without a guarantee that others will support the same set of standards.</p>
+<p>This document aims to provide a path to interoperability by standardizing the set of specifications that enable the presentation of JWT-VCs between implementers. Future versions of this document will include details on issuance and Wallet interoperability. Ultimately, this profile will define a standardized approach to Verifiable Credentials so that distributed developers, apps, and systems can share credentials through common means.</p>
 <h3 id="scope"><a class="toc-anchor" href="#scope" >§</a> Scope</h3>
 <h4 id="scope-2"><a class="toc-anchor" href="#scope-2" >§</a> Scope</h4>
 <p>This document is currently scoped for the presentation of VCs between the Self-Issued OP and the Verifier/RP, also known as the RP. The Self-Issued OP is a native mobile application. The following aspects of the presentation are covered:</p>
@@ -98,17 +100,9 @@ customElements.define("slide-panels",class extends HTMLElement{static get observ
 <p>The following items are out of scope for the current version of this document:</p>
 <ul>
 <li>Issuance of VCs</li>
-<li>Advanced concepts in the <a class="term-reference" href="#term:vc-data-model-v1.1">VC Data Model v1.1</a>:
-<ul>
-<li><code>credentialSchema</code> (<code>credentialType</code> is used instead)</li>
-<li><code>refreshService</code></li>
-<li><code>termsOfUse</code></li>
-<li><code>evidence</code></li>
+<li>Advanced concepts in the <a class="term-reference" href="#term:vc-data-model-v1.1">VC Data Model v1.1</a>: <code>credentialSchema</code> (<code>credentialType</code> is used instead), <code>refreshService</code>, <code>termsOfUse</code>, <code>evidence</code>, and Disputes.</li>
 <li>Selective disclosure and unlinkability</li>
 <li>Zero-Knowledge Proofs</li>
-<li>Disputes</li>
-</ul>
-</li>
 <li>Non-native Self-Issued OPs like web applications, PWAs, etc.</li>
 </ul>
 <p>Note: Although selective disclosure and unlinkability are out of scope of this document, future versions will include JSON Web Proofs (<a class="term-reference" href="#term:jwp">JWP</a>) and JSON Web Algorithms (<a class="term-reference" href="#term:jwa">JWA</a>) once they get ratified in IETF.</p>
@@ -118,45 +112,39 @@ customElements.define("slide-panels",class extends HTMLElement{static get observ
 <p>This section consolidates in one place common terms used across open standards that this profile consists of. For the details of these, as well as other useful terms, see text within each of the specification listed in <a class="term-reference" href="#term:references">References</a>.</p>
 <dl>
 <dt><span id="term:authorization-request">Authorization Request</span></dt>
-<dd>OAuth 2.0 Authorization Request extended by <a class="term-reference" href="#term:oidc">OIDC</a> and <a class="term-reference" href="#term:openid4vp">OpenID4VP</a></dd>
+<dd>OAuth 2.0 Authorization Request extended by <a class="term-reference" href="#term:openid4vp">OpenID4VP</a> and <a class="term-reference" href="#term:siopv2">SIOPv2</a>.</dd>
 <dt><span id="term:authorization-response">Authorization Response</span></dt>
-<dd>OAuth 2.0 Authorization Response extended by <a class="term-reference" href="#term:oidc">OIDC</a> and <a class="term-reference" href="#term:openid4vp">OpenID4VP</a></dd>
-<dt><span id="term:claims"><span id="term:claim">Claim</span></span></dt>
-<dd>An assertion made about the subject of a credential</dd>
+<dd>OAuth 2.0 Authorization Response extended by <a class="term-reference" href="#term:openid4vp">OpenID4VP</a> and <a class="term-reference" href="#term:siopv2">SIOPv2</a>.</dd>
 <dt><span id="term:did"><span id="term:decentralized-identifier">Decentralized Identifier</span></span></dt>
-<dd>An identifier with its core ability being enabling Clients to obtain key material and other metadata by reference</dd>
-<dt><span id="term:end-user">End User</span></dt>
-<dd>Participant</dd>
+<dd>An identifier with its core ability being enabling Clients to obtain key material and other metadata by reference, defined in <a class="term-reference" href="#term:did-core">DID Core</a>.</dd>
 <dt><span id="term:holder">Holder</span></dt>
-<dd>An entity that possesses or holds verifiable credentials and can generate verifiable presentations from them as defined in <a class="term-reference" href="#term:vc-data-model">VC Data Model</a>.</dd>
-<dt><span id="term:op"><span id="term:openid-provider"><span id="term:openid-provider-(op)">OpenID Provider (OP)</span></span></span></dt>
-<dd>OAuth 2.0 Authentication Server implementing <a class="term-reference" href="#term:oidc">OIDC</a> and <a class="term-reference" href="#term:openid4vp">OpenID4VP</a></dd>
+<dd>An entity that possesses or holds Verifiable Credentials and can generate Verifiable Presentations from them as defined in <a class="term-reference" href="#term:vc-data-model-v1.1">VC Data Model v1.1</a>.</dd>
+<dt><span id="term:end-user">End User</span></dt>
+<dd>Human Participant.</dd>
+<dt><span id="term:openid-provider-(op)">OpenID Provider (OP)</span></dt>
+<dd>OAuth 2.0 Authentication Server implementing <a class="term-reference" href="#term:openid-connect-core">OpenID Connect Core</a> and <a class="term-reference" href="#term:openid4vp">OpenID4VP</a></dd>
 <dt><span id="term:presentation">Presentation</span></dt>
-<dd>Data derived from one or more verifiable credentials, issued by one or more issuers, that is shared with a verifier</dd>
-<dt><span id="term:rp"><span id="term:relying-party"><span id="term:relying-party-(rp)">Relying Party (RP)</span></span></span></dt>
-<dd>OAuth 2.0 Client application using <a class="term-reference" href="#term:oidc">OIDC</a> and <a class="term-reference" href="#term:openid4vp">OpenID4VP</a> in <a class="term-reference" href="#term:siopv2">SIOPv2</a>. Synonymous with term
-<a class="term-reference" href="#term:verifier">Verifier</a> in <a class="term-reference" href="#term:vc-data-model">VC Data Model</a></dd>
+<dd>Data derived from one or more Verifiable Credentials, issued by one or more issuers, that is shared with a Verifier.</dd>
+<dt><span id="term:relying-party-(rp)">Relying Party (RP)</span></dt>
+<dd>OAuth 2.0 Client application using <a class="term-reference" href="#term:openid-connect-core">OpenID Connect Core</a> and <a class="term-reference" href="#term:openid4vp">OpenID4VP</a> in <a class="term-reference" href="#term:siopv2">SIOPv2</a>. Synonymous with term Verifier.</dd>
 <dt><span id="term:request-object">Request Object</span></dt>
-<dd>JWT that contains a set of request parameters as its <a class="term-reference" href="#term:claims">Claims</a></dd>
-<dt><span id="term:siop"><span id="term:self-issued-openid-provider"><span id="term:self-issued-openid-provider-(siop)">Self Issued OpenID Provider (SIOP)</span></span></span></dt>
-<dd>An OpenID Provider (OP) used by an <a class="term-reference" href="#term:end-user">End User</a> to prove control over a cryptographically verifiable identifier such as a <a class="term-reference" href="#term:did">DID</a>.</dd>
-<dt><span id="term:verifiable-credentials"><span id="term:vc"><span id="term:verifiable-credential">Verifiable Credential</span></span></span></dt>
-<dd>A set of one or more <a class="term-reference" href="#term:claims">Claims</a> made by an issuer that is tamper-evident and has authorship that can be cryptographically
-verified.</dd>
-<dt><span id="term:verifiable-presentations"><span id="term:vp"><span id="term:verifiable-presentation"><span id="term:verifiable-presentation-(vp)">Verifiable Presentation (VP)</span></span></span></span></dt>
-<dd>A <a class="term-reference" href="#term:presentation">Presentation</a> that is tamper-evident and has authorship that can be cryptographically verified</dd>
-<dt><span id="term:verifiers"><span id="term:verifier">Verifier</span></span></dt>
-<dd>An entity that receives one or more verifiable credential inside a verifiable presentation for processing. Synonymous
-with the term <a class="term-reference" href="#term:relying-party-(rp)">Relying Party (RP)</a></dd>
-<dt><span id="term:verification">Verification</span></dt>
-<dd>The process in which a <a class="term-reference" href="#term:verifier">Verifier</a> validates that the verifiable credential inside a verifiable presentation is authentic
-and a timely statement of the issuer or presenter</dd>
-<dt><span id="term:wallets"><span id="term:wallet">Wallet</span></span></dt>
-<dd>An entity that receives, stores, presents, and manages credentials and key material of the End User. Acts as a <a class="term-reference" href="#term:self-issued-openid-provider-(siop)">Self Issued OpenID Provider (SIOP)</a></dd>
+<dd>JWT that contains a set of Authorization Request parameters as its Claims.</dd>
+<dt><span id="term:self-issued-openid-provider-(self-issued-op)">Self-Issued OpenID Provider (Self-Issued OP)</span></dt>
+<dd>An OpenID Provider (OP) used by an End User to prove control over a cryptographically verifiable identifier such as a DID.</dd>
+<dt><span id="term:verifiable-credential-(vc)">Verifiable Credential (VC)</span></dt>
+<dd>A set of one or more Claims made by an issuer that is tamper-evident and has authorship that can be cryptographically verified.</dd>
+<dt><span id="term:verifiable-presentation-(vp)">Verifiable Presentation (VP)</span></dt>
+<dd>A Presentation that is tamper-evident and has authorship that can be cryptographically verified.</dd>
+<dt><span id="term:verifier">Verifier</span></dt>
+<dd>An entity that receives one or more Verifiable Credentials inside a Verifiable Presentation for processing. During presentation of Credentials, Verifier acts as an OAuth 2.0 Client towards the Wallet that is acting as an OAuth 2.0 Authorization Server. The Verifier is a specific case of OAuth 2.0 Client, just like Relying Party (RP) in <a class="term-reference" href="#term:openid-connect-core">OpenID Connect Core</a>.</dd>
+<dt><span id="term:issuer">Issuer</span></dt>
+<dd>An entity that issues Verifiable Credentials.</dd>
+<dt><span id="term:wallet">Wallet</span></dt>
+<dd>An entity that receives, stores, presents, and manages credentials and key material of the End User. During presentation of VP(s) using <a class="term-reference" href="#term:openid4vp">OpenID4VP</a>, the Wallet acts as an OAuth 2.0 Authorization Server towards the Verifier that is acting as an OAuth 2.0 Client. During user authentication using <a class="term-reference" href="#term:siopv2">SIOPv2</a>, the Wallet acts as a Self Issued OpenID Provider towards the Verifier that is a specific case of the Relying Party in <a class="term-reference" href="#term:openid-connect-core">OpenID Connect Core</a>.</dd>
 </dl>
 <h2 id="profile"><a class="toc-anchor" href="#profile" >§</a> Profile</h2>
 <h3 id="the-protocol-flow"><a class="toc-anchor" href="#the-protocol-flow" >§</a> The Protocol Flow</h3>
-<p>This section briefly describes the end to end verification flow. Concepts and terms mentioned here will be described in more detail in subsequent sections of this document.</p>
+<p>This section briefly describes the end to end flow. Concepts and terms mentioned here will be described in more detail in subsequent sections of this document.</p>
 <p>The flow begins as the Verifier generates a QR Code that contains a <code>request_uri</code> parameter which allows Self-Issued OP (SIOP) Request to be passed by reference. Verifier displays this QR code on their Verifier Website to initiate the exchange.</p>
 <div class="mermaid">
 sequenceDiagram
@@ -167,7 +155,7 @@ sequenceDiagram
   rp ->> rp: Displays QR Code
 </div>
 <p>Verifier Website presents the QR Code to the End User on their Verifier Website. The End User scans the QR Code using their Wallet. The Wallet parses the QR code to obtain the <code>request_uri</code>.</p>
-<p>The Wallet sends a GET request to the obtained <code>request_uri</code> to retrieve the Request Object. The Request Object is a signed JWT that contains a set of request parameters as defined in <a class="term-reference" href="#term:siopv2-id1">SIOPv2 ID1</a> and <a class="term-reference" href="#term:openid4vp-id1">OpenID4VP ID1</a>. In particular, Wallet will determine which VCs to submit to the Verifier by processing <code>presentation_definition</code> property in the Request Object.</p>
+<p>The Wallet sends a GET request to the obtained <code>request_uri</code> to retrieve the Request Object. The Request Object is a signed JWT that contains a set of Authorization Request parameters as defined in <a class="term-reference" href="#term:siopv2-id1">SIOPv2 ID1</a> and <a class="term-reference" href="#term:openid4vp-id1">OpenID4VP ID1</a>. In particular, Wallet will determine which VCs to submit to the Verifier by processing <code>presentation_definition</code> property in the Request Object.</p>
 <div class="mermaid">
 sequenceDiagram
   participant user as End User
@@ -201,16 +189,16 @@ sequenceDiagram
 <li>Verification Material intended for use in the profile MUST use <code>publicKeyJwk</code> (<a class="term-reference" href="#term:did-core">DID Core</a> section 5.2.1).  The keys MUST be secp256k1 or Ed25519, see the <em>Cryptographic Signature</em> section.</li>
 <li>DID Documents may contain Verification Material not intended for use with this profile of any Verification Material Type and any key format or algorithm.</li>
 <li>To bind an owner of a DID to a controller of a certain origin, a Well Known DID Configuration MUST be used as defined in <a class="term-reference" href="#term:well-known-did">Well Known DID</a>.</li>
-<li>For Revocation of VCs, Status List 2021 as defined in <a class="term-reference" href="#term:status-list-2021">Status List 2021</a> MUST be discovered using either DID Relative URLs stored in an HTTPS URL or ID Hub be used in combination with Identity Hubs as defined in <span id="term:identity-hub-(0.0.1-predraft)">Identity Hub (0.0.1 Predraft)</span> (Decentralized Web Node v0.0.1 predraft).</li>
+<li>For Revocation of VCs, Status List 2021 as defined in <a class="term-reference" href="#term:status-list-2021">Status List 2021</a> MUST be discovered using either DID Relative URLs stored in an HTTPS URL or ID Hub be used in combination with Identity Hubs as defined in <a class="term-reference" href="#term:identity-hub-(0.0.1-predraft)">Identity Hub (0.0.1 Predraft)</a>.</li>
 </ul>
 <p>This profile uses certain versions of specifications that have not yet reached final status: For more details see Normative References section.</p>
 <ul>
 <li>First Implementer’s Draft of Self-Issued OpenID Provider v2 specification</li>
 <li>First Implementer’s Draft of OpenID for Verifiable Prensetations specification</li>
-<li>ID Hub specification published as a v0.0.1 predraft of <a path-0="identity.foundation"path-1="decentralized-web-node"path-2="spec"path-3=""href="https://identity.foundation/decentralized-web-node/spec/" >Decentralized Web Node</a>. We will continue to use the term ID Hub rather than Decentralized Web Node to avoid confusion.</li>
+<li>ID Hub specification published as a v0.0.1 predraft of <a class="term-reference" href="#term:decentralized-web-node">Decentralized Web Node</a>. We will continue to use the term ID Hub rather than Decentralized Web Node to avoid confusion.</li>
 </ul>
 <h4 id="security-considerations"><a class="toc-anchor" href="#security-considerations" >§</a> Security Considerations</h4>
-<p>It is important to note that Cross-device SIOP is susceptible to a session phishing attack, where an attacker relays the request from a good Verifier/RP to a victim and is able to sign in as a victim. Implementers MUST implement mitigations most suitable to the use-case. For more details and concrete mitigations, see section 15 Security Considerations in <a class="term-reference" href="#term:siopv2-id1">SIOPv2 ID1</a>.</p>
+<p>It is important to note that Cross-device SIOP is susceptible to a session phishing attack, where an attacker relays the Authorization Request from a good Verifier/RP to a victim and is able to sign in as a victim. Implementers MUST implement mitigations most suitable to the use-case. For more details and concrete mitigations, see section 15 Security Considerations in <a class="term-reference" href="#term:siopv2-id1">SIOPv2 ID1</a>.</p>
 <h3 id="jwt-vcs"><a class="toc-anchor" href="#jwt-vcs" >§</a> JWT VCs</h3>
 <h4 id="using-jwt-claims-instead-of-their-counterparts-in-the-data-model-specification"><a class="toc-anchor" href="#using-jwt-claims-instead-of-their-counterparts-in-the-data-model-specification" >§</a> Using JWT claims instead of their counterparts in the data model specification</h4>
 <p>Section 6.3.1 of <a class="term-reference" href="#term:vc-data-model-v1.1">VC Data Model v1.1</a> provides two options for how to encode properties defined in VC Data Model v1.1 as a JWT:</p>
@@ -236,20 +224,20 @@ Due to this discussion (and the potential for transition), implementors are advi
 <p>When relative DID URL is used as a <code>kid</code>, <code>kid</code> only contains a DID fragment of a DID included in a <code>iss</code> if it is a VC or a VP and <code>sub</code> if it is an ID Token.</p>
 </div>
 <h3 id="authorization-request"><a class="toc-anchor" href="#authorization-request" >§</a> Authorization Request</h3>
-<p><a class="term-reference" href="#term:siopv2-id1">SIOPv2 ID1</a> MUST be used for key management and authentication, <a class="term-reference" href="#term:openid4vp-id1">OpenID4VP ID1</a> MUST be used to transport Verifiable Credentials, and <a class="term-reference" href="#term:presentation-exchange">Presentation Exchange</a> MUST be used as a query language as defined in <a class="term-reference" href="#term:openid4vp-id1">OpenID4VP ID1</a>.</p>
-<h4 id="invoking-self-issued-op"><a class="toc-anchor" href="#invoking-self-issued-op" >§</a> Invoking Self-Issued OP</h4>
+<p><a class="term-reference" href="#term:siopv2-id1">SIOPv2 ID1</a> MUST be used for key management and authentication, <a class="term-reference" href="#term:openid4vp-id1">OpenID4VP ID1</a> MUST be used to transport Verifiable Credentials, and <a class="term-reference" href="#term:presentation-exchange-v1.0.0">Presentation Exchange v1.0.0</a> MUST be used as a query language as defined in <a class="term-reference" href="#term:openid4vp-id1">OpenID4VP ID1</a>.</p>
+<h4 id="invoking-the-wallet"><a class="toc-anchor" href="#invoking-the-wallet" >§</a> Invoking the Wallet</h4>
 <p>Custom URL Scheme <code>openid-vc://</code> MUST be used to invoke Self-Issued OP.</p>
-<h4 id="self-issued-op-request-uri"><a class="toc-anchor" href="#self-issued-op-request-uri" >§</a> Self-Issued OP Request URI</h4>
-<p>Request object shall be passed by reference, rather than by value, as defined in Section 6.2 of <a class="term-reference" href="#term:oidc">OIDC</a>. The Holder Wallet retrieves full Request Object value from the resource at the <code>request_uri</code>.</p>
+<h4 id="authorization-request-uri"><a class="toc-anchor" href="#authorization-request-uri" >§</a> Authorization Request URI</h4>
+<p>Request object shall be passed by reference, rather than by value, as defined in Section 6.2 of <a class="term-reference" href="#term:openid-connect-core">OpenID Connect Core</a>. The Holder Wallet retrieves full Request Object value from the resource at the <code>request_uri</code>.</p>
 <p>There are multiple ways for a Verifier/RP to communicate <code>request_uri</code> to the Self-Issued OP. <code>request_uri</code> can be obtained from a QR code when Self-Issued OP is on a different device than the one on which the user interaction is occurring. It can also be obtained from a deep link when Self-Issued OP is on the same device as the one on which the user interaction is occurring.</p>
 <p>The Self-Issued OP Request URI has an <code>openid</code> scheme.</p>
 <p>The <code>request_uri</code> parameter is a HTTP URL from where the Holder Wallet can retrieve a full Request Object.</p>
-<p>The Holder Wallet will retrieve the Request Object value from the <code>request_uri</code> as defined in section 6 of <a class="term-reference" href="#term:oidc">OIDC</a>.</p>
-<p>The Self-Issued OP request URI MUST include the following parameter:</p>
+<p>The Holder Wallet will retrieve the Request Object value from the <code>request_uri</code> as defined in section 6 of <a class="term-reference" href="#term:openid-connect-core">OpenID Connect Core</a>.</p>
+<p>The Authorization Request URI MUST include the following parameter:</p>
 <ul>
 <li><code>request_uri</code>
 <ul>
-<li>REQUIRED. URL where Request Object value can be retrieved from, as specified in section 6.2 of <a class="term-reference" href="#term:oidc">OIDC</a>.</li>
+<li>REQUIRED. URL where Request Object value can be retrieved from, as specified in section 6.2 of <a class="term-reference" href="#term:openid-connect-core">OpenID Connect Core</a>.</li>
 </ul>
 </li>
 </ul>
@@ -259,7 +247,7 @@ Due to this discussion (and the potential for transition), implementors are advi
 <p><img src="./spec/assets/sample_qrcode.png" alt="Sample QR Code"></p>
 <h4 id="self-issued-op-request-object"><a class="toc-anchor" href="#self-issued-op-request-object" >§</a> Self-Issued OP Request Object</h4>
 <p>Upon receipt of the Request, the Holder Wallet MUST send an HTTP GET request to the <code>request_uri</code> to retrieve the referenced Request Object, unless it is already cached, and parse it to recreate the Request parameters.</p>
-<p>The response body to that request must be an encoded JWT. The media type must be <code>application/jwt</code></p>
+<p>The response body to that HTTP GET request MUST be an encoded JWT. The media type MUST be <code>application/jwt</code></p>
 <p>Below is a non-normative unencoded example of a retrieved Request Object:</p>
 <div id="non-normative-request-object" class="notice example"><a class="notice-link" href="#non-normative-request-object">EXAMPLE</a><pre class="language-json"><code class="language-json"><span class="token punctuation">{</span>
   <span class="token property">"alg"</span><span class="token operator">:</span> <span class="token string">"ES256K"</span><span class="token punctuation">,</span>
@@ -347,7 +335,7 @@ Due to this discussion (and the potential for transition), implementors are advi
 </li>
 <li><code>nonce</code>
 <ul>
-<li>REQUIRED. String value used to associate a Client session with an ID Token, and to mitigate replay attacks, as specified in section 3.1.2.1. of <a class="term-reference" href="#term:oidc">OIDC</a>.</li>
+<li>REQUIRED. String value used to associate a Client session with an ID Token, and to mitigate replay attacks, as specified in section 3.1.2.1. of <a class="term-reference" href="#term:openid-connect-core">OpenID Connect Core</a>.</li>
 </ul>
 </li>
 </ul>
@@ -436,8 +424,8 @@ Due to this discussion (and the potential for transition), implementors are advi
 </div>
 <p>Other Registration parameters defined in <a class="term-reference" href="#term:oidc-registration">OIDC Registration</a> can be used.</p>
 <h5 id="linked-domain-verification"><a class="toc-anchor" href="#linked-domain-verification" >§</a> Linked Domain Verification</h5>
-<p>To strengthen trust between the Verifier/RP and End-user, a Verifier/RP’s DID must be bound to its website. This proves the Verifier/RP controls both the DID and the origin and allows the End-user to verify this relationship. To bind an owner of a DID to a controller of a certain origin, Well Known DID Configuration MUST be used as defined in <a class="term-reference" href="#term:well-known-did">Well Known DID</a>.</p>
-<p>Validation of Domain Linkage Credentials by the wallet MUST follow the steps given in the <a class="term-reference" href="#term:well-known-did">Well Known DID</a> specification. To check validity of the Domain Linkage Credential, expiration property MUST be taken into account. Additional checks, e.g. of revocation, are not required by this profile. Since the Verifier/RP manages Domain Linkage Credentials and directly updates the DID Configuration Resource, the usage of a credentialStatus property for revocation in a Domain Linkage Credential typically is of little use.</p>
+<p>To strengthen trust between the Verifier/RP and End-user, a Verifier/RP’s DID MUST be bound to its website. This proves the Verifier/RP controls both the DID and the origin and allows the End-user to verify this relationship. To bind an owner of a DID to a controller of a certain origin, Well Known DID Configuration MUST be used as defined in <a class="term-reference" href="#term:well-known-did">Well Known DID</a>.</p>
+<p>Validation of Domain Linkage Credentials by the Wallet MUST follow the steps given in the <a class="term-reference" href="#term:well-known-did">Well Known DID</a> specification. To check validity of the Domain Linkage Credential, expiration property MUST be taken into account. Additional checks, e.g. of revocation, are not required by this profile. Since the Verifier/RP manages Domain Linkage Credentials and directly updates the DID Configuration Resource, the usage of a credentialStatus property for revocation in a Domain Linkage Credential typically is of little use.</p>
 <p>When creating a Verifier/RP’s DID, the domain linked to that DID MUST be included in a <code>serviceEndpoint</code> property of the DID Document as shown in a non-normative response below:</p>
 <div id="example-2" class="notice example"><a class="notice-link" href="#example-2">EXAMPLE</a><pre class="language-json"><code class="language-json"><span class="token punctuation">{</span>
   <span class="token property">"service"</span><span class="token operator">:</span> <span class="token punctuation">[</span>
@@ -450,7 +438,7 @@ Due to this discussion (and the potential for transition), implementors are advi
 <span class="token punctuation">}</span>
 </code></pre>
 </div>
-<p>Prior to a presentation request, the Verifier/RP MUST create a Domain Linkage Credential in a JSON Web Token format. It MUST be included on the website via ‘/.well-known/did-configuration.json’.</p>
+<p>Prior to generating an Authorization Request, the Verifier/RP MUST create a Domain Linkage Credential in a JSON Web Token format. It MUST be included on the website via ‘/.well-known/did-configuration.json’.</p>
 <p>Below is a non-normative example of a Domain Linkage Credential that is hosted at <code>https://www.vcsatoshi.com/.well-known/did-configuration.json</code>:</p>
 <div id="domain-linkage-credential" class="notice example"><a class="notice-link" href="#domain-linkage-credential">EXAMPLE</a><pre class="language-json"><code class="language-json"><span class="token punctuation">{</span>
   <span class="token property">"@context"</span><span class="token operator">:</span> <span class="token string">"https://identity.foundation/.well-known/contexts/did-configuration-v0.0.jsonld"</span><span class="token punctuation">,</span>
@@ -462,7 +450,7 @@ Due to this discussion (and the potential for transition), implementors are advi
 </code></pre>
 </div>
 <h5 id="requesting-verifiable-credentials"><a class="toc-anchor" href="#requesting-verifiable-credentials" >§</a> Requesting Verifiable Credentials</h5>
-<p>A Specific VC type MUST be requested using <a class="term-reference" href="#term:presentation-exchange">Presentation Exchange</a> syntax in the Self-Issued OP request as defined in section 8 of <a class="term-reference" href="#term:openid4vp-id1">OpenID4VP ID1</a>. <code>presentation_definition</code> property defined in <a class="term-reference" href="#term:presentation-exchange">Presentation Exchange</a> MUST be included in a <code>vp_token</code> property as defined in <a class="term-reference" href="#term:openid4vp-id1">OpenID4VP ID1</a>, which MUST be included in a <code>claims</code> parameter defined in <a class="term-reference" href="#term:oidc">OIDC</a>.</p>
+<p>A Specific VC type MUST be requested using <a class="term-reference" href="#term:presentation-exchange-v1.0.0">Presentation Exchange v1.0.0</a> syntax in the Self-Issued OP request as defined in section 8 of <a class="term-reference" href="#term:openid4vp-id1">OpenID4VP ID1</a>. <code>presentation_definition</code> property defined in <a class="term-reference" href="#term:presentation-exchange-v1.0.0">Presentation Exchange v1.0.0</a> MUST be included in a <code>vp_token</code> property as defined in <a class="term-reference" href="#term:openid4vp-id1">OpenID4VP ID1</a>, which MUST be included in a <code>claims</code> parameter defined in <a class="term-reference" href="#term:openid-connect-core">OpenID Connect Core</a>.</p>
 <p>Below is a non-normative example of a <code>claims</code> parameter:</p>
 <pre class="language-json"><code class="language-json"><span class="token punctuation">{</span>
   <span class="token property">"claims"</span><span class="token operator">:</span> <span class="token punctuation">{</span>
@@ -487,7 +475,7 @@ Due to this discussion (and the potential for transition), implementors are advi
 <span class="token punctuation">}</span>
 </code></pre>
 <h3 id="end-user-consent"><a class="toc-anchor" href="#end-user-consent" >§</a> End-user Consent</h3>
-<p>When the Self-Issued OP displays the consent screen to the user, it is RECOMMENDED to display the domain name obtained using <a href="#linked-domain-verification" >Linked Domains</a>. Displaying details of the consent using registration parameters such as <code>client_name</code>, <code>logo_uri</code>, and <code>client_purpose</code> defined in <a href="#verifierrp-registration-metadata" >Registration Metadata</a> is OPTIONAL.</p>
+<p>When the Self-Issued OP displays the consent screen to the user, it is RECOMMENDED to display the domain name obtained using as defined in <a href="#linked-domain-verification" >Linked Domain Verification</a>. Displaying details of the consent using registration parameters such as <code>client_name</code>, <code>logo_uri</code>, and <code>client_purpose</code> defined in <a href="#verifierrp-registration-metadata" >Registration Metadata</a> is OPTIONAL.</p>
 <p>Note that displaying the domain name of the Verifier/RP helps the End-users to identify malicious Verifiers/RPs who has copied registration parameters of good Verifiers/OP and are impersonating them.</p>
 <h3 id="authorization-response"><a class="toc-anchor" href="#authorization-response" >§</a> Authorization Response</h3>
 <p>Authorization Response is sent as an HTTPS POST request to the RP’s endpoint indicated in <code>redirect_uri</code> in the request.</p>
@@ -520,11 +508,11 @@ Due to this discussion (and the potential for transition), implementors are advi
 <li>Determine the number of VPs returned in the VP Token and identify in which VP requested VC(s) are included, using the descriptor map obtained from the ID Token.</li>
 <li>Check that the DID value in the <code>kid</code> and <code>iss</code> claims match in each of the VP(s).</li>
 <li>Validate the signature of each of the VP(s) passed in the VP Token. Validation is performed against the key obtained from a DID Document. DID Document MUST be obtained by resolving a Decentralized Identifier included in the <code>iss</code> claim using DID Resolution. If a DID Doc contains multiple keys, kid in the header is used to identify which key to use.</li>
-<li>Confirm that the VC meets all requested criteria using the mechanisms outlined in Section 4.3 of <a class="term-reference" href="#term:presentation-exchange-v1.0.0">Presentation Exchange v1.0.0</a>, using the presentation definition from the Authorization Request, i.e. credential format, type, JSON schema, etc.</li>
+<li>Confirm that the VC meets all requested criteria using the mechanisms outlined in Section 4.3 of <a class="term-reference" href="#term:presentation-exchange-v1.0.0">Presentation Exchange v1.0.0</a>, using the Presentation Definition from the Authorization Request, i.e. credential format, type, JSON schema, etc.</li>
 <li>Check that the DID value in the <code>kid</code> and <code>iss</code> claims match in each of the VC(s).</li>
 <li>Validate signature(s) on each VC(s). Validation is performed against the key obtained from a DID Document. DID Document MUST be obtained by resolving a Decentralized Identifier included in the <code>iss</code> claim using DID Resolution. If a DID Doc contains multiple keys, kid in the header is used to identify which key to use.</li>
 <li>Check that the DID value in the <code>iss</code> Claim of a VP exactly match with the <code>sub</code> Claim in the VC(s). (Holder Binding)</li>
-<li>Perform the checks required by the Verifier’s policy, based on the set of trust requirements such as trust frameworks it belongs to. The checks can include Linked Domain verification of the Credential Issuer’s DID using the mechanism defined in <a class="term-reference" href="#term:linked-domain-verification">Linked Domain Verification</a> and Credential status validation of the VC(s) using the mechanism defined in <a class="term-reference" href="#term:revocation">Revocation</a>.</li>
+<li>Perform the checks required by the Verifier’s policy, based on the set of trust requirements such as trust frameworks it belongs to. The checks can include Linked Domain verification of the Credential Issuer’s DID using the mechanism defined in <a href="#linked-domain-verification" >Linked Domain Verification</a> and Credential status validation of the VC(s) using the mechanism defined in <a href="#revocation" >Revocation</a>.</li>
 </ol>
 <h4 id="id-token-example"><a class="toc-anchor" href="#id-token-example" >§</a> ID Token example</h4>
 <p>Below is a non-normative example of an ID Token:</p>
@@ -746,17 +734,17 @@ Due to this discussion (and the potential for transition), implementors are advi
 <h4 id="serviceendpoints"><a class="toc-anchor" href="#serviceendpoints" >§</a> serviceEndpoints</h4>
 <p>The following two serviceEndpoints MUST be supported in the DID Document, but only one is required.</p>
 <ol>
-<li>LinkedDomain vis <a class="term-reference" href="#term:well-known-did">Well Known DID</a> spec</li>
-<li><span id="term:identity-hub-(0.0.1-predraft)">Identity Hub (0.0.1 Predraft)</span> (Decentralized Web Node v0.0.1 predraft))</li>
+<li>LinkedDomain as defined in <a class="term-reference" href="#term:well-known-did">Well Known DID</a></li>
+<li>IdentityHub as defined in <a class="term-reference" href="#term:identity-hub-(0.0.1-predraft)">Identity Hub (0.0.1 Predraft)</a></li>
 </ol>
 <h3 id="revocation"><a class="toc-anchor" href="#revocation" >§</a> Revocation</h3>
 <p>StatusList2021 MUST be used for revocation of VCs, as defined in <a class="term-reference" href="#term:status-list-2021">Status List 2021</a>.</p>
 <h4 id="credentialstatus"><a class="toc-anchor" href="#credentialstatus" >§</a> credentialStatus</h4>
-<p>The issued VC MAY include a <code>credentialStatus</code> property</p>
-<p>When <code>credentialStatus</code> is deinfed it MUST use StatusList2021 , as defined in section 5.1 of <a class="term-reference" href="#term:status-list-2021">Status List 2021</a>.</p>
+<p>The issued VC MAY include a <code>credentialStatus</code> property.</p>
+<p>When <code>credentialStatus</code> is deinfed, it MUST use StatusList2021 , as defined in section 5.1 of <a class="term-reference" href="#term:status-list-2021">Status List 2021</a>.</p>
 <p>StatusList2021 MUST be discovered using either DID Relative URLs stored in an ID Hub or HTTPS URL.</p>
-<p>An Issuer of a VC MAY have an ID Hub serviceEndpoint in the Issuer’s DID Document. ID Hubs are the single endpoint to look up objects associated with a DID, as defined in [Identity-Hub].
-Below is a non-normative example of a DID Document that includes a serviceEndpoint:</p>
+<p>An Issuer of a VC MAY have an ID Hub serviceEndpoint in the Issuer’s DID Document. ID Hubs are the single endpoint to look up objects associated with a DID, defined in <a class="term-reference" href="#term:identity-hub-(0.0.1-predraft)">Identity Hub (0.0.1 Predraft)</a>.</p>
+<p>Below is a non-normative example of a DID Document that includes a serviceEndpoint:</p>
 <pre class="language-json"><code class="language-json"><span class="token property">"service"</span><span class="token operator">:</span> <span class="token punctuation">[</span>
       <span class="token punctuation">{</span>
         <span class="token property">"id"</span><span class="token operator">:</span> <span class="token string">"hubs"</span><span class="token punctuation">,</span>
@@ -778,7 +766,7 @@ Below is a non-normative example of a DID Document that includes a serviceEndpoi
 <span class="token punctuation">}</span>
 </code></pre>
 <h3 id="cryptographic-signature"><a class="toc-anchor" href="#cryptographic-signature" >§</a> Cryptographic Signature</h3>
-<p>Verifiers and wallets compliant with this profile MUST support JWT signature verification of the Key Types as defined in the table below:</p>
+<p>Verifiers and Wallets compliant with this profile MUST support JWT signature verification of the Key Types as defined in the table below:</p>
 <table>
 <thead>
 <tr>
@@ -859,16 +847,16 @@ For reference and more information on LD signature suites see the <a path-0="w3c
 </ul>
 <p>Below is a storyboard that explains one concrete scenario using a workplace credential.</p>
 <ul>
-<li>Alice Smith is a user at Woodgrove and her employer has issued her a  workplace credential.</li>
-<li>Alice gets a notification email stating that she could get a workplace  credential but launching the issuer portal interface.</li>
-<li>Alice uses her smartphone’s camera app or Authenticator app (Wallet app)  to scan the QR Code shown on the portal.</li>
-<li>Alice is presented with an idtoken flow journey. She presents her  corporate username and password credentials to complete the idtoken flow.</li>
-<li>Issuer service takes the claim from idtoken and presents Alice a  Verifiable Credential that she can accept and store in her wallet app.</li>
+<li>Alice Smith is a user at Woodgrove and her employer has issued her a workplace credential.</li>
+<li>Alice gets a notification email stating that she could get a workplace credential but launching the issuer portal interface.</li>
+<li>Alice uses her smartphone’s camera app or Authenticator app (Wallet app) to scan the QR Code shown on the portal.</li>
+<li>Alice is presented with an idtoken flow journey. She presents her corporate username and password credentials to complete the idtoken flow.</li>
+<li>Issuer service takes the claims from ID Token and presents Alice a Verifiable Credential that she can accept and store in her Wallet app.</li>
 <li>Alice can review the credential information and can also review the  activity report for this credential.</li>
 </ul>
 <p><img src="./spec/assets/workplacecredential_storyboard.png" alt="WorkplaceCredential Storyboard"></p>
 <h2 id="examples"><a class="toc-anchor" href="#examples" >§</a> Examples</h2>
-<p>Examples are listed inline in above sections as well as in complete form within <a class="term-reference" href="#term:test-vectors">Test Vectors</a>.</p>
+<p>Examples are listed inline in above sections as well as in complete form within <a href="#test-vectors" >Test Vectors</a>.</p>
 <h2 id="implementations"><a class="toc-anchor" href="#implementations" >§</a> Implementations</h2>
 <ul>
 <li>Microsoft</li>
@@ -877,7 +865,7 @@ For reference and more information on LD signature suites see the <a path-0="w3c
 <li>Ping Identity</li>
 </ul>
 <h2 id="testing"><a class="toc-anchor" href="#testing" >§</a> Testing</h2>
-<p>Implementations may test conformance of the wallets to this profile using this <a path-0="vcinteroptesting.azurewebsites.net"path-1="verifier"href="https://vcinteroptesting.azurewebsites.net/verifier" >verification website</a>.</p>
+<p>Implementations may test conformance of the Wallets to this profile using this <a path-0="vcinteroptesting.azurewebsites.net"path-1="verifier"href="https://vcinteroptesting.azurewebsites.net/verifier" >verification website</a>.</p>
 <h2 id="test-vectors"><a class="toc-anchor" href="#test-vectors" >§</a> Test Vectors</h2>
 <p>The test vectors which follow are non-normative.</p>
 <p>Each payload is consistent with the others in the section, but will not match any externally run system and should not be considered as supported or endorsed identity.</p>
@@ -962,7 +950,7 @@ For reference and more information on LD signature suites see the <a path-0="w3c
 <h3 id="qr-code"><a class="toc-anchor" href="#qr-code" >§</a> QR Code</h3>
 <p>The QR Code is displayed on the Verifier’s Website and contains the encoded Self-Issued OP URI.
 <img src="./spec/assets/qrcode.png" alt="QR Code"></p>
-<h3 id="self-issued-op-request-uri-2"><a class="toc-anchor" href="#self-issued-op-request-uri-2" >§</a> Self Issued OP Request URI</h3>
+<h3 id="self-issued-op-request-uri"><a class="toc-anchor" href="#self-issued-op-request-uri" >§</a> Self Issued OP Request URI</h3>
 <p>The Self Issued OP Request URI contains the request_uri. It is decoded by the Wallet.</p>
 <pre class="language-uri"><code class="language-uri"><span class="token scheme">openid-vc<span class="token scheme-delimiter">:</span></span><span class="token authority"><span class="token authority-delimiter">//</span></span><span class="token query"><span class="token query-delimiter">?</span><span class="token pair"><span class="token key">request_uri</span>=<span class="token value">https://example/service/api/v1/presentation-request/8006b5fb-6e3b-42d1-a2be-55ed2a08073d</span></span></span>
 </code></pre>
@@ -1151,7 +1139,7 @@ For reference and more information on LD signature suites see the <a path-0="w3c
 <h2 id="references"><a class="toc-anchor" href="#references" >§</a> References</h2>
 <h3 id="normative-references"><a class="toc-anchor" href="#normative-references" >§</a> Normative References</h3>
 <dl>
-<dt><span id="term:oidc">OIDC</span></dt>
+<dt><span id="term:openid-connect-core">OpenID Connect Core</span></dt>
 <dd><a path-0="openid.net"path-1="specs"path-2="openid-connect-core-1_0.html"href="https://openid.net/specs/openid-connect-core-1_0.html" >Open ID Connect</a>. Nat Sakimura, John Bradley, Michael B. Jones, Breno de Medeiros, Chuck Mortimore. 2014.11. Status: Approved Specification.</dd>
 <dt><span id="term:did-core">DID Core</span></dt>
 <dd><a path-0="www.w3.org"path-1="TR"path-2="2021"path-3="PR-did-core-20210803"path-4=""href="https://www.w3.org/TR/2021/PR-did-core-20210803/" >Decentralized Identifiers (DIDs) v1.0</a>. Manu Sporny, Dave Longley, Markus Sabadello, Drummond Reed, Orie Steele, Christopher Allen. 2021.08. Status: W3C Proposed Recommendation.</dd>
@@ -1183,7 +1171,9 @@ For reference and more information on LD signature suites see the <a path-0="w3c
 <dt><span id="term:jwp">JWP</span></dt>
 <dd><a path-0="github.com"path-1="json-web-proofs"path-2="json-web-proofs"path-3="blob"path-4="main"path-5="draft-jmiller-json-web-proof.md"href="https://github.com/json-web-proofs/json-web-proofs/blob/main/draft-jmiller-json-web-proof.md" >JSON Web Proof</a>. Jeremie Miller, David Waite, Michael B. Jones. Status: Internet-Draft.</dd>
 <dt><span id="term:jpa">JPA</span></dt>
-<dd><a path-0="github.com"path-1="json-web-proofs"path-2="json-web-proofs"path-3="blob"path-4="main"path-5="draft-jmiller-json-proof-algorithms.md"href="https://github.com/json-web-proofs/json-web-proofs/blob/main/draft-jmiller-json-proof-algorithms.md" >JSON Proof Algorithms</a> Jeremie Miller, Michael B. Jones. Status: Internet-Draft.</dd>
+<dd><a path-0="github.com"path-1="json-web-proofs"path-2="json-web-proofs"path-3="blob"path-4="main"path-5="draft-jmiller-json-proof-algorithms.md"href="https://github.com/json-web-proofs/json-web-proofs/blob/main/draft-jmiller-json-proof-algorithms.md" >JSON Proof Algorithms</a>. Jeremie Miller, Michael B. Jones. Status: Internet-Draft.</dd>
+<dt><span id="term:decentralized-web-node">Decentralized Web Node</span></dt>
+<dd><a path-0="identity.foundation"path-1="decentralized-web-node"path-2="spec"path-3=""href="https://identity.foundation/decentralized-web-node/spec/" >Decentralized Web Node</a>. Daniel Buchner, Tobias Looker. Status: Draft.</dd>
 </dl>
 
                     </article>    
@@ -1246,8 +1236,8 @@ For reference and more information on LD signature suites see the <a path-0="w3c
 </li>
 <li><a href="#authorization-request" >Authorization Request</a>
 <ul>
-<li><a href="#invoking-self-issued-op" >Invoking Self-Issued OP</a></li>
-<li><a href="#self-issued-op-request-uri" >Self-Issued OP Request URI</a></li>
+<li><a href="#invoking-the-wallet" >Invoking the Wallet</a></li>
+<li><a href="#authorization-request-uri" >Authorization Request URI</a></li>
 <li><a href="#self-issued-op-request-object" >Self-Issued OP Request Object</a></li>
 </ul>
 </li>
@@ -1294,7 +1284,7 @@ For reference and more information on LD signature suites see the <a path-0="w3c
 </ul>
 </li>
 <li><a href="#qr-code" >QR Code</a></li>
-<li><a href="#self-issued-op-request-uri-2" >Self Issued OP Request URI</a></li>
+<li><a href="#self-issued-op-request-uri" >Self Issued OP Request URI</a></li>
 <li><a href="#request-object" >Request Object</a></li>
 <li><a href="#authorization-response-2" >Authorization Response</a>
 <ul>
