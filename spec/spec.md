@@ -43,7 +43,7 @@ The audience of the document includes Verifiable Credential implementers and/or 
 
 ## Status of This Document
 
-The status of the JWT VC Presentation Profile v1.0.0 is a PRE-DRAFT specification under development within the Decentralized Identity Foundation (DIF).
+The status of the JWT VC Presentation Profile v0.1.0 is a DRAFT specification under development within the Decentralized Identity Foundation (DIF).
 
 ### Description
 
