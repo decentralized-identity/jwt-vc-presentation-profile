@@ -189,7 +189,7 @@ sequenceDiagram
 - Verification Material intended for use in the profile MUST use `publicKeyJwk` ([[ref: DID Core]] section 5.2.1).  The keys MUST be secp256k1 or Ed25519, see the _Cryptographic Signature_ section.
 - DID Documents may contain Verification Material not intended for use with this profile of any Verification Material Type and any key format or algorithm.
 - To bind an owner of a DID to a controller of a certain origin, a Well Known DID Configuration MUST be used as defined in [[ref: Well Known DID]].
-- For Revocation of VCs, Status List 2021 as defined in [[ref: Status List 2021]] MUST be discovered using either DID Relative URLs stored in an HTTPS URL or ID Hub be used in combination with Identity Hubs as defined in [[ref: Identity Hub (0.0.1 Predraft)]].
+- For Revocation of VCs, Status List 2021 as defined in [[ref: Status List 2021 (0.0.1 Predraft)]] MUST be discovered using either DID Relative URLs stored in an Identity Hub as defined in [[ref: Identity Hub (0.0.1 Predraft)]] or discovered using an HTTPS URL.
 
 This profile uses certain versions of specifications that have not yet reached final status: For more details see [Normative References](#normative-references) section.
 
@@ -574,13 +574,13 @@ The following two serviceEndpoints MUST be supported in the DID Document, but on
 
 ### Revocation
 
-StatusList2021 MUST be used for revocation of VCs, as defined in [[ref: Status List 2021]].
+StatusList2021 MUST be used for revocation of VCs, as defined in [[ref: Status List 2021 (0.0.1 Predraft)]].
 
 #### credentialStatus
 
 The issued VC MAY include a `credentialStatus` property.
 
-When `credentialStatus` is deinfed, it MUST use StatusList2021 , as defined in section 5.1 of [[ref: Status List 2021]].
+When `credentialStatus` is defined, it MUST use StatusList2021 , as defined in section 5.1 of [[ref: Status List 2021 (0.0.1 Predraft)]].
 
 StatusList2021 MUST be discovered using either DID Relative URLs stored in an ID Hub or HTTPS URL. 
 
@@ -605,7 +605,7 @@ Below is a non-normative example of a DID Document that includes a serviceEndpoi
 {
   "credentialStatus": {
     "id": "Qmdfr32sdf32546...",
-    "type": "StatusList2021",
+    "type": "RevocationList2021Status",
     "statusListIndex": "94567",
     "statusListCredential": 'did:ion:123?service=IdentityHub&relativeRef=?messages=[{ type: "CollectionsQuery", statement: { id: "Qmdfr32sdf32546..." }}]'
   }
@@ -1047,8 +1047,8 @@ Note: The example VC does not contain a resolvable status list.
 [[def: Identity Hub (0.0.1 Predraft)]]
 ~ [Identity Hub - Decentralized Web Node 0.0.1 Predraft](https://identity.foundation/decentralized-web-node/spec/0.0.1-predraft/)
 
-[[def: Status List 2021]]
-~ [Status List 2021](https://w3c-ccg.github.io/vc-status-list-2021/). Manu Sporny, Dave Longley, Orie Steele, Mike Prorock, Mahmoud Alkhraishi. 2022.04. Status: Draft Community Group Report.
+[[def: Status List 2021 (0.0.1 Predraft)]]
+~ [Status List 2021 0.0.1 Predraft](https://github.com/w3c/vc-status-list-2021/releases/tag/v0.0.1). Manu Sporny, Dave Longley, Orie Steele, Mike Prorock, Mahmoud Alkhraishi. 2022.04. Status: Draft Community Group Report.
 
 ### Non-Normative References
 
