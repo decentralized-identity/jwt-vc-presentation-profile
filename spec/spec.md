@@ -7,7 +7,7 @@ JWT VC Presentation Profile
 [https://identity.foundation/jwt-vc-presentation-profile](https://identity.foundation/jwt-vc-presentation-profile)
 
 Editors:
-~ [Daniel McGrogan](www.linkedin.com/in/dtmcgrogan) (Workday)
+~ [Daniel McGrogan](https://www.linkedin.com/in/dtmcgrogan) (Workday)
 ~ [Kristina Yasuda](https://www.linkedin.com/in/kristina-yasuda-6263b5a2) (Microsoft)
 ~ [Jen Schreiber](https://www.linkedin.com/in/jischr/) (Workday)
 
@@ -19,6 +19,7 @@ Contributors:
 ~ Daniel Godbout (Microsoft)
 ~ Rohit Gulati (Microsoft)
 ~ Eric Kuhn (Kraken)
+~ Niels Klomp (Sphereon)
 
 Participate:
 ~ [GitHub repo](https://github.com/decentralized-identity/jwt-vc-presentation-profile)
@@ -191,7 +192,7 @@ sequenceDiagram
 - For key management and authentication, First Implementer's Draft of Self-Issued OpenID Connect Provider v2, an extension to OpenID Connect, MUST be used as defined in [[ref: SIOPv2 ID1]].
 - For transportation of VCs, First Implementer's Draft of OpenID for Verifiable Presentations MUST be used as defined in [[ref: OpenID4VP ID1]].
 - As the query language, [[ref: Presentation Exchange v1.0.0]] MUST be used and conform to the syntax defined in [[ref: OpenID4VP ID1]].
-- Decentralized Identifiers (DIDs), as defined in [[ref: DID Core]], MUST be used as identifiers of the entities. Implementations MUST support did:web and did:ion as a mandatory DID method as defined in [[ref: did-web]] and [[ref: did-ion]].
+- Decentralized Identifiers (DIDs), as defined in [[ref: DID Core]], MUST be used as identifiers of the entities. Implementations MUST support did:web, did:ion and did:jwk as a mandatory DID method as defined in [[ref: did-web]], [[ref: did-ion]] and [[ref: did-jwk]] respectively.
 - To bind an owner of a DID to a controller of a certain origin, a Well Known DID Configuration MUST be used as defined in [[ref: Well Known DID]].
 - For Revocation of VCs, Status List 2021 as defined in [[ref: Status List 2021]] MUST be discovered using either DID Relative URLs stored in an HTTPS URL or ID Hub be used in combination with Identity Hubs as defined in [[def: Identity Hub (0.0.1 Predraft)]] (Decentralized Web Node v0.0.1 predraft).
 
@@ -200,7 +201,7 @@ It is important to note that Cross-device SIOP is susceptible to a session phish
 This profile uses certain versions of specifications that have not yet reached final status: For more details see Normative References section.
 
   - First Implementer's Draft of Self-Issued OpenID Provider v2 specification
-  - First Implementer's Draft of OpenID for Verifiable Prensetations specification
+  - First Implementer's Draft of OpenID for Verifiable Presentations specification
   - ID Hub specification published as a v0.0.1 predraft of [Decentralized Web Node](https://identity.foundation/decentralized-web-node/spec/). We will continue to use the term ID Hub rather than Decentralized Web Node to avoid confusion.
 
 ### Authorization Request
@@ -272,7 +273,7 @@ The Self-Issued OP request object obtained via request_uri MUST include the foll
 
 The Verifier/RP MUST use static Self-Issued OP metadata as defined in section 6.2.1 of [[ref: SIOPv2 ID1]].
 
-::: example SIOP Metatdata
+::: example SIOP Metadata
 ```json
 [[insert: ./spec/assets/1_siop_metadata.json]]
 ```
@@ -465,13 +466,17 @@ Below is a non-normative example of a decoded VC in a JSON format, signed as a J
 
 ### Decentralized Identifiers
 
-This profile utilizes Decentralized Identifiers (DIDs) as a cryptographically verifiable identifier of the Verifier/RP and Self-Issued OP and that resolve to cryptographic key material. Implementations of this profile MUST support DID Method ION.
+This profile utilizes Decentralized Identifiers (DIDs) as a cryptographically verifiable identifier of the Verifier/RP and Self-Issued OP and that resolve to cryptographic key material. Implementations of this profile MUST support the following DID Methods:
+ - [[ref: did-web]]
+ - [[ref: did-ion]]
+ - [[ref: did-jwk]]
 
+#### ION forms
 ION DIDs can operate in both long-form and short-form. Implementations of this profile MUST be able to consume both long-form and short-form DIDs regardless of whether they are anchored.
 
 The Verifier/RP should always check DIDs against an ION node to validate their current states. Just because a long form DID has been used, doesn't mean the state hasn't changed on ION.
 
-#### Short-Form DID
+#### ION Short-Form DID
 
 Short Form DIDs are DIDs written on a Bitcoin Blockchain. They are also known as anchored DIDs. These types of DIDs give the organization and user the most flexibility because the underlying components of the DID Document, such as public keys and service endpoints, can change without altering the DID itself.
 
@@ -487,7 +492,7 @@ Below is a non-normative example of a DID Document obtained by resolving a short
 ```
 :::
 
-#### Long-Form DID
+#### ION Long-Form DID
 
 Long-form DIDs are DIDs not written on a Bitcoin Blockchain. They are also known as unanchored DIDs.
 
@@ -522,7 +527,7 @@ StatusList2021 MUST be used for revocation of VCs, as defined in [[ref: Status L
 
 The issued VC MAY include a `credentialStatus` property
 
-When `credentialStatus` is deinfed it MUST use StatusList2021 , as defined in section 5.1 of [[ref: Status List 2021]].
+When `credentialStatus` is defined it MUST use StatusList2021 , as defined in section 5.1 of [[ref: Status List 2021]].
 
 StatusList2021 MUST be discovered using either DID Relative URLs stored in an ID Hub or HTTPS URL. 
 
@@ -555,7 +560,7 @@ Below is a non-normative example of a DID Document that includes a serviceEndpoi
 
 ### Cryptographic Signature
 
-While ION supports any public key JWK representation in a DID Document, implementors of this document MUST support JWT signature verification with the following Key Types and must support JWT signing with at least one.
+While DID ION, Web and JWK support any public key JWK representation in a DID Document, implementors of this document MUST support JWT signature verification with the following Key Types and must support JWT signing with at least one.
 
 |Key Type|JWT Algorithm|
 |--------|-------------|
@@ -641,6 +646,10 @@ Embedded or referenced test vectors.
 
 [[def: did-ion]]
 ~ [ION DID Method](https://github.com/decentralized-identity/ion-did-method). Various DIF contributors. Status: Registered in DID Specification Registry.
+
+[[def: did-jwk]]
+~ [JWK DID Method](https://github.com/quartzjer/did-jwk). Jeremie Miller. Status: Registered in DID Specification Registry.
+
 
 [[def: OIDC Registration]]
 ~ [OpenID Connect Dynamic Client Registration 1.0 incorporating errata set 1](https://openid.net/specs/openid-connect-registration-1_0.html). Nat Sakimura, John Bradley, Michael B. Jones. 2014.11. Status: Approved Specification.
