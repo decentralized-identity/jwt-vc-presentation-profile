@@ -1039,7 +1039,6 @@ Note: The example VC does not contain a resolvable status list.
 [[def: did-jwk]]
 ~ [JWK DID Method](https://github.com/quartzjer/did-jwk). Jeremie Miller. Status: Registered in DID Specification Registry.
 
-
 [[def: OIDC Registration]]
 ~ [OpenID Connect Dynamic Client Registration 1.0 incorporating errata set 1](https://openid.net/specs/openid-connect-registration-1_0.html). Nat Sakimura, John Bradley, Michael B. Jones. 2014.11. Status: Approved Specification.
 
