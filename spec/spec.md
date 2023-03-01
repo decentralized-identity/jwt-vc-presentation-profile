@@ -15,6 +15,7 @@ Contributors:
 ~ Tobias Looker (Mattr)
 ~ Andrew Hughes (Ping Identity)
 ~ David Waite (Ping Identity)
+~ Jacob Yanicak (Workday)
 ~ Valerie Lanard (Workday)
 ~ Daniel Godbout (Microsoft)
 ~ Rohit Gulati (Microsoft)
