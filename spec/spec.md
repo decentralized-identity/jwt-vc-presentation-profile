@@ -694,6 +694,8 @@ Implementations may test conformance of the wallets to this profile using the fo
 - https://vcinteroptesting.azurewebsites.net/verifier
 - https://verifiablecredentials.dev/presentation
 - https://app.vp.interop.spruceid.xyz/
+https://verifycredential.pingone.com/verifier.html
+https://demo-rp.stg.trustbloc.dev/verifierqr
 
 Companies may stop maintaining these websites without any prior notice, and do not commit to maintain them to the most recent updates of this specification.
 
