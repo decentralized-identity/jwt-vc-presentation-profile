@@ -692,10 +692,10 @@ Examples are listed inline in above sections as well as in complete form within 
 Implementations may test conformance of the wallets to this profile using the following verification websites:
 
 - https://vcinteroptesting.azurewebsites.net/verifier
-- https://verifiablecredentials.dev/presentation
 - https://app.vp.interop.spruceid.xyz/
-https://verifycredential.pingone.com/verifier.html
-https://demo-rp.stg.trustbloc.dev/verifierqr
+- https://verifycredential.pingone.com/verifier.html
+- https://demo-rp.stg.trustbloc.dev/verifierqr
+- https://verifiablecredentials.dev/presentation
 
 Companies may stop maintaining these websites without any prior notice, and do not commit to maintain them to the most recent updates of this specification.
 
