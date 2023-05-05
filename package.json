@@ -8,13 +8,17 @@
     "url": "https://github.com/decentralized-identity/jwt-vc-presentation-profile"
   },
   "scripts": {
+    "render": "node -e \"require('spec-up')({ nowatch: true })\"",
+    "edit": "npm run dev",
+    "build": "npm run build:specs",
+    "build:specs": "node -e \"require('spec-up')({ nowatch: true })\"",
     "dev": "node -e \"require('spec-up')()\"",
-    "render": "node -e \"require('spec-up')({ nowatch: true })\""
+    "dev:specs": "node -e \"require('spec-up')()\""
   },
   "bugs": {
     "url": "https://github.com/decentralized-identity/jwt-vc-presentation-profile/issues"
   },
   "dependencies": {
-    "spec-up": "^0.10.3"
+    "spec-up": "^0.10.6"
   }
 }
