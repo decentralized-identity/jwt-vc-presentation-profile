@@ -7,7 +7,7 @@ JWT VC Presentation Profile
 [https://identity.foundation/jwt-vc-presentation-profile](https://identity.foundation/jwt-vc-presentation-profile)
 
 **Versions:**
-~ **v0.0.1** - [https://identity.foundation/presentation-exchange/spec/v0.0.1](https://identity.foundation/presentation-exchange/spec/0.0.1)
+~ **v0.0.1** - [https://identity.foundation/jwt-vc-presentation-profile/spec/v0.0.1](https://identity.foundation/jwt-vc-presentation-profile/spec/0.0.1)
 
 Editors:
 ~ [Daniel McGrogan](www.linkedin.com/in/dtmcgrogan) (Workday)
