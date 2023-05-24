@@ -681,7 +681,6 @@ Examples are listed inline in above sections as well as in complete form within 
 ## Implementations
 
 - Microsoft
-- Workday
 - Ping Identity
 - Gen Digital
 - Spruce Systems Inc.
