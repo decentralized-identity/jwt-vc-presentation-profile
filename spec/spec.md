@@ -685,6 +685,7 @@ Examples are listed inline in above sections as well as in complete form within 
 - Ping Identity
 - Gen Digital
 - Spruce Systems Inc.
+- IBM
 - Auth0Lab
 
 ## Testing
@@ -693,7 +694,7 @@ Implementations may test conformance of the wallets to this profile using the fo
 
 - https://vcinteroptesting.azurewebsites.net/verifier
 - https://app.vp.interop.spruceid.xyz/
-- https://verifycredential.pingone.com/verifier.html
+- https://vc.ping-eng.com/verifier.html
 - https://demo-rp.stg.trustbloc.dev/verifierqr
 - https://verifiablecredentials.dev/presentation
 
