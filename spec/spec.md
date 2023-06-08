@@ -679,13 +679,23 @@ Examples are listed inline in above sections as well as in complete form within 
 ## Implementations
 
 - Microsoft
-- Workday
-- Mattr
 - Ping Identity
+- Gen Digital
+- Spruce Systems Inc.
+- IBM
+- Auth0Lab
 
 ## Testing
 
-Implementations may test conformance of the Wallets to this profile using this [verification website](https://vcinteroptesting.azurewebsites.net/verifier).
+Implementations may test conformance of the wallets to this profile using the following verification websites:
+
+- https://vcinteroptesting.azurewebsites.net/verifier
+- https://app.vp.interop.spruceid.xyz/
+- https://vc.ping-eng.com/verifier.html
+- https://demo-rp.stg.trustbloc.dev/verifierqr
+- https://verifiablecredentials.dev/presentation
+
+Companies may stop maintaining these websites without any prior notice, and do not commit to maintain them to the most recent updates of this specification.
 
 ## Test Vectors
 
