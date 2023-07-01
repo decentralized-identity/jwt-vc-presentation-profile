@@ -437,7 +437,7 @@ in the JWT body,
 * `iss`: REQUIRED. The Issuer of the Verified Domain JWT. The value of `iss` MUST be a DID using a DID method defined by this profile.
 * `iat`: REQUIRED. The time of issuance of the Verified Domain JWT. See [RFC7519](https://datatracker.ietf.org/doc/html/rfc7519) for more information.
 * `exp`: OPTIONAL. The expiry time of the Verified Domain JWT after which it is no longer valid. See [RFC7519](https://datatracker.ietf.org/doc/html/rfc7519) for more information.
-* `type`: REQUIRED. The type of a JSON object that is secured by the JWT, as defined in [I-D.draft-terbu-oauth-sd-jwt-vc](https://datatracker.ietf.org/doc/html/draft-terbu-sd-jwt-vc). MUST be of value `VerifiedDomain`.
+* `type`: REQUIRED. The type of a JSON object that is secured by the JWT, as defined in [I-D.draft-terbu-oauth-sd-jwt-vc](https://datatracker.ietf.org/doc/html/draft-terbu-sd-jwt-vc). MUST be of value `verified_domain`.
 * `domain_binding`: REQUIRED. Object with the information about the DID and the domain that the third party is attesting. It consists of the following two parameters:
   * `did`: REQUIRED. DID of a Verifier/RP using the `did` scheme defined is [[ref: DID Core]].
   * `domain`: REQUIRED. A URL using the `https` scheme that belongs to the Verifier/RP identified using DID in the same object.
