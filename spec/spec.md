@@ -634,7 +634,7 @@ Embedded or referenced test vectors.
 ~ [Verifiable Credentials Data Model v1.1](https://www.w3.org/TR/vc-data-model/). Manu Sporny, Dave Longley, David Chadwick. 2021.08. Status: W3C Proposed Recommendation.
 
 [[def: Presentation Exchange v2.0.0]]
-~ [Presentation Exchange v2.0.0](https://identity.foundation/presentation-exchange/spec/). Daniel Buchner, Brent Zundel, Martin Riedel, Kim Hamilton Duffy.
+~ [Presentation Exchange v2.0.0](https://identity.foundation/presentation-exchange/spec/v2.0.0/). Daniel Buchner, Brent Zundel, Martin Riedel, Kim Hamilton Duffy.
 
 [[def: did-web]]
 ~ [Web DID Method](https://github.com/w3c-ccg/did-method-web). Oliver Terbu, Mike Xu, Dmitri Zagidulin, Amy Guy. Status: Registered in DID Specification Registry.
