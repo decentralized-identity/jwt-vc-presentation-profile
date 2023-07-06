@@ -3,6 +3,6 @@
 # the repo. Unless a later match takes precedence,
 # they will be requested for review when someone opens a 
 # pull request.
-*       @bumblefudge @paulgrehan @chriskellyLP @dtmcg @quartzjer @Sakurann @jischr
+*       @dwaite @Sakurann @brentzundel @rado0x54 @bumblefudge @paulgrehan 
 
 # See CODEOWNERS syntax here: https://help.github.com/articles/about-codeowners/#codeowners-syntax
