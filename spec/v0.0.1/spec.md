@@ -7,10 +7,10 @@ JWT VC Presentation Profile
 [https://identity.foundation/jwt-vc-presentation-profile](https://identity.foundation/jwt-vc-presentation-profile)
 
 **Versions:**
-~ **v0.0.1** - [https://identity.foundation/jwt-vc-presentation-profile/spec/v0.0.1](https://identity.foundation/jwt-vc-presentation-profile/spec/v0.0.1)
+~ **v0.0.1** - [https://identity.foundation/jwt-vc-presentation-profile/spec/v0.0.1](https://identity.foundation/jwt-vc-presentation-profile/spec/0.0.1)
 
 Editors:
-~ [Daniel McGrogan](https://www.linkedin.com/in/dtmcgrogan) (Workday)
+~ [Daniel McGrogan](www.linkedin.com/in/dtmcgrogan) (Workday)
 ~ [Kristina Yasuda](https://www.linkedin.com/in/kristina-yasuda-6263b5a2) (Microsoft)
 ~ [Jen Schreiber](https://www.linkedin.com/in/jischr/) (Workday)
 
@@ -25,7 +25,6 @@ Contributors:
 ~ Eric Kuhn (Kraken)
 ~ Jeremie Miller (Ping Identity)
 ~ Oliver Terbu (Spruce)
-~ Niels Klomp (Sphereon)
 
 Participate:
 ~ [GitHub repo](https://github.com/decentralized-identity/jwt-vc-presentation-profile)
@@ -188,7 +187,7 @@ sequenceDiagram
 - VCs MUST adhere to the [[ref: VC Data Model v1.1]] and be encoded as JSON and signed as JWT as defined in 6.3.1 of [[ref: VC Data Model v1.1]]. VCs encoded as JSON-LD and signed using Linked Data Proofs are NOT supported.
 - For key management and authentication, First Implementer's Draft of Self-Issued OpenID Connect Provider v2, an extension to OpenID Connect, MUST be used as defined in [[ref: SIOPv2 ID1]].
 - For transportation of VCs, First Implementer's Draft of OpenID for Verifiable Presentations MUST be used as defined in [[ref: OpenID4VP ID1]].
-- As the query language, [[ref: Presentation Exchange v2.0.0]] MUST be used and conform to the syntax defined in [[ref: OpenID4VP ID1]].
+- As the query language, [[ref: Presentation Exchange v1.0.0]] MUST be used and conform to the syntax defined in [[ref: OpenID4VP ID1]].
 - Decentralized Identifiers (DIDs), as defined in [[ref: DID Core]], MUST be used as identifiers of the entities. Implementations MUST support did:web and did:ion as a mandatory DID method as defined in [[ref: did-web]] and [[ref: did-ion]].
 - DID Documents MUST use either `JsonWebKey2020` or `EcdsaSecp256k1VerificationKey2019` as the type for Verification Material intended for use in the profile. ([[ref: DID Core]] section 5.2.1)
 - Verification Material intended for use in the profile MUST use `publicKeyJwk` ([[ref: DID Core]] section 5.2.1).  The keys MUST be secp256k1 or Ed25519, see the _Cryptographic Signature_ section.
@@ -199,7 +198,7 @@ sequenceDiagram
 This profile uses certain versions of specifications that have not yet reached final status: For more details see [Normative References](#normative-references) section.
 
   - First Implementer's Draft of Self-Issued OpenID Provider v2 specification
-  - First Implementer's Draft of OpenID for Verifiable Presentations specification
+  - First Implementer's Draft of OpenID for Verifiable Prensetations specification
   - ID Hub specification published as a v0.0.1 predraft of [[ref: Decentralized Web Node]]. Throughout the document, the term ID Hub, rather than Decentralized Web Node, will be used to avoid confusion.
 
 The JWT VC Presentation Profile currently only supports response mode `direct_post` defined in [[ref: OpenID4VP ID1]], sending Authorization Response as HTTP POST request.
@@ -313,7 +312,7 @@ The Self-Issued OP request object obtained via request_uri MUST include the foll
 
 The Verifier/RP MUST use static Self-Issued OP metadata as defined in section 6.2.1 of [[ref: SIOPv2 ID1]].
 
-::: example SIOP Metadata
+::: example SIOP Metatdata
 ```json
 [[insert: ./spec/assets/1_siop_metadata.json]]
 ```
@@ -530,12 +529,11 @@ Below is a non-normative example of a decoded VC in a JSON format, signed as a J
 
 This profile utilizes Decentralized Identifiers (DIDs) as a cryptographically verifiable identifier of the Verifier/RP and Self-Issued OP and that resolve to cryptographic key material.
 
-#### ION DID forms
 ION DIDs can operate in both long-form and short-form. Implementations of this profile MUST be able to consume both long-form and short-form DIDs regardless of whether they are anchored.
 
 The Verifier/RP should always check DIDs against an ION node to validate their current states. Just because a long form DID has been used, doesn't mean the state hasn't changed on ION.
 
-#### ION Short-Form DID
+#### Short-Form DID
 
 Short Form DIDs are DIDs written on a Bitcoin Blockchain. They are also known as anchored DIDs. These types of DIDs give the organization and user the most flexibility because the underlying components of the DID Document, such as public keys and service endpoints, can change without altering the DID itself.
 
@@ -551,7 +549,7 @@ Below is a non-normative example of a DID Document obtained by resolving a short
 ```
 :::
 
-#### ION Long-Form DID
+#### Long-Form DID
 
 Long-form DIDs are DIDs not written on a Bitcoin Blockchain. They are also known as unanchored DIDs.
 
@@ -1041,17 +1039,14 @@ Note: The example VC does not contain a resolvable status list.
 [[def: VC Data Model v1.1]]
 ~ [Verifiable Credentials Data Model v1.1](https://www.w3.org/TR/vc-data-model/). Manu Sporny, Dave Longley, David Chadwick. 2021.08. Status: W3C Proposed Recommendation.
 
-[[def: Presentation Exchange v2.0.0]]
-~ [Presentation Exchange v2.0.0](https://identity.foundation/presentation-exchange/spec/v2.0.0/). Daniel Buchner, Brent Zundel, Martin Riedel, Kim Hamilton Duffy.
+[[def: Presentation Exchange v1.0.0]]
+~ [Presentation Exchange v1.0.0](https://identity.foundation/presentation-exchange/spec/v1.0.0/). Daniel Buchner, Brent Zundel, Martin Riedel.
 
 [[def: did-web]]
 ~ [Web DID Method](https://github.com/w3c-ccg/did-method-web). Oliver Terbu, Mike Xu, Dmitri Zagidulin, Amy Guy. Status: Registered in DID Specification Registry.
 
 [[def: did-ion]]
 ~ [ION DID Method](https://github.com/decentralized-identity/ion-did-method). Various DIF contributors. Status: Registered in DID Specification Registry.
-
-[[def: did-jwk]]
-~ [JWK DID Method](https://github.com/quartzjer/did-jwk). Jeremie Miller. Status: Registered in DID Specification Registry.
 
 [[def: OIDC Registration]]
 ~ [OpenID Connect Dynamic Client Registration 1.0 incorporating errata set 1](https://openid.net/specs/openid-connect-registration-1_0.html). Nat Sakimura, John Bradley, Michael B. Jones. 2014.11. Status: Approved Specification.

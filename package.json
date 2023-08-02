@@ -1,20 +1,24 @@
 {
   "name": "dif-jwt-vc-presentation-profile",
   "description": "DIF JWT VC Presentation Profile",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "license": "Apache 2.0",
   "repository": {
     "type": "git",
     "url": "https://github.com/decentralized-identity/jwt-vc-presentation-profile"
   },
   "scripts": {
+    "render": "node -e \"require('spec-up')({ nowatch: true })\"",
+    "edit": "npm run dev",
+    "build": "npm run build:specs",
+    "build:specs": "node -e \"require('spec-up')({ nowatch: true })\"",
     "dev": "node -e \"require('spec-up')()\"",
-    "render": "node -e \"require('spec-up')({ nowatch: true })\""
+    "dev:specs": "node -e \"require('spec-up')()\""
   },
   "bugs": {
     "url": "https://github.com/decentralized-identity/jwt-vc-presentation-profile/issues"
   },
   "dependencies": {
-    "spec-up": "^0.10.3"
+    "spec-up": "^0.10.6"
   }
 }
