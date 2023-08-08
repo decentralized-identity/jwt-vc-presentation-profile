@@ -66,7 +66,7 @@ This document is currently scoped for the presentation of VCs between the Wallet
 - Data model
 - Protocol to request presentation of VCs, including query language
 - User authentication layer using Self-Issued ID Token
-- Mechanism to establishing trust in the DID via Domain Linkage
+- Mechanism to identify the verifier by establishing a link between the DID and a domain
 - Identifiers of the entities
 - Revocation of VCs
 - Crypto suites
@@ -370,13 +370,19 @@ Below is a normative example of claims included in the `registration` parameter:
 
 Other Registration parameters defined in [[ref: OIDC Registration]] can be used.
 
-##### Linked Domain Verification
+##### Identifying the Verifier
 
-To strengthen trust between the Verifier/RP and End-user, a Verifier/RP's DID MUST be bound to its website. This proves the Verifier/RP controls both the DID and the origin and allows the End-user to verify this relationship. To bind an owner of a DID to a controller of a certain origin, Well Known DID Configuration MUST be used as defined in [[ref: Well Known DID]].
+The Wallet needs to be able to verify that the Verifier/RP controls both the DID and the domain to identify the Verifier and provide the basis for the End-Users to provide consent to present a VC since a domain is more familiar that a DID to the End-Users.
+
+There are two ways to do this, as described in the subsequent two sections. One way is when the Verifier/RP that owns the domain uploads did-configuration file under the domain’s .well-known path as defined in [[ref: Well Known DID]]. Another is when a third-party trusted by the Wallet that can attest the binding between DID and domain of a Verifier/RP generates a Verified Domain JWT that proves the binding and is hosted in a Verifier/RP's ID Hub.
+
+###### Linked Domain Verification
+
+When the Verifier/RP that owns the domain is able to upload did-configuration file under its own domain’s .well-known path, Well Known DID Configuration as defined in [[ref: Well Known DID]] MUST be used.
 
 Validation of Domain Linkage Credentials by the Wallet MUST follow the steps given in the [[ref: Well Known DID]] specification. To check validity of the Domain Linkage Credential, expiration property MUST be taken into account. Additional checks, e.g. of revocation, are not required by this profile. Since the Verifier/RP manages Domain Linkage Credentials and directly updates the DID Configuration Resource, the usage of a credentialStatus property for revocation in a Domain Linkage Credential typically is of little use. 
 
-When creating a Verifier/RP's DID, the domain linked to that DID MUST be included in a `serviceEndpoint` property of the DID Document as shown in a non-normative response below:
+When creating a Verifier/RP's DID, the domain linked to that DID MUST be included in a `serviceEndpoint` property of a type `LinkedDomain` in the DID Document as shown in a non-normative response below:
 
 ::: example
 ```json
@@ -393,13 +399,61 @@ When creating a Verifier/RP's DID, the domain linked to that DID MUST be include
 :::
 Prior to generating an Authorization Request, the Verifier/RP MUST create a Domain Linkage Credential in a JSON Web Token format. It MUST be included on the website via `/.well-known/did-configuration.json`.
 
-Below is a non-normative example of a Domain Linkage Credential that is hosted at `https://www.vcsatoshi.com/.well-known/did-configuration.json`:
+Below is a non-normative example of a Domain Linkage Credential that is hosted at `https://vcsatoshi.com/.well-known/did-configuration.json`:
 
 ::: example Domain Linkage Credential
 ```json
 [[insert: ./spec/assets/2_domain_linkage_credential.json]]
 ```
 :::
+
+###### Verified Domain attestation
+
+When the Verifier/RP that owns the domain is unable to upload did-configuration file under its own domain’s .well-known path, a third party that can attest the binding between DID and domain of a Verifier/RP can generate a Verified Domain JWT that proves the binding and is hosted in a Verifier/RP's ID Hub. The third party MUST be trusted by the Wallet.
+
+Verified Domain JWT MUST be obtained from the endpoint included in a `serviceEndpoint` property of a type `IdentityHub` in the DID Document of the Verifier/RP. The following is a non-normative example:
+
+::: example
+```json
+{
+  "service": [
+    {
+      "id": "#hub",
+      "type": "IdentityHub",
+      "serviceEndpoint": "https://example.com/hub"
+    }
+  ]
+}
+```
+:::
+
+The following claims are defined for the Verified Domain JWT:
+
+in the JOSE Header,
+* `alg`: The cryptographic algorithm used to secure the JWT. See [RFC7515](https://datatracker.ietf.org/doc/html/rfc7515) for more information.
+* `kid`: A hint indicating which key was used to secure the JWT. MUST be an abolute DID. See [RFC7515](https://datatracker.ietf.org/doc/html/rfc7515) for more information.
+* `typ`: Media type of this complete JWT. MUST be of value `verified-domain+jwt`. See [RFC7515](https://datatracker.ietf.org/doc/html/rfc7515) for more information.
+
+in the JWT body,
+* `iss`: REQUIRED. The Issuer of the Verified Domain JWT. The value of `iss` MUST be a DID using a DID method defined by this profile.
+* `iat`: REQUIRED. The time of issuance of the Verified Domain JWT. See [RFC7519](https://datatracker.ietf.org/doc/html/rfc7519) for more information.
+* `exp`: OPTIONAL. The expiry time of the Verified Domain JWT after which it is no longer valid. See [RFC7519](https://datatracker.ietf.org/doc/html/rfc7519) for more information.
+* `type`: REQUIRED. The type of a JSON object that is secured by the JWT, as defined in [I-D.draft-terbu-oauth-sd-jwt-vc](https://datatracker.ietf.org/doc/html/draft-terbu-sd-jwt-vc). MUST be of value `verified_domain`.
+* `domain_binding`: REQUIRED. Object with the information about the DID and the domain that the third party is attesting. It consists of the following two parameters:
+  * `did`: REQUIRED. DID of a Verifier/RP using the `did` scheme defined is [[ref: DID Core]].
+  * `domain`: REQUIRED. A URL using the `https` scheme that belongs to the Verifier/RP identified using DID in the same object.
+
+ToDo: add IANA registry for verified-domain+jwt.
+
+Below is a non-normative example of a Verified Domain JWT that is hosted at `https://example.com/hub`:
+
+::: example Domain Linkage Credential
+```json
+[[insert: ./spec/assets/2_domain_linkage_credential.json]]
+```
+:::
+
+The Wallet needs to have pre-obtained third-party's identifeir and/or public key in advance to be able to trust Verified Domain JWT.
 
 ##### Requesting Verifiable Credentials
 
